@@ -14,9 +14,9 @@ using System.Linq;
 /// <param name="Name"></param>
 public record StringIdentifier(List<string> Scopes, string Name)
 {
-    public StringIdentifier(string singleScope, string itemName) : this(new List<string> { singleScope }, itemName)
+    public StringIdentifier(string singleScope, string Name) : this(new List<string> { singleScope }, Name)
     {
-        if (string.IsNullOrEmpty(singleScope) || string.IsNullOrEmpty(itemName))
+        if (string.IsNullOrEmpty(singleScope) || string.IsNullOrEmpty(Name))
         {
             throw new ArgumentException("Both scope and itemName must be provided.");
         }
