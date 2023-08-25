@@ -86,7 +86,7 @@ namespace Pulsar4X.ECSLib
         public Guid ID { get; internal set; }
         public string Name { get; internal set; } //player defined name. ie "5t 2kn Thruster".
 
-        public Guid CargoTypeID { get; internal set; }
+        public StringIdentifier CargoTypeID { get; internal set; }
         public long MassPerUnit { get; internal set; }
 
         public double VolumePerUnit { get; internal set; }
@@ -482,7 +482,7 @@ namespace Pulsar4X.ECSLib
             get { return _design.IndustryTypeID; }
             internal set { _design.IndustryTypeID = value; }
         }
-        public Guid CargoTypeID
+        public StringIdentifier CargoTypeID
         {
             get { return _design.CargoTypeID; }
             internal set { _design.CargoTypeID = value; }

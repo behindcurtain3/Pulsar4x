@@ -13,26 +13,26 @@ namespace Pulsar4X.ECSLib
     {
 
 
-        
+
 
         internal static void RecalcVolumeCapacityAndRates(Entity parentEntity)
         {
-            
+
             VolumeStorageDB cargoStorageDB = parentEntity.GetDataBlob<VolumeStorageDB>();
             //Dictionary<Guid, CargoTypeStore> storageDBStoredCargos = cargoStorageDB.StoredCargoTypes;
 
-            Dictionary<Guid, double> calculatedMaxStorage = new Dictionary<Guid, double>();
+            Dictionary<StringIdentifier, double> calculatedMaxStorage = new ();
 
             var instancesDB = parentEntity.GetDataBlob<ComponentInstancesDB>();
 
             double transferRate = 0;
-            double transferRange = 0; 
-            
-            
-            
+            double transferRange = 0;
+
+
+
             if( instancesDB.TryGetComponentsByAttribute<VolumeStorageAtb>(out var componentInstances))
             {
-                
+
                 foreach (var instance in componentInstances)
                 {
                     var design = instance.Design;
@@ -52,7 +52,7 @@ namespace Pulsar4X.ECSLib
             {
                 if(!cargoStorageDB.TypeStores.ContainsKey(kvp.Key))
                     cargoStorageDB.TypeStores.Add(kvp.Key, new TypeStore(kvp.Value));
-                
+
                 else
                 {
                     var stor = cargoStorageDB.TypeStores[kvp.Key];
@@ -60,8 +60,8 @@ namespace Pulsar4X.ECSLib
                     cargoStorageDB.ChangeMaxVolume(kvp.Key, dif);
                 }
             }
-            
-            
+
+
             int i = 0;
             if (instancesDB.TryGetComponentsByAttribute<StorageTransferRateAtbDB>(out var componentTransferInstances))
             {
@@ -70,7 +70,7 @@ namespace Pulsar4X.ECSLib
                     var design = instance.Design;
                     if(!design.HasAttribute<StorageTransferRateAtbDB>())
                         continue;
-                    
+
                     var atbdata = design.GetAttribute<StorageTransferRateAtbDB>();
                     if (instance.HealthPercent() > 0.75)
                     {

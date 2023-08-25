@@ -169,7 +169,7 @@ namespace Pulsar4X.ECSLib
                 {
                     curFileName = file;
                     obj = Load(file);
-                    
+
                     StoreObject(obj, newStore);
                 }
                 foreach (string file in hjsonfiles)
@@ -253,6 +253,7 @@ namespace Pulsar4X.ECSLib
             switch (typeStr)
             {
                 case "ArmorTypes":
+                case "CargoTypes":
                     data = obj["Data"].ToObject(type, Serializer2);
                     break;
                 default:

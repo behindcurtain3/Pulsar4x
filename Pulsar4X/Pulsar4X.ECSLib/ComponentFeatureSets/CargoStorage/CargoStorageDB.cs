@@ -1,15 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
 
 namespace Pulsar4X.ECSLib
 {
 
     public class VolumeStorageDB : BaseDataBlob, IAbilityDescription
     {
-        public Dictionary<Guid, TypeStore> TypeStores = new Dictionary<Guid, TypeStore>();
+        public Dictionary<StringIdentifier, TypeStore> TypeStores = new();
         public double TotalStoredMass { get; internal set; } = 0;
 
         public int TransferRateInKgHr { get; set; } = 500;
@@ -21,7 +19,7 @@ namespace Pulsar4X.ECSLib
         {
         }
 
-        public VolumeStorageDB(Guid type, double maxVolume)
+        public VolumeStorageDB(StringIdentifier type, double maxVolume)
         {
             TypeStores.Add(type, new TypeStore(maxVolume));
         }
@@ -29,7 +27,7 @@ namespace Pulsar4X.ECSLib
 
         public VolumeStorageDB(VolumeStorageDB db)
         {
-            TypeStores = new Dictionary<Guid, TypeStore>();
+            TypeStores = new Dictionary<StringIdentifier, TypeStore>();
             foreach (var kvp in db.TypeStores)
             {
                 TypeStores.Add(kvp.Key, kvp.Value.Clone());
@@ -89,10 +87,16 @@ namespace Pulsar4X.ECSLib
 
     public class VolumeStorageAtb : IComponentDesignAttribute
     {
-        public Guid StoreTypeID;
+        public StringIdentifier StoreTypeID;
         public double MaxVolume;
 
-        public VolumeStorageAtb(Guid storeTypeID, double maxVolume)
+        public VolumeStorageAtb(string storageTypeID, double maxVolume)
+        {
+            StoreTypeID = new StringIdentifier(storageTypeID);
+            MaxVolume = maxVolume;
+        }
+
+        public VolumeStorageAtb(StringIdentifier storeTypeID, double maxVolume)
         {
             StoreTypeID = storeTypeID;
             MaxVolume = maxVolume;

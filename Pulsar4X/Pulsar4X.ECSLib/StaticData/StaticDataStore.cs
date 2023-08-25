@@ -109,7 +109,7 @@ namespace Pulsar4X.ECSLib
         /// Dictionary to store CargoTypes
         /// </summary>
         [JsonIgnore]
-        public Dictionary<Guid, CargoTypeSD> CargoTypes = new Dictionary<Guid, CargoTypeSD>();
+        public Dictionary<StringIdentifier, CargoTypeSD> CargoTypes = new ();
 
         [JsonIgnore]
         public Dictionary<Guid, IndustryTypeSD> IndustryTypes = new Dictionary<Guid, IndustryTypeSD>();
@@ -165,7 +165,7 @@ namespace Pulsar4X.ECSLib
                     "ComponentTemplates", typeof(Dictionary<Guid, ComponentTemplateSD>)
                 },
                 {
-                    "CargoTypes", typeof(Dictionary<Guid, CargoTypeSD>)
+                    "CargoTypes", typeof(Dictionary<StringIdentifier, CargoTypeSD>)
                 },
                 {
                     "IndustryTypes", typeof(Dictionary<Guid, IndustryTypeSD>)
@@ -210,7 +210,7 @@ namespace Pulsar4X.ECSLib
                     typeof(Dictionary<Guid, ComponentTemplateSD>), "Components"
                 },
                 {
-                    typeof(Dictionary<Guid, CargoTypeSD>), "CargoTypes"
+                    typeof(Dictionary<StringIdentifier, CargoTypeSD>), "CargoTypes"
                 },
                 {
                     typeof(Dictionary<Guid, IndustryTypeSD>), "IndustryTypes"
@@ -250,13 +250,17 @@ namespace Pulsar4X.ECSLib
             if (ComponentTemplates.ContainsKey(id))
                 return ComponentTemplates[id];
 
-            if (CargoTypes.ContainsKey(id))
-                return CargoTypes[id];
-
             return null;
         }
 
-        public Dictionary<Guid, Guid> StorageTypeMap = new Dictionary<Guid, Guid>();
+        public object FindDataObjectUsingID(StringIdentifier id)
+        {
+            if (CargoTypes.ContainsKey(id))
+                return CargoTypes[id];
+            return null;
+        }
+
+        public Dictionary<Guid, StringIdentifier> StorageTypeMap = new ();
         internal void SetStorageTypeMap()
         {
             StorageTypeMap.Clear();
@@ -393,12 +397,16 @@ namespace Pulsar4X.ECSLib
         /// <summary>
         /// Stores cargoType Static Data. Will overwrite any existing Component with the same ID.
         /// </summary>
-        internal void Store(Dictionary<Guid, CargoTypeSD> cargoTypes)
+        internal void Store(Dictionary<StringIdentifier, CargoTypeSD> cargoTypes)
         {
             if (cargoTypes != null)
             {
-                foreach (KeyValuePair<Guid, CargoTypeSD> typeKVP in cargoTypes)
-                    CargoTypes[typeKVP.Key] = typeKVP.Value;
+                foreach (var (key, cargoType) in cargoTypes)
+                {
+                    cargoType.ID = key;
+                    Store(key, cargoType);
+                    CargoTypes[key] = cargoType;
+                }
             }
         }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Pulsar4X.Orbital;
 namespace Pulsar4X.ECSLib
 {
-    
+
     public struct ManuverState
     {
         public DateTime At;
@@ -27,11 +27,11 @@ namespace Pulsar4X.ECSLib
 
         public string StateString = "";
 
-        public Guid From; 
+        public Guid From;
         public List<(ICargoable item, int count)>  ItemsToShip =  new List<(ICargoable item, int count)>();
-        public Dictionary<Guid, double>  TradeSpace =  new Dictionary<Guid, double>();
+        public Dictionary<StringIdentifier, double>  TradeSpace =  new ();
         public double MaxTradeMass = 1;
-        public Guid To; 
+        public Guid To;
 
         public States CurrentState = States.Waiting;
         public List<LogisticsCycle.CargoTask> BiddingTasks = new List<LogisticsCycle.CargoTask>();
@@ -46,7 +46,7 @@ namespace Pulsar4X.ECSLib
         internal override void OnSetToEntity()
         {
             var cdb = base.OwningEntity.GetDataBlob<VolumeStorageDB>();
-            TradeSpace = new Dictionary<Guid, double>();
+            TradeSpace = new Dictionary<StringIdentifier, double>();
             foreach(var kvp in cdb.TypeStores)
             {
                 TradeSpace.Add(kvp.Key, 0);
@@ -69,7 +69,7 @@ namespace Pulsar4X.ECSLib
             StateString = db.StateString;
             From = db.From;
             ItemsToShip = new List<(ICargoable item, int count)>(db.ItemsToShip);
-            TradeSpace = new Dictionary<Guid, double>(db.TradeSpace);
+            TradeSpace = new Dictionary<StringIdentifier, double>(db.TradeSpace);
             MaxTradeMass = db.MaxTradeMass;
             To = db.To;
             CurrentState = db.CurrentState;

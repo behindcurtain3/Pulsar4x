@@ -527,7 +527,7 @@ namespace Pulsar4X.SDL2UI
             double egen = 0;
             double estor = 0;
             Guid thrusterFuel = Guid.Empty;
-            Dictionary<Guid, double> cstore = new Dictionary<Guid, double>();
+            Dictionary<StringIdentifier, double> cstore = new ();
 
             foreach (var component in _shipComponents)
             {

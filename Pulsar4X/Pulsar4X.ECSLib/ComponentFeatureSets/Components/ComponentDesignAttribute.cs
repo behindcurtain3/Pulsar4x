@@ -36,13 +36,13 @@ namespace Pulsar4X.ECSLib
                 return IsEnabledFormula.BoolResult;
             }
         }
-        
+
         public Type AttributeType;
 
         public Type EnumType;
         public int ListSelection;
         //public BaseDataBlob DataBlob;
-        internal ComponentDesigner ParentComponent; 
+        internal ComponentDesigner ParentComponent;
         public ComponentDesignAttribute(ComponentDesigner parentComponent, ComponentTemplateAttributeSD templateAtb, FactionTechDB factionTech)
         {
             ParentComponent = parentComponent;
@@ -69,7 +69,7 @@ namespace Pulsar4X.ECSLib
                         if (factionTech.ResearchedTechs.ContainsKey(Guid.Parse(kvp.Key.ToString())))
                         {
                             TechSD techSD = staticData.Techs[Guid.Parse(kvp.Key.ToString())];
-                            GuidDictionary.Add(kvp.Key, new ChainedExpression(ResearchProcessor.DataFormula(factionTech, techSD).ToString(), this, factionTech, staticData));                      
+                            GuidDictionary.Add(kvp.Key, new ChainedExpression(ResearchProcessor.DataFormula(factionTech, techSD).ToString(), this, factionTech, staticData));
                         }
                     }
                 }
@@ -89,7 +89,7 @@ namespace Pulsar4X.ECSLib
             }
             if (_templateSD.AttributeType != null)
             {
-                AttributeType = Type.GetType(_templateSD.AttributeType);   
+                AttributeType = Type.GetType(_templateSD.AttributeType);
                 if(AttributeType == null)
                     throw new Exception("Attribute Type Error. Attribute type not found: " + _templateSD.AttributeType + ". Try checking the namespace.");
             }
@@ -108,9 +108,9 @@ namespace Pulsar4X.ECSLib
                 //don't allow a value less than 0
                 if (MinValue < 0)
                     MinValue = 0;
-                //Dont set a max value above the max length of the enum list. 
+                //Dont set a max value above the max length of the enum list.
                 MaxValue = Math.Min(MaxValue , Enum.GetNames(EnumType).Length);
-                
+
                 ListSelection = (int)Value;
                 //string[] names = Enum.GetNames(EnumType);
             }
@@ -122,7 +122,7 @@ namespace Pulsar4X.ECSLib
 
             if (GuiHint == GuiHint.GuiOrdnanceSelectionList)
             {
-                
+
             }
         }
 
@@ -158,7 +158,7 @@ namespace Pulsar4X.ECSLib
             Formula.ReplaceExpression("TechData('" + techguid + "')");
             ParentComponent.SetAttributes();
         }
-        
+
         public void SetValueFromComponentList(Guid componentID)
         {
             Formula.ReplaceExpression("'" + componentID + "'");
@@ -236,8 +236,8 @@ namespace Pulsar4X.ECSLib
 
         /// <summary>
         /// This should probilby be avoided, but can be usefull for another formula reading this one, doing another calc, then setting this result again.
-        /// Note that doing so will not recalc other dependants. 
-        /// if I can avoid using this I will remove it. 
+        /// Note that doing so will not recalc other dependants.
+        /// if I can avoid using this I will remove it.
         /// </summary>
         internal object SetResult { set { Result = value; } }
 
@@ -258,7 +258,7 @@ namespace Pulsar4X.ECSLib
                         else
                             return IntResult;
                     case double val:
-                        return (int)val; 
+                        return (int)val;
                     case float val:
                         return (int)val;
                     case long val:
@@ -267,7 +267,7 @@ namespace Pulsar4X.ECSLib
                         return val;
                     default:
                         throw new Exception("Unexpected Result data Type " + Result.GetType() + " is not double or int");
-                    
+
                 }
             }
         }
@@ -320,14 +320,14 @@ namespace Pulsar4X.ECSLib
                         else
                             return DResult;
                     case double val:
-                        return val; 
+                        return val;
                     case float val:
                         return val;
                     case int val:
                         return val;
                     default:
                         throw new Exception("Unexpected Result data Type " + Result.GetType() + " is not double or int");
-                    
+
                 }
             }
         }
@@ -352,7 +352,7 @@ namespace Pulsar4X.ECSLib
                 }
             }
         }
-        
+
         internal string StrResult
         {
             get{
@@ -382,7 +382,7 @@ namespace Pulsar4X.ECSLib
 
         /// <summary>
         /// Evaluates the expression and updates the Result.
-        /// will also cause any other dependant ChainedExpressions to evaluate. 
+        /// will also cause any other dependant ChainedExpressions to evaluate.
         /// </summary>
         internal void Evaluate()
         {
@@ -444,7 +444,7 @@ namespace Pulsar4X.ECSLib
         }
 
         /// <summary>
-        /// a private constructor that is used internaly for a one use Expression 
+        /// a private constructor that is used internaly for a one use Expression
         /// </summary>
         /// <param name="expression"></param>
         /// <param name="designer"></param>
@@ -461,7 +461,7 @@ namespace Pulsar4X.ECSLib
         }
 
         /// <summary>
-        /// a private constructor that is used internaly for a one use Expression 
+        /// a private constructor that is used internaly for a one use Expression
         /// </summary>
         /// <param name="expression"></param>
         /// <param name="designAbility"></param>
@@ -530,7 +530,7 @@ namespace Pulsar4X.ECSLib
         {
             _expression.EvaluateFunction += NCalcPulsarFunctions;
             _expression.EvaluateParameter += NCalcPulsarParameters;
-            
+
             //put extra parameters that don't require extra processing here.ie:
             //_expression.Parameters["X"] = 5;
         }
@@ -549,14 +549,14 @@ namespace Pulsar4X.ECSLib
                 case "Pi":
                     args.Result = Math.PI;
                     break;
-                
+
                 case "Mass":
-                    MakeThisDependant(_designer.MassFormula); //we do this so that when the mass value changes, whatever formula is referencing mass gets updated also. 
-                    args.Result = (double)_designer.MassValue; //this is the resulting value from the mass value. 
+                    MakeThisDependant(_designer.MassFormula); //we do this so that when the mass value changes, whatever formula is referencing mass gets updated also.
+                    args.Result = (double)_designer.MassValue; //this is the resulting value from the mass value.
                     break;
-                
+
                 case "Volume_km3":
-                
+
                     MakeThisDependant(_designer.VolumeFormula);
                     args.Result = _designer.VolumeM3Value;
                     break;
@@ -564,7 +564,7 @@ namespace Pulsar4X.ECSLib
                     MakeThisDependant(_designer.CrewFormula);
                     args.Result = _designer.CrewReqValue;
                     break;
-                
+
                 case "HTK":
                     MakeThisDependant(_designer.HTKFormula);
                     args.Result = _designer.HTKValue;
@@ -583,7 +583,7 @@ namespace Pulsar4X.ECSLib
 
                     args.Result = _designer.ResourceCostValues;
                     break;
-                
+
                 case "MineralCosts":
                     foreach (var formula in _designer.ResourceCostFormulas.Values)
                     {
@@ -623,7 +623,7 @@ namespace Pulsar4X.ECSLib
             int index = -1;
             Guid techGuid;
             Guid typeGuid;
-            
+
             switch (name)
             {
                 case "Ability":
@@ -654,7 +654,7 @@ namespace Pulsar4X.ECSLib
                     //TODO: maybe log this catch and throw the component out. (instead of throwing)
                     catch (KeyNotFoundException e)
                     {
-                        
+
                         throw new Exception("Cannot find an ability named " + key + ", in " + _designer.Name + " " + e);
                     }
 
@@ -749,8 +749,7 @@ namespace Pulsar4X.ECSLib
                     break;
                 //currently not used, but an future experiment to pass the CargoTypeSD as a parameter
                 case "CargoType":
-                    typeGuid = Guid.Parse((string)args.EvaluateParameters()[0]);
-                    CargoTypeSD typeSD = _staticDataStore.CargoTypes[typeGuid];
+                    CargoTypeSD typeSD = _staticDataStore.CargoTypes[new StringIdentifier((string)args.EvaluateParameters()[0])];
                     args.Result = typeSD;
                     break;
                 //used for datablob args for when a guid is required as a parameter

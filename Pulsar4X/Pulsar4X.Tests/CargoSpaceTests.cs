@@ -37,10 +37,10 @@ namespace Pulsar4X.Tests
         public void CargoDefinitionsLibrary_When_AskedIfSomethingIsAMineral_Should_CorrectlyRespond()
         {
             var minerals = new List<MineralSD>();
-            var mineralCargoTypeId = Guid.NewGuid();
+            var mineralCargoTypeId = new StringIdentifier("test.storage-minerals");
 
             var otherJunk = new List<ICargoable>();
-            var otherCargoTypeId = Guid.NewGuid();
+            var otherCargoTypeId = new StringIdentifier("text.storage-other");
 
             var theDice = new Random();
 
@@ -70,7 +70,7 @@ namespace Pulsar4X.Tests
                 };
                 otherJunk.Add(randomCargoThing);
             }
-            
+
             var library = new CargoDefinitionsLibrary();
             library.LoadMineralDefinitions(minerals);
             library.LoadOtherDefinitions(otherJunk);
@@ -89,10 +89,10 @@ namespace Pulsar4X.Tests
         public void CargoDefinitionsLibrary_When_AskedIfSomethingIsAMaterial_Should_CorrectlyRespond()
         {
             var materials = new List<ProcessedMaterialSD>();
-            var materialCargoTypeId = Guid.NewGuid();
+            var materialCargoTypeId = new StringIdentifier("test.storage-materials");
 
             var otherJunk = new List<ICargoable>();
-            var otherCargoTypeId = Guid.NewGuid();
+            var otherCargoTypeId = new StringIdentifier("text.storage-other");
 
             var theDice = new Random();
 
@@ -141,10 +141,10 @@ namespace Pulsar4X.Tests
         public void CargoDefinitionsLibrary_When_AskedIfSomethingIsOtherCargo_Should_CorrectlyRespond()
         {
             var materials = new List<ProcessedMaterialSD>();
-            var materialCargoTypeId = Guid.NewGuid();
+            var materialCargoTypeId = new StringIdentifier("test.storage-materials");
 
             var otherJunk = new List<ICargoable>();
-            var otherCargoTypeId = Guid.NewGuid();
+            var otherCargoTypeId = new StringIdentifier("test.storage-other");
 
             var theDice = new Random();
 
@@ -196,7 +196,7 @@ namespace Pulsar4X.Tests
             Assert.IsNull(library.GetAny(Guid.NewGuid()));
         }
 
-    
+
 
 
 
@@ -211,8 +211,8 @@ namespace Pulsar4X.Tests
             var cookiePile = new VolumeStorageDB();
             cookiePile.TypeStores.Add(cookies.CargoTypeID, new TypeStore(100));
             var added = cookiePile.AddCargoByUnit(cookies, 99);
-            
-            
+
+
             var storedCookies = cookiePile.GetUnitsStored(cookies);
             var storedCookieMass = cookiePile.GetMassStored(cookies);
             var storedCookieVolume = cookiePile.GetVolumeStored(cookies);
@@ -222,7 +222,7 @@ namespace Pulsar4X.Tests
             Assert.AreEqual( 99, storedCookies);
             Assert.AreEqual(99, storedCookieMass);
             Assert.AreEqual(99, storedCookieVolume);
-            
+
             var addMore = cookiePile.AddCargoByUnit(cookies, 100);
             var storedCookies2 = cookiePile.GetUnitsStored(cookies);
             var storedCookieMass2 = cookiePile.GetMassStored(cookies);
@@ -243,9 +243,9 @@ namespace Pulsar4X.Tests
                 Name = "Clicked Cookies",
                 Description = "Tastes like carpal tunnel and time.",
                 ID = Guid.NewGuid(),
-                CargoTypeID = Guid.NewGuid(),
+                CargoTypeID = new StringIdentifier("test"),
                 MassPerUnit = 1,
-                VolumePerUnit = 1//these are some really really big cookies. 
+                VolumePerUnit = 1//these are some really really big cookies.
             };
 
             return cookies;
@@ -258,7 +258,7 @@ namespace Pulsar4X.Tests
                 Name = "Rock",
                 Description = "A pile of heavy rocks. Very useful. Trust me.",
                 ID = Guid.NewGuid(),
-                CargoTypeID = Guid.NewGuid(),
+                CargoTypeID = new StringIdentifier("test"),
                 MassPerUnit = 10,
                 VolumePerUnit = 0.0001,
             };
@@ -273,7 +273,7 @@ namespace Pulsar4X.Tests
 
         public string Name { get; set; }
 
-        public Guid CargoTypeID { get; set; }
+        public StringIdentifier CargoTypeID { get; set; }
 
         public long MassPerUnit { get; set; }
         public double VolumePerUnit { get; }

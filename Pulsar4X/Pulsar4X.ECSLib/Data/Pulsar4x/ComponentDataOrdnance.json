@@ -24,7 +24,7 @@
           "CreditCostFormula": "[Mass]",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "Missile",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-ordnance",
           "IndustryTypeID": "B457C6FE-07A7-4EA1-90DB-D2547245FA86",
           "ComponentAtbSDs": [
             {
@@ -246,7 +246,7 @@
           "BuildPointCostFormula": "[Mass]",
           "MountType": "Missile",
           "IndustryTypeID": "B457C6FE-07A7-4EA1-90DB-D2547245FA86",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-ordnance",
           "ComponentAtbSDs": [
             {
               "Name": "Guidance Type",
@@ -390,7 +390,7 @@
           "CreditCostFormula": "[Mass]",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "Missile",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-ordnance",
           "IndustryTypeID": "B457C6FE-07A7-4EA1-90DB-D2547245FA86",
           "ComponentAtbSDs": [
             {
@@ -467,7 +467,7 @@
           "CreditCostFormula": "120",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipComponent, ShipCargo, PlanetInstallation",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
           "ComponentAtbSDs": [
             {
@@ -527,7 +527,7 @@
             {
               "Name": "DBargsStor",
               "GuiHint": "None",
-              "AttributeFormula": "AtbConstrArgs(GuidString('055E2026-20A4-4CFA-A8CA-A01915A48B5E'), Ability('Total Cargo Stored'))",
+              "AttributeFormula": "AtbConstrArgs('base.storage-ordnance', Ability('Total Cargo Stored'))",
               "AttributeType": "Pulsar4X.ECSLib.VolumeStorageAtb"
             },
             {

@@ -10,7 +10,7 @@ namespace Pulsar4X.ECSLib
     public class CargoAbleTypeDB : BaseDataBlob , ICargoable, IComponentDesignAttribute
     {
         [JsonProperty]
-        public Guid CargoTypeID { get; internal set; }
+        public StringIdentifier CargoTypeID { get; internal set; }
 
         /// <summary>
         /// NOTE! this is an entites *Design* ID, not the EntitesID.
@@ -27,26 +27,26 @@ namespace Pulsar4X.ECSLib
         }
 
         [JsonIgnore]
-        public long MassPerUnit => (long)Math.Ceiling(OwningEntity.GetDataBlob<MassVolumeDB>().MassDry); 
+        public long MassPerUnit => (long)Math.Ceiling(OwningEntity.GetDataBlob<MassVolumeDB>().MassDry);
 
         public double VolumePerUnit => OwningEntity.GetDataBlob<MassVolumeDB>().Volume_m3;
 
         public double Density => OwningEntity.GetDataBlob<MassVolumeDB>().DensityDry_kgm;
 
         /// <summary>
-        /// This should be set to true if the item has become damaged or in any other way needs to maintain state 
+        /// This should be set to true if the item has become damaged or in any other way needs to maintain state
         /// </summary>
         [JsonIgnore]
         public string Name
         {
-            
-            get 
+
+            get
             {
                 if (this.OwningEntity.GetDataBlob<NameDB>() != null)
                 {
                     return this.OwningEntity.GetDataBlob<NameDB>()?.GetName(OwningEntity.FactionOwnerID);
                 }
-                else return "Unknown Object"; 
+                else return "Unknown Object";
             }
         }
 
@@ -57,7 +57,7 @@ namespace Pulsar4X.ECSLib
         [JsonProperty]
         internal bool MustBeSpecificCargo { get; set; } = false;
 
-        public CargoAbleTypeDB(Guid cargoTypeID)
+        public CargoAbleTypeDB(StringIdentifier cargoTypeID)
         {
             CargoTypeID = cargoTypeID;
         }
@@ -72,8 +72,8 @@ namespace Pulsar4X.ECSLib
         {
             return new CargoAbleTypeDB(this);
         }
-        
-        
+
+
         public void OnComponentDeInstalation(Entity ship, Entity component)
         {
             throw new NotImplementedException();
@@ -82,9 +82,9 @@ namespace Pulsar4X.ECSLib
         public void OnComponentInstallation(Entity parentEntity, ComponentInstance componentInstance)
         {
             if (!parentEntity.HasDataBlob<CargoAbleTypeDB>())
-                parentEntity.SetDataBlob(new CargoAbleTypeDB(this)); //basicaly just clone the design to the instance. 
+                parentEntity.SetDataBlob(new CargoAbleTypeDB(this)); //basicaly just clone the design to the instance.
         }
-        
+
         public string AtbName()
         {
             return "Cargoable";

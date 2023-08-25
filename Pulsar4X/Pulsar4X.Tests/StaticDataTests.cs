@@ -120,7 +120,7 @@ namespace Pulsar4X.Tests
 
             //installations.Add(install);
 
-            
+
 
             //ComponentAbilitySD launchAbility = new ComponentAbilitySD();
             //launchAbility.Ability = AbilityType.LaunchMissileSize;
@@ -160,10 +160,10 @@ namespace Pulsar4X.Tests
         [Test]
         public void TestCargoType()
         {
-            Dictionary<Guid, CargoTypeSD> cargoTypes = new Dictionary<Guid, CargoTypeSD>();
+            Dictionary<StringIdentifier, CargoTypeSD> cargoTypes = new ();
             CargoTypeSD cargoTypeGeneral = new CargoTypeSD()
             {
-                ID = new Guid("16B4C4F0-7292-4F4D-8FEA-22103C70B288"),
+                ID = new StringIdentifier("base.storage-general"),
                 Name = "General",
                 Description = "Storage for general cargo items"
             };
@@ -171,7 +171,7 @@ namespace Pulsar4X.Tests
 
             CargoTypeSD cargoTypeFuel = new CargoTypeSD()
             {
-                ID = new Guid("D8E8DA2D-8DC8-4A3F-B989-5F2E67C55E77"),
+                ID = new StringIdentifier("base.storage-fuel"),
                 Name = "Fuel",
                 Description = "Storage for fuel"
             };
@@ -179,7 +179,7 @@ namespace Pulsar4X.Tests
 
             CargoTypeSD cargoTypePopulation = new CargoTypeSD()
             {
-                ID = new Guid("9E52A3AF-66AF-4935-982D-26F3FEE775B0"),
+                ID = new StringIdentifier("base.storage-cryogenic"),
                 Name = "Cryogenic Storage",
                 Description = "Storage for frozen people"
             };
@@ -199,7 +199,7 @@ namespace Pulsar4X.Tests
                 Description = "Fuel for SpaceShips",
                 ID = new Guid("33E6AC88-0235-4917-A7FF-35C8886AAD3A"),
                 MineralsRequired = new Dictionary<Guid, long>(),
-                
+
                 MassPerUnit = 1,
                 //soriumFuel.CargoType = CargoType.Fuel;
                 IndustryPointCosts = 10,
@@ -214,9 +214,9 @@ namespace Pulsar4X.Tests
                 Description = "A mix of Duranium and refined fuel to teset refinarys",
                 ID = new Guid("6DA93677-EE08-4853-A8A5-0F46D93FE0EB"),
                 MineralsRequired = new Dictionary<Guid, long>(),
-                
+
                 MaterialsRequired = new Dictionary<Guid, long>(),
-                
+
                 MassPerUnit = 1,
                 //DepleatedDuranuim.CargoType = CargoType.General;
                 IndustryPointCosts = 20,
@@ -227,7 +227,7 @@ namespace Pulsar4X.Tests
             mats.Add(DepleatedDuranuim.ID, DepleatedDuranuim);
 
             StaticDataManager.ExportStaticData(mats, "ReinfedMaterialsDataExportTest.json");
-            
+
         }
 
         [Test]
@@ -319,7 +319,7 @@ namespace Pulsar4X.Tests
             techs.Add(EngineTech4.ID, EngineTech4);
 
             StaticDataManager.ExportStaticData(techs, "TechnologyDataExportTest.json");
-            
+
         }
 
         [Test]
@@ -369,10 +369,10 @@ namespace Pulsar4X.Tests
             int mineralsNum = staticDataStore.CargoGoods.GetMineralsList().Count;
             Guid someGuid = new Guid("08f15d35-ea1d-442f-a2e3-bde04c5c22e9");
             string someName = staticDataStore.CargoGoods.GetMineral(someGuid).Name;
-            
+
             StaticDataManager.LoadData("Other", game);
             staticDataStore = game.StaticData;
-            
+
             // now check that overwriting occured and that there were no duplicates:
             Assert.AreEqual(mineralsNum, staticDataStore.CargoGoods.GetMineralsList().Count);
             //check the name has been overwritten
@@ -402,7 +402,7 @@ namespace Pulsar4X.Tests
             testObj = staticDataStore.FindDataObjectUsingID(testID);
             Assert.IsNotNull(testObj);
             Assert.AreEqual(testID, ((MineralSD)testObj).ID);
-            
+
             testObj = staticDataStore.FindDataObjectUsingID(testID);
             Assert.IsNotNull(testObj);
 
@@ -414,7 +414,7 @@ namespace Pulsar4X.Tests
 
         //for want of a better place to put it.
         [Test]
-        public void TestJdicExtension() 
+        public void TestJdicExtension()
         {
             Dictionary<int, int> dict = new Dictionary<int, int>();
             dict.Add(1,1);

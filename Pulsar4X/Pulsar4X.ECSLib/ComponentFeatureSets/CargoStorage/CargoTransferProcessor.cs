@@ -32,7 +32,7 @@ namespace Pulsar4X.ECSLib
                 ICargoable cargoItem = itemsToXfer.item;
                 long amountToXfer = itemsToXfer.amount;
 
-                Guid cargoTypeID = cargoItem.CargoTypeID;
+                StringIdentifier cargoTypeID = cargoItem.CargoTypeID;
                 double itemMassPerUnit = cargoItem.MassPerUnit;
 
                 if (!transferDB.CargoToDB.TypeStores.ContainsKey(cargoTypeID))
@@ -44,19 +44,19 @@ namespace Pulsar4X.ECSLib
                 var toCargoTypeStore = transferDB.CargoToDB.TypeStores[cargoTypeID]; //reference to the cargoType store we're pushing to.
                 var toCargoItemAndAmount = toCargoTypeStore.CurrentStoreInUnits; //reference to dictionary holding the cargo we want to send too
                 var fromCargoTypeStore = transferDB.CargoFromDB.TypeStores[cargoTypeID]; //reference to the cargoType store we're pulling from.
-                var fromCargoItemAndAmount = fromCargoTypeStore.CurrentStoreInUnits; //reference to dictionary we want to pull cargo from. 
+                var fromCargoItemAndAmount = fromCargoTypeStore.CurrentStoreInUnits; //reference to dictionary we want to pull cargo from.
 
-                //the transfer speed is mass based, not unit based. 
+                //the transfer speed is mass based, not unit based.
                 double totalMassToTransfer = itemMassPerUnit * amountToXfer;
-                double massToTransferThisTick = Math.Min(totalMassToTransfer, transferDB.TransferRateInKG * deltaSeconds); //only the amount that can be transfered in this timeframe. 
+                double massToTransferThisTick = Math.Min(totalMassToTransfer, transferDB.TransferRateInKG * deltaSeconds); //only the amount that can be transfered in this timeframe.
 
                 //TODO: this wont handle objects that have a larger unit mass than the availible transferRate,
                 //but maybe that makes for a game mechanic
                 long countToTransferThisTick = (long)(massToTransferThisTick / itemMassPerUnit);
-                
+
                 long amountFrom = transferDB.CargoFromDB.RemoveCargoByUnit(cargoItem, countToTransferThisTick);
                 long amountTo = transferDB.CargoToDB.AddCargoByUnit(cargoItem, countToTransferThisTick);
-                
+
                 //update the total masses for these entites
                 transferDB.CargoFromDB.OwningEntity.GetDataBlob<MassVolumeDB>().UpdateMassTotal(transferDB.CargoFromDB);
                 transferDB.CargoToDB.OwningEntity.GetDataBlob<MassVolumeDB>().UpdateMassTotal(transferDB.CargoToDB);
@@ -67,7 +67,7 @@ namespace Pulsar4X.ECSLib
                 long newAmount = transferDB.ItemsLeftToTransfer[i].amount - amountTo;
                 transferDB.ItemsLeftToTransfer[i] = (cargoItem, newAmount);
             }
-            
+
         }
 
 
@@ -131,7 +131,7 @@ namespace Pulsar4X.ECSLib
             mv.UpdateMassTotal(cargo);
             return amountSuccess;
         }
-                
+
         /// <summary>
         /// Calculates a simplified difference in DeltaV between two enties who have the same parent
         /// for the purposes of calculating cargo transfer rate
@@ -148,17 +148,17 @@ namespace Pulsar4X.ECSLib
             double sgp;
             double r1;
             double r2;
-            
+
             Entity soi1 = entity1.GetSOIParentEntity();
             Entity soi2 = entity2.GetSOIParentEntity();
-            
-            
+
+
             if(soi1 == soi2)
             {
                 parent = soi1;
                 parentMass = parent.GetDataBlob<MassVolumeDB>().MassDry;
                 sgp = GeneralMath.StandardGravitationalParameter(parentMass);
-                
+
                 (Vector3 pos, Vector3 Velocity) state1 = entity1.GetRelativeState();
                 (Vector3 pos, Vector3 Velocity) state2 = entity2.GetRelativeState();
                 r1 = state1.pos.Length();
@@ -177,8 +177,8 @@ namespace Pulsar4X.ECSLib
 
         }
 
-        
-        
+
+
         /// <summary>
         /// Calculates a simplified difference in DeltaV between two enties who have the same parent
         /// for the purposes of calculating cargo transfer rate
@@ -194,7 +194,7 @@ namespace Pulsar4X.ECSLib
             var hohmann = OrbitalMath.Hohmann(sgp, r1, r2);
             return hohmann[0].deltaV.Length() + hohmann[1].deltaV.Length();
         }
-        
+
 
         /// <summary>
         /// Calculates the transfer rate.
@@ -245,17 +245,17 @@ namespace Pulsar4X.ECSLib
 
         internal static void SetTransferRate(Entity entity, CargoTransferDB transferDB)
         {
-            double dv_mps = CalcDVDifference_m(entity, transferDB.CargoToEntity);    
+            double dv_mps = CalcDVDifference_m(entity, transferDB.CargoToEntity);
             var rate = CalcTransferRate(dv_mps, transferDB.CargoFromDB, transferDB.CargoToDB);
             transferDB.TransferRateInKG = rate;
         }
 
-        
+
         public int ProcessManager(EntityManager manager, int deltaSeconds)
         {
             List<Entity> entitysWithCargoTransfers = manager.GetAllEntitiesWithDataBlob<CargoTransferDB>();
-            foreach(var entity in entitysWithCargoTransfers) 
-            {                
+            foreach(var entity in entitysWithCargoTransfers)
+            {
                 ProcessEntity(entity, deltaSeconds);
             }
 

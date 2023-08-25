@@ -160,7 +160,7 @@ namespace Pulsar4X.ECSLib.Industry
             {
                 ICargoable cargoItem = StaticRefLib.StaticData.CargoGoods.GetAny(kvp.Key);//fromCargo.OwningEntity.Manager.Game.StaticData.GetICargoable(kvp.Key);
 
-                Guid cargoTypeID = cargoItem.CargoTypeID;
+                StringIdentifier cargoTypeID = cargoItem.CargoTypeID;
                 long amountUsedThisTick = 0;
                 if (fromCargo.TypeStores.ContainsKey(cargoTypeID))
                 {

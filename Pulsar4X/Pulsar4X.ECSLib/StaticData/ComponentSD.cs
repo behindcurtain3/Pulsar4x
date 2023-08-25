@@ -22,7 +22,7 @@ namespace Pulsar4X.ECSLib
         //if it can be fitted to a ship as a ship component, on a planet as an installation, can be cargo etc.
         public ComponentMountType MountType;
         public Guid IndustryTypeID;
-        public Guid CargoTypeID; //cargo TypeID from CargoTypeSD
+        public StringIdentifier CargoTypeID; //cargo TypeID from CargoTypeSD
         public List<ComponentTemplateAttributeSD> ComponentAtbSDs;
     }
 
@@ -42,14 +42,14 @@ namespace Pulsar4X.ECSLib
         //public string[] EnumItems;
         //public string[] EnumTechReq;
         //public string[] EnumFormula;
-        
+
         //used if GuiHint is GuiMinMax
         public string MaxFormula;
         public string MinFormula;
         public string StepFormula;
-        
 
-        //if guihint is selection list or minmax, this should point to a default value. 
+
+        //if guihint is selection list or minmax, this should point to a default value.
         public string AttributeFormula;
 
         public string AttributeType;

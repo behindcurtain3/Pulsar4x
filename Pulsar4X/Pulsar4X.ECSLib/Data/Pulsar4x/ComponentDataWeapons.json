@@ -24,7 +24,7 @@
           "CreditCostFormula": "[Mass]",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipComponent, ShipCargo, PlanetInstallation",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "B457C6FE-07A7-4EA1-90DB-D2547245FA86",
           "ComponentAtbSDs": [
             {
@@ -257,7 +257,7 @@
           "CreditCostFormula": "[Mass]",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipComponent, ShipCargo",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "B457C6FE-07A7-4EA1-90DB-D2547245FA86",
           "ComponentAtbSDs": [
             {
@@ -347,7 +347,7 @@
           "CreditCostFormula": "[Mass]",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipComponent, ShipCargo",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "B457C6FE-07A7-4EA1-90DB-D2547245FA86",
           "ComponentAtbSDs": [
             {
@@ -428,7 +428,7 @@
               "AttributeFormula": "AtbConstrArgs(Ability('Max Mass'), Ability('ROF'), Ability('Launch Force'))",
               "AttributeType": "Pulsar4X.ECSLib.ComponentFeatureSets.Missiles.MissileLauncherAtb"
             }
-            
+
           ]
         }
       }

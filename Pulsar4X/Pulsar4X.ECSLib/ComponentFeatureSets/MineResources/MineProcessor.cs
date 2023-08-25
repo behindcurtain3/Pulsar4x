@@ -20,7 +20,7 @@ namespace Pulsar4X.ECSLib
         {
             _minerals = game.StaticData.CargoGoods.GetMinerals();
         }
-        
+
         public void ProcessEntity(Entity entity, int deltaSeconds)
         {
             if(entity.HasDataBlob<ColonyInfoDB>() && entity.GetDataBlob<ColonyInfoDB>().PlanetEntity.HasDataBlob<MineralsDB>())
@@ -30,13 +30,13 @@ namespace Pulsar4X.ECSLib
         public int ProcessManager(EntityManager manager, int deltaSeconds)
         {
             var entities = manager.GetAllEntitiesWithDataBlob<MiningDB>();
-            foreach(var entity in entities) 
+            foreach(var entity in entities)
             {
                 ProcessEntity(entity, deltaSeconds);
             }
             return entities.Count;
         }
-    
+
         private void MineResources(Entity colonyEntity)
         {
             Dictionary<Guid, long> actualMiningRates = colonyEntity.GetDataBlob<MiningDB>().ActualMiningRate;
@@ -46,7 +46,7 @@ namespace Pulsar4X.ECSLib
             foreach (var kvp in actualMiningRates)
             {
                 ICargoable mineral = _minerals[kvp.Key];
-                Guid cargoTypeID = mineral.CargoTypeID;
+                var cargoTypeID = mineral.CargoTypeID;
 
                 var unitsMinableThisTick = (long)Math.Min(actualMiningRates[kvp.Key], planetMinerals[kvp.Key].Amount);
 
@@ -57,7 +57,7 @@ namespace Pulsar4X.ECSLib
                     StaticRefLib.EventLog.AddPlayerEntityErrorEvent(colonyEntity, EventType.Storage, erstr);
                        continue; //can't store this mineral
                 }
-                
+
                 var unitsMinedThisTick = stockpile.AddCargoByUnit(mineral, unitsMinableThisTick);
 
                 if (unitsMinableThisTick > unitsMinedThisTick)
@@ -96,14 +96,14 @@ namespace Pulsar4X.ECSLib
                 {
                     float healthPercent = instance.HealthPercent();
                     var designInfo = instance.Design.GetAttribute<MineResourcesAtbDB>();
-     
+
                     foreach (var item in designInfo.ResourcesPerEconTick)
                     {
-                        rates.SafeValueAdd(item.Key, Convert.ToInt64(item.Value * healthPercent)); 
+                        rates.SafeValueAdd(item.Key, Convert.ToInt64(item.Value * healthPercent));
                     }
                 }
             }
-            
+
             colonyEntity.GetDataBlob<MiningDB>().BaseMiningRate = rates;
 
             // Calculate the actual mining rates if the planet entity has minerals

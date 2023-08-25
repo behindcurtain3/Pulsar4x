@@ -28,7 +28,7 @@
           "CreditCostFormula": "120",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipCargo, PlanetInstallation",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
           "ComponentAtbSDs": [
             {
@@ -40,7 +40,7 @@
                   {
                     "Key": "5eadda1f-43aa-44be-bdb4-395441a33f14",
                     "Value": "10"
-                  },                  
+                  },
                   {
                     "Key": "c8a64019-aef4-4453-bd9b-36b26b0e9684",
                     "Value": "10"
@@ -48,7 +48,7 @@
                   {
                     "Key": "d554fb70-bd28-459c-a1b3-d7b2019f685a",
                     "Value": "10"
-                  },                  
+                  },
                   {
                     "Key": "66f15e2f-7a24-4ff6-9b68-03fcd93686f9",
                     "Value": "10"
@@ -68,7 +68,7 @@
                   {
                     "Key": "2d4b2866-aa4a-4b9a-b8aa-755fe509c0b3",
                     "Value": "10"
-                  },                  
+                  },
                   {
                     "Key": "08f15d35-ea1d-442f-a2e3-bde04c5c22e9",
                     "Value": "10"
@@ -143,7 +143,7 @@
           "CreditCostFormula": "120",
           "BuildPointCostFormula": "[Mass] / 2",
           "MountType": "ShipCargo, PlanetInstallation",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
           "ComponentAtbSDs": [
             {
@@ -170,7 +170,7 @@
               "StepFormula": "1",
               "AttributeFormula": "0"
             },
-            
+
             {
               "Name": "RP Amount Per EconTick",
               "DescriptionFormula": "''",
@@ -207,7 +207,7 @@
           "CreditCostFormula": "120",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipCargo, PlanetInstallation",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
           "ComponentAtbSDs": [
             {
@@ -270,7 +270,7 @@
           "CreditCostFormula": "120",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipCargo, PlanetInstallation",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
           "ComponentAtbSDs": [
             {
@@ -353,7 +353,7 @@
           "CreditCostFormula": "120",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipCargo, PlanetInstallation",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
           "ComponentAtbSDs": [
             {
@@ -418,7 +418,7 @@
           "CreditCostFormula": "0",
           "BuildPointCostFormula": "100",
           "MountType": "ShipCargo, PlanetInstallation",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
           "ComponentAtbSDs": [
             {
@@ -468,7 +468,7 @@
           "CreditCostFormula": "120",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipComponent, ShipCargo, PlanetInstallation",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
           "ComponentAtbSDs": [
             {
@@ -530,7 +530,7 @@
           "CreditCostFormula": "120",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipCargo, PlanetInstallation",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
           "ComponentAtbSDs": [
             {
@@ -580,7 +580,7 @@
           "CreditCostFormula": "120",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipComponent, ShipCargo, PlanetInstallation",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
           "ComponentAtbSDs": [
             {
@@ -631,7 +631,7 @@
             {
               "Name": "DBargsStor",
               "GuiHint": "None",
-              "AttributeFormula": "AtbConstrArgs(GuidString('16b4c4f0-7292-4f4d-8fea-22103c70b288'), Ability('Warehouse Size'))",
+              "AttributeFormula": "AtbConstrArgs('base.storage-general', Ability('Warehouse Size'))",
               "AttributeType": "Pulsar4X.ECSLib.VolumeStorageAtb"
             },
             {
@@ -669,7 +669,7 @@
           "CreditCostFormula": "[Mass]",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipComponent, ShipCargo, PlanetInstallation, Fighter",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
           "ComponentAtbSDs": [
             {
@@ -698,7 +698,7 @@
             {
               "Name": "DBargs",
               "GuiHint": "None",
-              "AttributeFormula": "AtbConstrArgs(GuidString('d8e8da2d-8dc8-4a3f-b989-5f2e67c55e77'), Ability('Tank Volume'))",
+              "AttributeFormula": "AtbConstrArgs(('base.storage-fuel'), Ability('Tank Volume'))",
               "AttributeType": "Pulsar4X.ECSLib.VolumeStorageAtb"
             }
           ]
@@ -730,7 +730,7 @@
           "CreditCostFormula": "[Mass]",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipComponent, ShipCargo, PlanetInstallation, Fighter",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
           "ComponentAtbSDs": [
             {
@@ -751,13 +751,13 @@
             {
               "Name": "Dry Weight",
               "DescriptionFormula": "'The weight of the empty tank'",
-              "GuiHint": "GuiTextDisplay", 
+              "GuiHint": "GuiTextDisplay",
               "AttributeFormula": "(4 * Pi * Ability('Tank Radius') * Ability('Tank Radius')) * 23.5 "
             },
             {
               "Name": "DBargs",
               "GuiHint": "None",
-              "AttributeFormula": "AtbConstrArgs(GuidString('d8e8da2d-8dc8-4a3f-b989-5f2e67c55e77'), Ability('Tank Volume'))",
+              "AttributeFormula": "AtbConstrArgs(('base.storage-fuel'), Ability('Tank Volume'))",
               "AttributeType": "Pulsar4X.ECSLib.VolumeStorageAtb"
             }
           ]
@@ -789,7 +789,7 @@
           "CreditCostFormula": "120",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "PlanetInstallation",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
           "ComponentAtbSDs": [
             {

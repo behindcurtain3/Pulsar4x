@@ -24,7 +24,7 @@
           "CreditCostFormula": "[Mass]",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipComponent, ShipCargo, Fighter",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "B457C6FE-07A7-4EA1-90DB-D2547245FA86",
           "ComponentAtbSDs": [
             {
@@ -99,7 +99,7 @@
           "CreditCostFormula": "[Mass]",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipComponent, ShipCargo, Fighter",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "B457C6FE-07A7-4EA1-90DB-D2547245FA86",
           "ComponentAtbSDs": [
             {
@@ -174,7 +174,7 @@
           "CreditCostFormula": "[Mass]",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipComponent, ShipCargo, Fighter",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "B457C6FE-07A7-4EA1-90DB-D2547245FA86",
           "ComponentAtbSDs": [
             {
@@ -249,7 +249,7 @@
           "CreditCostFormula": "[Mass]",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipComponent, ShipCargo, Fighter",
-          "CargoTypeID": "16b4c4f0-7292-4f4d-8fea-22103c70b288",
+          "CargoTypeID": "base.storage-general",
           "IndustryTypeID": "B457C6FE-07A7-4EA1-90DB-D2547245FA86",
           "ComponentAtbSDs": [
             {

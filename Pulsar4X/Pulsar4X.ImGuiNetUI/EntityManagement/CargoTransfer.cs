@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
-using NUnit.Framework.Constraints;
 using Pulsar4X.ECSLib;
 namespace Pulsar4X.SDL2UI
 {
@@ -14,7 +13,7 @@ namespace Pulsar4X.SDL2UI
         StaticDataStore _staticData;
         EntityState _entityState;
         VolumeStorageDB _volStorageDB;
-        Dictionary<Guid, TypeStore> _stores = new Dictionary<Guid, TypeStore>();
+        Dictionary<StringIdentifier, TypeStore> _stores = new ();
 
         public CargoListPannelSimple(StaticDataStore staticData, EntityState entity)
         {
@@ -37,7 +36,7 @@ namespace Pulsar4X.SDL2UI
             if (_volStorageDB == null) //if this colony does not have any storage.
                 return;
             //we do a deep copy clone so as to avoid a thread collision when we loop through.
-            var newDict = new Dictionary<Guid, TypeStore>();
+            var newDict = new Dictionary<StringIdentifier, TypeStore>();
 
             ICollection ic = _volStorageDB.TypeStores;
             lock (ic.SyncRoot)
@@ -140,7 +139,7 @@ namespace Pulsar4X.SDL2UI
         StaticDataStore _staticData;
         EntityState _entityState;
         VolumeStorageDB _volStorageDB;
-        Dictionary<Guid, TypeStore> _stores = new Dictionary<Guid, TypeStore>();
+        Dictionary<StringIdentifier, TypeStore> _stores = new ();
         Dictionary<ICargoable, long> _cargoToMove = new Dictionary<ICargoable, long>();
         Dictionary<ICargoable, long> _cargoToMoveUI = new Dictionary<ICargoable, long>();
         Dictionary<ICargoable, long> _cargoToMoveOrders = new Dictionary<ICargoable, long>();
@@ -167,7 +166,7 @@ namespace Pulsar4X.SDL2UI
         public void Update()
         {
             //we do a deep copy clone so as to avoid a thread collision when we loop through.
-            var newDict = new Dictionary<Guid, TypeStore>();
+            var newDict = new Dictionary<StringIdentifier, TypeStore>();
             ICollection ic = _volStorageDB.TypeStores;
             lock (ic.SyncRoot)
             {
@@ -234,7 +233,7 @@ namespace Pulsar4X.SDL2UI
             Update();
         }
 
-        internal bool CanStore(Guid cargoTypeID)
+        internal bool CanStore(StringIdentifier cargoTypeID)
         {
             return _stores.ContainsKey(cargoTypeID);
 

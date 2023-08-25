@@ -18,12 +18,12 @@ namespace Pulsar4X.SDL2UI
         private string[] _allResourceNames;
         private List<Guid> _allResourceID;
         private int _allResourceIndex = 0;
-        private Dictionary<Guid, Dictionary<ICargoable, (int count, int demandSupplyWeight)>> _displayedResources;
+        private Dictionary<StringIdentifier, Dictionary<ICargoable, (int count, int demandSupplyWeight)>> _displayedResources;
         private EntityState _entityState;
         private Entity _selectedEntity;
         private LogiBaseDB _logisticsDB;
         private VolumeStorageDB _volStorageDB;
-        private Dictionary<Guid, TypeStore> _stores;
+        private Dictionary<StringIdentifier, TypeStore> _stores;
         private StaticDataStore _staticData;
         private bool isEnabled;
         private ColonyLogisticsDisplay(EntityState entity)
@@ -76,10 +76,10 @@ namespace Pulsar4X.SDL2UI
                 return;
 
             _changes = new Dictionary<ICargoable, (int count, int demandSupplyWeight)>();
-            _displayedResources = new Dictionary<Guid, Dictionary<ICargoable, (int count, int demandSupplyWeight)>>();
+            _displayedResources = new Dictionary<StringIdentifier, Dictionary<ICargoable, (int count, int demandSupplyWeight)>>();
 
             //we do a deep copy clone so as to avoid a thread collision when we loop through.
-            var newDict = new Dictionary<Guid, TypeStore>();
+            var newDict = new Dictionary<StringIdentifier, TypeStore>();
 
             ICollection ic = _volStorageDB.TypeStores;
             lock (ic.SyncRoot)
@@ -334,7 +334,7 @@ namespace Pulsar4X.SDL2UI
                         var ctype = kvp.Key;
                         var cname = ctype.Name;
                         var itemsStored = 0;
-                        if(_stores[stypeID].Cargoables.ContainsKey(ctype.ID)) 
+                        if(_stores[stypeID].Cargoables.ContainsKey(ctype.ID))
                             itemsStored = (int)_stores[stypeID].CurrentStoreInUnits[ctype.ID];
                         var volumePerItem = ctype.VolumePerUnit;
                         ImGui.Text(cname);
@@ -346,7 +346,7 @@ namespace Pulsar4X.SDL2UI
                             if(!_changes.ContainsKey(ctype))
                                 _changes.Add(ctype, (1, 1));
                             else
-                            { 
+                            {
                                 _changes[ctype] = (_changes[ctype].count + 1, 1);
                             }
                         }
@@ -356,7 +356,7 @@ namespace Pulsar4X.SDL2UI
                             if(!_changes.ContainsKey(ctype))
                                 _changes.Add(ctype, (-1, 1));
                             else
-                            { 
+                            {
                                 _changes[ctype] = (_changes[ctype].count - 1, 1);
                             }
                         }
@@ -366,7 +366,7 @@ namespace Pulsar4X.SDL2UI
                         if(_logisticsDB.ListedItems.ContainsKey(ctype))
                         {
                             int total = _logisticsDB.ListedItems[ctype].count;
-                            
+
                             if(_changes.ContainsKey(ctype))
                             {
                                 total += _changes[ctype].count;
