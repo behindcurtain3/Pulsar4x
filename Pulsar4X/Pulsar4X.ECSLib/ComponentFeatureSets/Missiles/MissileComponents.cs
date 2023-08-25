@@ -142,7 +142,7 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.Missiles
 
         //TODO: this is one of those places where moddata has bled into hardcode...
         //the guid here is from IndustryTypeData.json "Ordinance Construction"
-        public Guid IndustryTypeID { get; } = new Guid("5ADBF620-3740-4FD7-98BE-E8670D58945F");
+        public StringIdentifier IndustryTypeID { get; } = new StringIdentifier("base.ordnance-construction");
         public ushort OutputAmount
         {
             get { return 1; }

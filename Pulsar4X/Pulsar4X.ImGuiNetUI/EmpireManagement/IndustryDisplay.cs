@@ -91,13 +91,13 @@ namespace Pulsar4X.SDL2UI
             var constructablesIDs = new Guid[count];
 
             int i = 0;
-            Dictionary<Guid, List<int>> _constructablesIndexesByType = new ();
+            Dictionary<StringIdentifier, List<int>> _constructablesIndexesByType = new ();
             foreach (var (id, design) in _factionInfoDB.IndustryDesigns)
             {
                 //_constructableDesigns[i] = kvp.Value;
                 constructablesNames[i] = design.Name;
                 constructablesIDs[i] = id;
-                Guid typeID = design.IndustryTypeID;
+                StringIdentifier typeID = design.IndustryTypeID;
 
                 if(!_constructablesIndexesByType.ContainsKey(typeID))
                     _constructablesIndexesByType.Add(typeID, new List<int>());

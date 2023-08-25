@@ -112,7 +112,7 @@ namespace Pulsar4X.ECSLib
         public Dictionary<StringIdentifier, CargoTypeSD> CargoTypes = new ();
 
         [JsonIgnore]
-        public Dictionary<Guid, IndustryTypeSD> IndustryTypes = new Dictionary<Guid, IndustryTypeSD>();
+        public Dictionary<StringIdentifier, IndustryTypeSD> IndustryTypes = new Dictionary<StringIdentifier, IndustryTypeSD>();
 
         public Dictionary<StringIdentifier, ArmorSD> ArmorTypes = new ();
 
@@ -168,7 +168,7 @@ namespace Pulsar4X.ECSLib
                     "CargoTypes", typeof(Dictionary<StringIdentifier, CargoTypeSD>)
                 },
                 {
-                    "IndustryTypes", typeof(Dictionary<Guid, IndustryTypeSD>)
+                    "IndustryTypes", typeof(Dictionary<StringIdentifier, IndustryTypeSD>)
                 },
                 {
                     "ArmorTypes", typeof(Dictionary<StringIdentifier, ArmorSD>)
@@ -213,7 +213,7 @@ namespace Pulsar4X.ECSLib
                     typeof(Dictionary<StringIdentifier, CargoTypeSD>), "CargoTypes"
                 },
                 {
-                    typeof(Dictionary<Guid, IndustryTypeSD>), "IndustryTypes"
+                    typeof(Dictionary<StringIdentifier, IndustryTypeSD>), "IndustryTypes"
                 },
                 {
                     typeof(Dictionary<StringIdentifier, ArmorSD>), "ArmorTypes"
@@ -410,13 +410,15 @@ namespace Pulsar4X.ECSLib
             }
         }
 
-        internal void Store(Dictionary<Guid, IndustryTypeSD> industryTypes)
+        internal void Store(Dictionary<StringIdentifier, IndustryTypeSD> industryTypes)
         {
             if (industryTypes != null)
             {
-                foreach (KeyValuePair<Guid,IndustryTypeSD> kvp in industryTypes)
+                foreach (var (key, industryType) in industryTypes)
                 {
-                    IndustryTypes[kvp.Key] = kvp.Value;
+                    industryType.ID = key;
+                    IndustryTypes[key] = industryType;
+                    Store(key, industryType);
                 }
             }
         }

@@ -254,6 +254,7 @@ namespace Pulsar4X.ECSLib
             {
                 case "ArmorTypes":
                 case "CargoTypes":
+                case "IndustryTypes":
                     data = obj["Data"].ToObject(type, Serializer2);
                     break;
                 default:

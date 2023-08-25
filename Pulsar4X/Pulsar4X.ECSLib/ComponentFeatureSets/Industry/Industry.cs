@@ -28,12 +28,12 @@ namespace Pulsar4X.ECSLib.Industry
     public class IndustryAtb : IComponentDesignAttribute
     {
         [JsonProperty]
-        public Dictionary<Guid, int> IndustryPoints { get; private set; } = new Dictionary<Guid, int>();
+        public Dictionary<StringIdentifier, int> IndustryPoints { get; private set; } = new ();
 
         [JsonProperty]
         private double MaxProductionVolume;
 
-        public IndustryAtb(Dictionary<Guid, double> industryRates)
+        public IndustryAtb(Dictionary<StringIdentifier, double> industryRates)
         {
             MaxProductionVolume = double.PositiveInfinity;
 
@@ -45,7 +45,7 @@ namespace Pulsar4X.ECSLib.Industry
             }
         }
 
-        public IndustryAtb(Dictionary<Guid, double> industryRates, double maxProductionVolume)
+        public IndustryAtb(Dictionary<StringIdentifier, double> industryRates, double maxProductionVolume)
         {
             MaxProductionVolume = maxProductionVolume;
 
@@ -86,7 +86,7 @@ namespace Pulsar4X.ECSLib.Industry
             string industryTypesAndPoints = "";
             foreach (var kvp in IndustryPoints)
             {
-                var name =StaticRefLib.StaticData.IndustryTypes[kvp.Key].Name;
+                var name = StaticRefLib.StaticData.IndustryTypes[kvp.Key].Name;
                 var amount = kvp.Value;
 
                 industryTypesAndPoints += name + "\t" + amount + "\n";
@@ -112,7 +112,7 @@ namespace Pulsar4X.ECSLib.Industry
         Dictionary<Guid, long> ResourceCosts { get; }
 
         long IndustryPointCosts { get; }
-        Guid IndustryTypeID { get; }
+        StringIdentifier IndustryTypeID { get; }
         ushort OutputAmount { get; }
         void OnConstructionComplete(Entity industryEntity, VolumeStorageDB storage, Guid productionLine, IndustryJob batchJob, IConstrucableDesign designInfo);
 
@@ -164,7 +164,7 @@ namespace Pulsar4X.ECSLib.Industry
 
     public class IndustryJob : JobBase
     {
-        internal Guid TypeID;
+        internal StringIdentifier TypeID;
 
         public IndustryJob(FactionInfoDB factionInfo, Guid itemID)
         {

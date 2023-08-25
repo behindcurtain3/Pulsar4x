@@ -13,7 +13,7 @@ namespace Pulsar4X.ECSLib
         {
             public string Name;
             public double MaxVolume;
-            public Dictionary<Guid, int> IndustryTypeRates = new Dictionary<Guid, int>();
+            public Dictionary<StringIdentifier, int> IndustryTypeRates = new ();
             public List<IndustryJob> Jobs = new List<IndustryJob>();
         }
 

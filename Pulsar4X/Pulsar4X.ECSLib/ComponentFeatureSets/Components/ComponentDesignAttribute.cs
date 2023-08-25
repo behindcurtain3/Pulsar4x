@@ -608,6 +608,16 @@ namespace Pulsar4X.ECSLib
 
                     args.Result = dict;
                     break;
+                case "StringIdentifierDict":
+                    Dictionary<StringIdentifier, double> siDict = new ();
+                    foreach (var kvp in _designAttribute.GuidDictionary)
+                    {
+                        //MakeThisDependant(kvp.Value);
+                        siDict.Add(new StringIdentifier(kvp.Key.ToString()), kvp.Value.DResult);
+                    }
+
+                    args.Result = siDict;
+                    break;
             }
         }
 

@@ -25,10 +25,10 @@ namespace Pulsar4X.ECSLib
     }
 
     [StaticData(true, IDPropertyName = "ID")]
-    public struct IndustryTypeSD
+    public class IndustryTypeSD
     {
         public string Name;
-        public Guid ID;
+        public StringIdentifier ID;
     }
 }
 

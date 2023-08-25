@@ -47,7 +47,7 @@ namespace Pulsar4X.ECSLib
 
         //TODO: this is one of those places where moddata has bled into hardcode...
         //the guid here is from IndustryTypeData.json "Ship Assembly"
-        public Guid IndustryTypeID { get; } = new Guid("91823C5B-A71A-4364-A62C-489F0183EFB5");
+        public StringIdentifier IndustryTypeID { get; } = new StringIdentifier("base.ship-assembly");
         public ushort OutputAmount { get; } = 1;
 
         public void OnConstructionComplete(Entity industryEntity, VolumeStorageDB storage, Guid productionLine, IndustryJob batchJob, IConstrucableDesign designInfo)

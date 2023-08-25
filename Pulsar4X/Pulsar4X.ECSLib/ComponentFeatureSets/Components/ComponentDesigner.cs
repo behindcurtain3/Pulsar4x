@@ -101,7 +101,7 @@ namespace Pulsar4X.ECSLib
         public int HTK;
         public int CrewReq;
         public long IndustryPointCosts { get; set; }
-        public Guid IndustryTypeID { get; set; }
+        public StringIdentifier IndustryTypeID { get; set; }
         public ushort OutputAmount
         {
             get { return 1; }
@@ -477,7 +477,7 @@ namespace Pulsar4X.ECSLib
         {
             get { return _design.ComponentMountType;}
             internal set { _design.ComponentMountType = value; } }
-        public Guid IndustryType
+        public StringIdentifier IndustryType
         {
             get { return _design.IndustryTypeID; }
             internal set { _design.IndustryTypeID = value; }

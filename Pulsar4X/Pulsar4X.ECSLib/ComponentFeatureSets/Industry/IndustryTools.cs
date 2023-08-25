@@ -104,7 +104,7 @@ namespace Pulsar4X.ECSLib.Industry
 
             foreach (var (prodLineID, prodLine) in industryDB.ProductionLines.ToArray())
             {
-                var industryPointsRemaining = new Dictionary<Guid, int>(prodLine.IndustryTypeRates);
+                var industryPointsRemaining = new Dictionary<StringIdentifier, int>(prodLine.IndustryTypeRates);
 
                 foreach(var batchJob in prodLine.Jobs.ToArray())
                 {

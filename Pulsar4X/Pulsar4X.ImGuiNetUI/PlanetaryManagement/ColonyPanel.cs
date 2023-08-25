@@ -27,7 +27,7 @@ namespace Pulsar4X.SDL2UI
             _selectedEntity = selectedEntity;
             _cargoList = new CargoListPannelSimple(staticData, selectedEntity);
             _staticData = staticData;
-            
+
         }
 
         public static ColonyPanel GetInstance(StaticDataStore staticData, EntityState selectedEntity)
@@ -59,10 +59,10 @@ namespace Pulsar4X.SDL2UI
 
             //resources list include refined or seperate?
             //factories/installations list - expandable to show health and disable/enable specific installations
-            //mining stats pannel. 
+            //mining stats pannel.
             //refinary panel, expandable?
             //construction pannel, expandable?
-            //constructed but not installed components. 
+            //constructed but not installed components.
             //installation pannel (install constructed components
             if (IsActive)
             {
@@ -71,22 +71,22 @@ namespace Pulsar4X.SDL2UI
                 {
                     ImGui.BeginTabBar("IndustryTabs");
 
-                    
+
                     if (ImGui.BeginTabItem("Overview"))
                     {
                         OverViewPannel.Display(_selectedEntity);
                         ImGui.EndTabItem();
                     }
-                    
+
                     if (ImGui.BeginTabItem("Facilities"))
                     {
                         FacilitiesViewPannel.Display(_selectedEntity);
                         ImGui.EndTabItem();
                     }
 
-                    
-                    
-                    
+
+
+
                     if( ImGui.BeginTabItem("Cargo and Storage"))
                     {
                         _cargoList.Display();
@@ -110,8 +110,8 @@ namespace Pulsar4X.SDL2UI
                 ImGui.End();
             }
         }
-        
-        
+
+
         internal void HardRefresh()
         {
             _factionInfoDB = _uiState.Faction.GetDataBlob<FactionInfoDB>();
@@ -127,9 +127,9 @@ namespace Pulsar4X.SDL2UI
                 _industryDB = null;
                 _industryPannel = null;
             }
-            
+
             _cargoList = new CargoListPannelSimple(_staticData, _selectedEntity);
-            
+
 
         }
 
@@ -143,18 +143,18 @@ namespace Pulsar4X.SDL2UI
     public class OverViewPannel
     {
         private static Guid _entityID;
-        private static Dictionary<Guid, IndustryTypeSD> _industryTypes;
+        private static Dictionary<StringIdentifier, IndustryTypeSD> _industryTypes;
         public static void Setup(EntityState selectedEntity)
         {
             _entityID = selectedEntity.Entity.Guid;
             _industryTypes = Pulsar4X.ECSLib.StaticRefLib.StaticData.IndustryTypes;
-            
+
         }
-        
+
         public static void Display(EntityState selectedEntity)
         {
             EntityInfoPanel.AbilitesDisplay.Display(selectedEntity.Entity);
-            
+
         }
     }
 
@@ -162,12 +162,12 @@ namespace Pulsar4X.SDL2UI
     {
 
         private static Guid _entityID;
-        private static Dictionary<Guid, IndustryTypeSD> _industryTypes;
+        private static Dictionary<StringIdentifier, IndustryTypeSD> _industryTypes;
         public static void Setup(EntityState selectedEntity)
         {
             _entityID = selectedEntity.Entity.Guid;
             _industryTypes = Pulsar4X.ECSLib.StaticRefLib.StaticData.IndustryTypes;
-            
+
         }
 
         public static void Display(EntityState selectedEntity)
@@ -176,10 +176,10 @@ namespace Pulsar4X.SDL2UI
             var componentInstances = EntityInfoPanel.ComponentsDisplay.CreateNewInstanceArray(selectedEntity.Entity);
             EntityInfoPanel.ComponentsDisplay.DisplayComplex(componentInstances);
 
- 
+
 
         }
-        
+
 
     }
 }

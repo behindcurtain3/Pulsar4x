@@ -25,7 +25,7 @@
           "BuildPointCostFormula": "[Mass]",
           "MountType": "Missile",
           "CargoTypeID": "base.storage-ordnance",
-          "IndustryTypeID": "B457C6FE-07A7-4EA1-90DB-D2547245FA86",
+          "IndustryTypeID": "base.component-construction",
           "ComponentAtbSDs": [
             {
               "Name": "Mass",
@@ -245,7 +245,7 @@
           "CreditCostFormula": "[Mass]",
           "BuildPointCostFormula": "[Mass]",
           "MountType": "Missile",
-          "IndustryTypeID": "B457C6FE-07A7-4EA1-90DB-D2547245FA86",
+          "IndustryTypeID": "base.component-construction",
           "CargoTypeID": "base.storage-ordnance",
           "ComponentAtbSDs": [
             {
@@ -391,7 +391,7 @@
           "BuildPointCostFormula": "[Mass]",
           "MountType": "Missile",
           "CargoTypeID": "base.storage-ordnance",
-          "IndustryTypeID": "B457C6FE-07A7-4EA1-90DB-D2547245FA86",
+          "IndustryTypeID": "base.component-construction",
           "ComponentAtbSDs": [
             {
               "Name": "Engine Mass",
@@ -468,7 +468,7 @@
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipComponent, ShipCargo, PlanetInstallation",
           "CargoTypeID": "base.storage-general",
-          "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
+          "IndustryTypeID": "base.installation-construction",
           "ComponentAtbSDs": [
             {
               "Name": "Rack Size",

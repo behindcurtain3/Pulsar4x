@@ -29,7 +29,7 @@
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipCargo, PlanetInstallation",
           "CargoTypeID": "base.storage-general",
-          "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
+          "IndustryTypeID": "base.installation-construction",
           "ComponentAtbSDs": [
             {
               "Name": "MiningAmount",
@@ -144,7 +144,7 @@
           "BuildPointCostFormula": "[Mass] / 2",
           "MountType": "ShipCargo, PlanetInstallation",
           "CargoTypeID": "base.storage-general",
-          "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
+          "IndustryTypeID": "base.installation-construction",
           "ComponentAtbSDs": [
             {
               "Name": "Size",
@@ -208,7 +208,7 @@
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipCargo, PlanetInstallation",
           "CargoTypeID": "base.storage-general",
-          "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
+          "IndustryTypeID": "base.installation-construction",
           "ComponentAtbSDs": [
             {
               "Name": "Size",
@@ -233,12 +233,12 @@
                 "Entries":
                 [
                   {
-                    "Key": "265B36EE-BAED-4F92-9AEC-BC8A7EA0DF1F",
+                    "Key": "base.refining",
                     "Value": "Ability('Refinery Points')"
                   }
                 ]
               },
-              "AttributeFormula": "AtbConstrArgs([GuidDict])",
+              "AttributeFormula": "AtbConstrArgs([StringIdentifierDict])",
               "AttributeType": "Pulsar4X.ECSLib.Industry.IndustryAtb"
             }
           ]
@@ -271,7 +271,7 @@
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipCargo, PlanetInstallation",
           "CargoTypeID": "base.storage-general",
-          "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
+          "IndustryTypeID": "base.installation-construction",
           "ComponentAtbSDs": [
             {
               "Name": "Size",
@@ -308,20 +308,20 @@
                 "Entries":
                 [
                   {
-                    "Key": "B457C6FE-07A7-4EA1-90DB-D2547245FA86",
+                    "Key": "base.component-construction",
                     "Value": "Ability('Component Construction Points')"
                   },
                   {
-                    "Key": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
+                    "Key": "base.installation-construction",
                     "Value": "Ability('Installation Construction Points')"
                   },
                   {
-                    "Key": "5ADBF620-3740-4FD7-98BE-E8670D58945F",
+                    "Key": "base.ordnance-construction",
                     "Value": "Ability('Ordnance Construction Points')"
                   }
                 ]
               },
-              "AttributeFormula": "AtbConstrArgs([GuidDict])",
+              "AttributeFormula": "AtbConstrArgs([StringIdentifierDict])",
               "AttributeType": "Pulsar4X.ECSLib.Industry.IndustryAtb"
             }
           ]
@@ -354,7 +354,7 @@
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipCargo, PlanetInstallation",
           "CargoTypeID": "base.storage-general",
-          "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
+          "IndustryTypeID": "base.installation-construction",
           "ComponentAtbSDs": [
             {
               "Name": "Component Construction Points",
@@ -381,16 +381,16 @@
                 "Entries":
                 [
                   {
-                    "Key": "B457C6FE-07A7-4EA1-90DB-D2547245FA86",
+                    "Key": "base.component-construction",
                     "Value": "Ability('Component Construction Points')"
                   },
                   {
-                    "Key": "91823C5B-A71A-4364-A62C-489F0183EFB5",
+                    "Key": "base.ship-assembly",
                     "Value": "Ability('Ship Assembly Points')"
                   }
                 ]
               },
-              "AttributeFormula": "AtbConstrArgs([GuidDict], Ability('Slip Size'))",
+              "AttributeFormula": "AtbConstrArgs([StringIdentifierDict], Ability('Slip Size'))",
               "AttributeType": "Pulsar4X.ECSLib.Industry.IndustryAtb"
             }
           ]
@@ -419,7 +419,7 @@
           "BuildPointCostFormula": "100",
           "MountType": "ShipCargo, PlanetInstallation",
           "CargoTypeID": "base.storage-general",
-          "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
+          "IndustryTypeID": "base.installation-construction",
           "ComponentAtbSDs": [
             {
               "Name": "Support Colonists",
@@ -469,7 +469,7 @@
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipComponent, ShipCargo, PlanetInstallation",
           "CargoTypeID": "base.storage-general",
-          "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
+          "IndustryTypeID": "base.installation-construction",
           "ComponentAtbSDs": [
             {
               "Name": "Cargo Transfer Rate",
@@ -531,7 +531,7 @@
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipCargo, PlanetInstallation",
           "CargoTypeID": "base.storage-general",
-          "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
+          "IndustryTypeID": "base.installation-construction",
           "ComponentAtbSDs": [
             {
               "Name": "Logistic Capacity",
@@ -581,7 +581,7 @@
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipComponent, ShipCargo, PlanetInstallation",
           "CargoTypeID": "base.storage-general",
-          "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
+          "IndustryTypeID": "base.installation-construction",
           "ComponentAtbSDs": [
             {
               "Name": "Warehouse Size",
@@ -670,7 +670,7 @@
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipComponent, ShipCargo, PlanetInstallation, Fighter",
           "CargoTypeID": "base.storage-general",
-          "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
+          "IndustryTypeID": "base.installation-construction",
           "ComponentAtbSDs": [
             {
               "Name": "Tank Radius",
@@ -731,7 +731,7 @@
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipComponent, ShipCargo, PlanetInstallation, Fighter",
           "CargoTypeID": "base.storage-general",
-          "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
+          "IndustryTypeID": "base.installation-construction",
           "ComponentAtbSDs": [
             {
               "Name": "Tank Volume",
@@ -790,7 +790,7 @@
           "BuildPointCostFormula": "[Mass]",
           "MountType": "PlanetInstallation",
           "CargoTypeID": "base.storage-general",
-          "IndustryTypeID": "EC717019-D9B2-4F24-ADE2-BFFC87294545",
+          "IndustryTypeID": "base.installation-construction",
           "ComponentAtbSDs": [
             {
               "Name": "Warehouse Size",

@@ -78,13 +78,13 @@ namespace Pulsar4X.ImGuiNetUI.EntityManagement
             var constructablesIDs = new Guid[count];
 
             int i = 0;
-            Dictionary<Guid, List<int>> _constructablesIndexesByType = new Dictionary<Guid, List<int>>();
+            Dictionary<StringIdentifier, List<int>> _constructablesIndexesByType = new ();
             foreach (var kvp in _factionInfoDB.IndustryDesigns)
             {
                 //_constructableDesigns[i] = kvp.Value;
                 constructablesNames[i] = kvp.Value.Name;
                 constructablesIDs[i] = kvp.Key;
-                Guid typeID = kvp.Value.IndustryTypeID;
+                StringIdentifier typeID = kvp.Value.IndustryTypeID;
 
                 if(!_constructablesIndexesByType.ContainsKey(typeID))
                     _constructablesIndexesByType.Add(typeID, new List<int>());

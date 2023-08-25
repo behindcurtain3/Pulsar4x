@@ -37,7 +37,7 @@
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipComponent, ShipCargo, Fighter",
           "CargoTypeID": "base.storage-general",
-          "IndustryTypeID": "B457C6FE-07A7-4EA1-90DB-D2547245FA86",
+          "IndustryTypeID": "base.component-construction",
           "ComponentAtbSDs": [
             {
               "Name": "Mass",
@@ -123,7 +123,7 @@
           "BuildPointCostFormula": "[Mass]",
           "MountType": "ShipComponent, ShipCargo, Fighter",
           "CargoTypeID": "base.storage-general",
-          "IndustryTypeID": "B457C6FE-07A7-4EA1-90DB-D2547245FA86",
+          "IndustryTypeID": "base.component-construction",
           "ComponentAtbSDs": [
             {
               "Name": "Mass",

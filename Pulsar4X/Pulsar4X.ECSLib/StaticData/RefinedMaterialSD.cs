@@ -15,7 +15,7 @@ namespace Pulsar4X.ECSLib
             get;
             init;
         }
-        public Guid IndustryTypeID { get; set; }
+        public StringIdentifier IndustryTypeID { get; set; }
 
         public void OnConstructionComplete(Entity industryEntity, VolumeStorageDB storage, Guid productionLine, IndustryJob batchJob, IConstrucableDesign designInfo)
         {
