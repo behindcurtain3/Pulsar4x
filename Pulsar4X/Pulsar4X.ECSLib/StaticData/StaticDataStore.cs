@@ -14,6 +14,24 @@ namespace Pulsar4X.ECSLib
     /// </summary>
     public class StaticDataStore
     {
+        private static readonly Dictionary<StringIdentifier, object> Data = new();
+
+        internal void Store(StringIdentifier id, object data)
+        {
+            // Check for bad data or bad id
+            if(data == null || id.ToString().IsNullOrEmpty() || id.Name.IsNullOrEmpty()) return;
+
+            if(Data.ContainsKey(id))
+            {
+                // override existing data
+                Data[id] = data;
+            }
+            else
+            {
+                Data.Add(id, data);
+            }
+        }
+
         /// <summary>
         /// Easily convert string to Type
         /// </summary>
@@ -399,9 +417,11 @@ namespace Pulsar4X.ECSLib
         {
             if (armorTypes != null)
             {
-                foreach (KeyValuePair<StringIdentifier,ArmorSD> kvp in armorTypes)
+                foreach (var (key, armorType) in armorTypes)
                 {
-                    ArmorTypes[kvp.Key] = kvp.Value;
+                    armorType.ResourceID = key;
+                    Store(key, armorType);
+                    ArmorTypes[key] = armorType;
                 }
             }
         }

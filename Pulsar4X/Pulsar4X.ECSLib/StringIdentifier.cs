@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using System.ComponentModel;
+using System.Globalization;
 
 namespace Pulsar4X.ECSLib
 {
@@ -15,6 +17,7 @@ namespace Pulsar4X.ECSLib
     /// </summary>
     /// <param name="Scopes"></param>
     /// <param name="Name"></param>
+    [TypeConverter(typeof(StringIdentifierTypeConverter))]
     public record StringIdentifier(List<string> Scopes, string Name)
     {
         public StringIdentifier(string singleScope, string Name) : this(new List<string> { singleScope }, Name)
@@ -78,4 +81,30 @@ namespace Pulsar4X.ECSLib
             writer.WriteValue(identifier.ToString());
         }
     }
+
+    public class StringIdentifierTypeConverter : TypeConverter
+{
+    public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+    {
+        return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
+    }
+
+    public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+    {
+        if (value is string s)
+        {
+            return new StringIdentifier(s);
+        }
+        return base.ConvertFrom(context, culture, value);
+    }
+
+    public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+    {
+        if (destinationType == typeof(string) && value is StringIdentifier identifier)
+        {
+            return identifier.ToString();
+        }
+        return base.ConvertTo(context, culture, value, destinationType);
+    }
+}
 }

@@ -1,36 +1,17 @@
 {
-
   "Type": "ArmorTypes",
   "Data": {
-    "Entries": [
-      {
-        "Key": "base.armor-types.stainless-steel",
-        "Value": {
-          "ID": "base.armor-types.stainless-steel",
-          "Density": "7900"
-        }
-      },
-      {
-        "Key": "base.armor-types.plastics",
-        "Value": {
-          "ID": "base.armor-types.plastics",
-          "Density": "1175"
-        }
-      },
-      {
-        "Key": "base.armor-types.aluminium",
-        "Value": {
-          "ID": "base.armor-types.aluminium",
-          "Density": "2700"
-        }
-      },
-      {
-        "Key": "base.armor-types.titanium",
-        "Value": {
-          "ID": "base.armor-types.titanium",
-          "Density": "4540"
-        }
-      }
-    ]
+    "base.armor-types.stainless-steel": {
+      "Density": 7900
+    },
+    "base.armor-types.plastics": {
+      "Density": 1175
+    },
+    "base.armor-types.aluminium": {
+      "Density": 2700
+    },
+    "base.armor-types.titanium": {
+      "Density": 4540
+    }
   }
 }
