@@ -14,7 +14,7 @@ namespace Pulsar4X.ECSLib
         private ComponentDesign _design;
         private ComponentDesignAttribute _designAbility;
         private Expression _expression;
-        
+
         // ReSharper disable once NotAccessedField.Local (Used for debuging puroposes. though maybe it could be public and shown in the UI?)
         private string _stringExpression;
 
@@ -29,8 +29,8 @@ namespace Pulsar4X.ECSLib
 
         /// <summary>
         /// This should probilby be avoided, but can be usefull for another formula reading this one, doing another calc, then setting this result again.
-        /// Note that doing so will not recalc other dependants. 
-        /// if I can avoid using this I will remove it. 
+        /// Note that doing so will not recalc other dependants.
+        /// if I can avoid using this I will remove it.
         /// </summary>
         internal object SetResult { set { Result = value; } }
 
@@ -50,7 +50,7 @@ namespace Pulsar4X.ECSLib
                     return (int)(double)Result;
                 else
                 {
-                    throw new Exception("Unexpected Result data Type " + Result.GetType() + " is not double or int");  
+                    throw new Exception("Unexpected Result data Type " + Result.GetType() + " is not double or int");
                 }
             }
         }
@@ -70,7 +70,7 @@ namespace Pulsar4X.ECSLib
                     return (int)Result;
                 else
                 {
-                    throw new Exception("Unexpected Result data Type " + Result.GetType() + " is not double or int");  
+                    throw new Exception("Unexpected Result data Type " + Result.GetType() + " is not double or int");
                 }
             }
         }
@@ -78,7 +78,7 @@ namespace Pulsar4X.ECSLib
 
         /// <summary>
         /// Evaluates the expression and updates the Result.
-        /// will also cause any other dependant ChainedExpressions to evaluate. 
+        /// will also cause any other dependant ChainedExpressions to evaluate.
         /// </summary>
         internal void Evaluate()
         {
@@ -124,7 +124,7 @@ namespace Pulsar4X.ECSLib
         }
 
         /// <summary>
-        /// a private constructor that is used internaly for a one use Expression 
+        /// a private constructor that is used internaly for a one use Expression
         /// </summary>
         /// <param name="expression"></param>
         /// <param name="design"></param>
@@ -141,7 +141,7 @@ namespace Pulsar4X.ECSLib
         }
 
         /// <summary>
-        /// a private constructor that is used internaly for a one use Expression 
+        /// a private constructor that is used internaly for a one use Expression
         /// </summary>
         /// <param name="expression"></param>
         /// <param name="designAbility"></param>
@@ -175,7 +175,7 @@ namespace Pulsar4X.ECSLib
         /// <param name="expression"></param>
         internal void ReplaceExpression(Expression expression)
         {
-            
+
             _expression = expression;
             SetupExpression();
             _stringExpression = _expression.ParsedExpression.ToString();
@@ -275,7 +275,7 @@ namespace Pulsar4X.ECSLib
                 foreach (var kvp in _designAbility.GuidDictionary)
                 {
                     //MakeThisDependant(kvp.Value);
-                    dict.Add((Guid.Parse( kvp.Key.ToString())),kvp.Value.DResult);     
+                    dict.Add((Guid.Parse( kvp.Key.ToString())),kvp.Value.DResult);
                 }
                 args.Result = dict;
             }
@@ -295,11 +295,11 @@ namespace Pulsar4X.ECSLib
                 try
                 {
                     index = (int)args.Parameters[0].Evaluate();
-                    
+
                     ChainedExpression result = _design.ComponentDesignAttributes[index].Formula;
                     if(result.Result == null)
                         result.Evaluate();
-                    MakeThisDependant(result); 
+                    MakeThisDependant(result);
                     args.Result = result.Result;
 
                 }
@@ -338,7 +338,7 @@ namespace Pulsar4X.ECSLib
                 foreach (var kvp in _designAbility.GuidDictionary)
                 {
                     dynamic key = enumConstants[(string)kvp.Key];
-                    dict.Add(key, kvp.Value.DResult);         
+                    dict.Add(key, kvp.Value.DResult);
                 }
                 args.Result = dict;
             }
@@ -346,7 +346,7 @@ namespace Pulsar4X.ECSLib
             if (name == "TechData")
             {
 
-                Guid techGuid = Guid.Parse((string)args.EvaluateParameters()[0]);
+                StringIdentifier techGuid = new StringIdentifier((string)args.EvaluateParameters()[0]);
                 TechSD techSD = _staticDataStore.Techs[techGuid];
                 args.Result = ResearchProcessor.DataFormula(_factionTechDB, techSD);
             }
@@ -355,7 +355,7 @@ namespace Pulsar4X.ECSLib
             if (name == "TechLevel")
             {
 
-                Guid techGuid = Guid.Parse((string)args.EvaluateParameters()[0]);
+                StringIdentifier techGuid = new StringIdentifier((string)args.EvaluateParameters()[0]);
                 if (_factionTechDB.ResearchedTechs.ContainsKey(techGuid))
                     args.Result = _factionTechDB.ResearchedTechs[techGuid];
                 else args.Result = 0;

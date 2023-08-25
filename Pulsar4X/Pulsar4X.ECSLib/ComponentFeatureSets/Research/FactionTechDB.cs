@@ -14,20 +14,20 @@ namespace Pulsar4X.ECSLib
         /// </summary>
         [PublicAPI]
         [JsonProperty]
-        public Dictionary<Guid,int> ResearchedTechs { get; internal set; }
+        public Dictionary<StringIdentifier, int> ResearchedTechs { get; internal set; }
 
         /// <summary>
-        /// dictionary of technologies that are available to research, or are being researched. 
+        /// dictionary of technologies that are available to research, or are being researched.
         /// techs will get added to this dict as they become available by the processor.
         /// the int is how much research has been compleated on this tech.
         /// </summary>
         [PublicAPI]
         [JsonProperty]
         //internal Dictionary<TechSD, int> ResearchableTechs { get; set; }
-        
-        private Dictionary<Guid, (TechSD tech ,int pointsResearched, int pointCost)> Researchables = new Dictionary<Guid, (TechSD, int, int)>();
-        
-        public (TechSD tech, int pointsResearched, int pointCost) GetResarchableTech(Guid id)
+
+        private Dictionary<StringIdentifier, (TechSD tech ,int pointsResearched, int pointCost)> Researchables = new ();
+
+        public (TechSD tech, int pointsResearched, int pointCost) GetResarchableTech(StringIdentifier id)
         {
             return Researchables[id];
         }
@@ -37,25 +37,25 @@ namespace Pulsar4X.ECSLib
             return Researchables.Values.ToList();
         }
 
-        public Dictionary<Guid, (TechSD tech, int pointsResearched, int pointCost)> GetResearchablesDic()
+        public Dictionary<StringIdentifier, (TechSD tech, int pointsResearched, int pointCost)> GetResearchablesDic()
         {
-            return new Dictionary<Guid, (TechSD tech, int pointsResearched, int pointCost)>(Researchables);
+            return new Dictionary<StringIdentifier, (TechSD tech, int pointsResearched, int pointCost)>(Researchables);
         }
 
-        public bool IsResearchable(Guid id)
+        public bool IsResearchable(StringIdentifier id)
         {
             return Researchables.ContainsKey(id);
         }
 
-        internal void IncrementLevel(Guid id)
+        internal void IncrementLevel(StringIdentifier id)
         {
-            
+
             TechSD tech = Researchables[id].tech;
             if (ResearchedTechs.ContainsKey(tech.ID))
                 ResearchedTechs[tech.ID] += 1;
             else
                 ResearchedTechs.Add(tech.ID, 1);
-            
+
             if (GetLevelforTech(tech) >= tech.MaxLevel)
             {
                 Researchables.Remove(tech.ID);
@@ -67,7 +67,7 @@ namespace Pulsar4X.ECSLib
             }
         }
 
-        internal void AddPoints(Guid id, int pointsToAdd)
+        internal void AddPoints(StringIdentifier id, int pointsToAdd)
         {
             lock (Researchables) //because different systems which are on seperate threads may interact with this.
             {
@@ -80,7 +80,7 @@ namespace Pulsar4X.ECSLib
                         ResearchedTechs[tech.ID] += 1;
                     else
                         ResearchedTechs.Add(tech.ID, 1);
-                    
+
                     if (GetLevelforTech(tech) >= tech.MaxLevel)
                     {
                         Researchables.Remove(tech.ID);
@@ -97,8 +97,8 @@ namespace Pulsar4X.ECSLib
                     Researchables[id] = (Researchables[id].tech, points, Researchables[id].pointCost);
                 }
             }
-            
-            
+
+
         }
 
         public void MakeResearchable(TechSD tech)
@@ -126,20 +126,20 @@ namespace Pulsar4X.ECSLib
 
 
         public List<(Scientist scientist, Entity atEntity)> AllScientists { get; internal set; } = new List<(Scientist, Entity)>();
-        
+
         /// <summary>
         /// Constructor for datablob, this should only be used when a new faction is created.
         /// </summary>
         /// <param name="alltechs">a list of all possible techs in game</param>
         public FactionTechDB(List<TechSD> alltechs)
         {
-            
+
             foreach (var techSD in alltechs)
-            {             
+            {
                 UnavailableTechs.Add(techSD);
             }
-            
-            ResearchedTechs = new Dictionary<Guid, int>();
+
+            ResearchedTechs = new Dictionary<StringIdentifier, int>();
 
             ResearchPoints = 0;
         }
@@ -147,15 +147,15 @@ namespace Pulsar4X.ECSLib
         public FactionTechDB(FactionTechDB techDB)
         {
             UnavailableTechs = new HashSet<TechSD>(techDB.UnavailableTechs);
-            ResearchedTechs = new Dictionary<Guid, int>(techDB.ResearchedTechs);
+            ResearchedTechs = new Dictionary<StringIdentifier, int>(techDB.ResearchedTechs);
 
             ResearchPoints = techDB.ResearchPoints;
         }
 
         public FactionTechDB()
         {
-            
-            ResearchedTechs = new Dictionary<Guid, int>();
+
+            ResearchedTechs = new Dictionary<StringIdentifier, int>();
 
             ResearchPoints = 0;
         }
@@ -184,9 +184,9 @@ namespace Pulsar4X.ECSLib
             hash = Misc.ValueHash(ResearchPoints, hash);
             foreach (var item in ResearchedTechs)
             {
-                hash = Misc.ValueHash(item.Key, hash);  
+                hash = Misc.ValueHash(item.Key, hash);
                 hash = Misc.ValueHash(item.Value, hash);
-            } 
+            }
 
             return hash;
         }

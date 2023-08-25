@@ -94,7 +94,7 @@ namespace Pulsar4X.ECSLib
         public double Density { get; internal set; }
 
         public long ResearchCostValue;
-        public Guid TechID;
+        public StringIdentifier TechID;
         public string TypeName; //ie the name in staticData. ie "Newtonion Thruster".
         public string Description;
         //public int Volume_m3 = 1;
@@ -292,7 +292,6 @@ namespace Pulsar4X.ECSLib
             FactionTechDB factionTech = factionEntity.GetDataBlob<FactionTechDB>();
             TechSD tech = new TechSD()
             {
-                ID = Guid.NewGuid(),
                 Name = _design.Name + " Design Research",
                 Description = "Research into building " + _design.Name,
                 MaxLevel = 1,
@@ -300,6 +299,7 @@ namespace Pulsar4X.ECSLib
                 Faction = factionEntity,
                 Design = _design
             };
+            tech.ID = new StringIdentifier("player", tech.Name);
 
             _design.TechID = tech.ID;
             factionTech.MakeResearchable(tech); //add it to researchable techs

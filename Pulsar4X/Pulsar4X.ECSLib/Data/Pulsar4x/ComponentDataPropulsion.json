@@ -32,7 +32,7 @@
               "Units": "kg",
               "DescriptionFormula": "'Mass of this engine'",
               "GuiHint": "GuiSelectionMaxMin",
-              "MaxFormula": "TechData('b056576a-124e-41c5-afcd-27d1f0bf6f4e')",
+              "MaxFormula": "TechData('base.tech-lox-max-size')",
               "MinFormula": "1",
               "StepFormula": "1",
               "AttributeFormula": "500"
@@ -42,14 +42,14 @@
               "Units": "m/s",
               "DescriptionFormula": "'Specific Impulse in m/s, can be increased by research'",
               "GuiHint": "GuiTextDisplay",
-              "AttributeFormula": "3000 * TechData('fa2736ed-d0bf-44a5-bc00-d25d3adaa23c')"
+              "AttributeFormula": "3000 * TechData('base.tech-lox-exhaust-velocity')"
             },
             {
               "Name": "Fuel Consumption",
               "Units": "kg/s",
               "DescriptionFormula": "'Fuel Consumption per second'",
               "GuiHint": "GuiTextDisplay",
-              "AttributeFormula": "Ability('Mass') * 0.3 * TechData('8557acb9-c764-44e7-8ee4-db2c2cebf0bc')"
+              "AttributeFormula": "Ability('Mass') * 0.3 * TechData('base.tech-lox-fuel-consumption')"
             },
             {
               "Name": "Thrust",
@@ -107,7 +107,7 @@
               "Units": "kg",
               "DescriptionFormula": "'Mass of this engine'",
               "GuiHint": "GuiSelectionMaxMin",
-              "MaxFormula": "TechData('b056576a-124e-41c5-afcd-27d1f0bf6f4e')",
+              "MaxFormula": "TechData('base.tech-lox-max-size')",
               "MinFormula": "1",
               "StepFormula": "1",
               "AttributeFormula": "500"
@@ -117,14 +117,14 @@
               "Units": "m/s",
               "DescriptionFormula": "'Specific Impulse in m/s, can be increased by research'",
               "GuiHint": "GuiTextDisplay",
-              "AttributeFormula": "3700 * TechData('fa2736ed-d0bf-44a5-bc00-d25d3adaa23c')"
+              "AttributeFormula": "3700 * TechData('base.tech-lox-exhaust-velocity')"
             },
             {
               "Name": "Fuel Consumption",
               "Units": "kg/s",
               "DescriptionFormula": "'Fuel Consumption per second'",
               "GuiHint": "GuiTextDisplay",
-              "AttributeFormula": "Ability('Mass') * 0.4 * TechData('8557acb9-c764-44e7-8ee4-db2c2cebf0bc')"
+              "AttributeFormula": "Ability('Mass') * 0.4 * TechData('base.tech-lox-fuel-consumption')"
             },
             {
               "Name": "Thrust",
@@ -182,7 +182,7 @@
               "Units": "kg",
               "DescriptionFormula": "'Mass of this engine'",
               "GuiHint": "GuiSelectionMaxMin",
-              "MaxFormula": "TechData('b056576a-124e-41c5-afcd-27d1f0bf6f4e')",
+              "MaxFormula": "TechData('base.tech-lox-max-size')",
               "MinFormula": "1",
               "StepFormula": "1",
               "AttributeFormula": "500"
@@ -192,14 +192,14 @@
               "Units": "m/s",
               "DescriptionFormula": "'Specific Impulse in m/s, can be increased by research'",
               "GuiHint": "GuiTextDisplay",
-              "AttributeFormula": "4000 * TechData('fa2736ed-d0bf-44a5-bc00-d25d3adaa23c')"
+              "AttributeFormula": "4000 * TechData('base.tech-lox-exhaust-velocity')"
             },
             {
               "Name": "Fuel Consumption",
               "Units": "kg/s",
               "DescriptionFormula": "'Fuel Consumption per second'",
               "GuiHint": "GuiTextDisplay",
-              "AttributeFormula": "Ability('Mass') * 0.3 * TechData('8557acb9-c764-44e7-8ee4-db2c2cebf0bc')"
+              "AttributeFormula": "Ability('Mass') * 0.3 * TechData('base.tech-lox-fuel-consumption')"
             },
             {
               "Name": "Thrust",
@@ -258,7 +258,7 @@
               "DescriptionFormula": "'Mass of the engine'",
               "GuiHint": "GuiSelectionMaxMin",
               "MaxFormula": "25000",
-              "MinFormula": "TechData('d814f1d7-329d-407f-b514-3a5a8451e655')",
+              "MinFormula": "TechData('base.tech-alcubierre-miniaturization')",
               "StepFormula": "1",
               "AttributeFormula": "2500"
             },
@@ -267,8 +267,8 @@
               "Units": "EvP",
               "DescriptionFormula": "'More Powerful engines are less efficient for a given size'",
               "GuiHint": "GuiSelectionMaxMin",
-              "MaxFormula": "TechData('b8ef73c7-2ef0-445e-8461-1e0508958a0e')",
-              "MinFormula": "TechData('08fa4c4b-0ddb-4b3a-9190-724d715694de')",
+              "MaxFormula": "TechData('base.tech-engine-max-size')",
+              "MinFormula": "TechData('base.tech-engine.min-size')",
               "StepFormula": "0.1",
               "AttributeFormula": "1"
             },
@@ -284,21 +284,21 @@
               "Units": "KJ",
               "DescriptionFormula": "'How much energy required to create the warp bubble.'",
               "GuiHint": "GuiTextDisplay",
-              "AttributeFormula": "Ability('EnginePower') * TechData('c534d9f0-0d63-424f-9780-d124235903de') * 0.5"
+              "AttributeFormula": "Ability('EnginePower') * TechData('base.tech-alcubierre-bubble-creation-cost') * 0.5"
             },
             {
               "Name": "Bubble Sustain Energy Cost",
               "Units": "KW",
               "DescriptionFormula": "'How much energy required to sustain the warp bubble per second during the warp'",
               "GuiHint": "GuiTextDisplay",
-              "AttributeFormula": "Ability('EnginePower') * 0.001 * TechData('7fa0dc05-5e58-4678-be44-afaad014e096')"
+              "AttributeFormula": "Ability('EnginePower') * 0.001 * TechData('base.tech-alcubierre-sustain-cost')"
             },
             {
               "Name": "Bubble Collapse Energy Returned",
               "Units": "KJ",
               "DescriptionFormula": "'How much energy we get back from collapsing the warp bubble'",
               "GuiHint": "GuiTextDisplay",
-              "AttributeFormula": "Ability('Bubble Creation Energy Cost') * TechData('d48e1883-2069-441f-ba55-69f63f47add7')"
+              "AttributeFormula": "Ability('Bubble Creation Energy Cost') * TechData('base.tech-alcubierre-collapse-efficency')"
             },
             {
               "Name": "db",

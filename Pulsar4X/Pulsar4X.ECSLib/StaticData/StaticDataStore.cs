@@ -91,7 +91,7 @@ namespace Pulsar4X.ECSLib
         /// stored in a dictionary to allow fast lookup of a specific Technology based on its guid.
         /// </summary>
         [JsonIgnore]
-        public Dictionary<Guid, TechSD> Techs = new Dictionary<Guid, TechSD>();
+        public Dictionary<StringIdentifier, TechSD> Techs = new ();
 
         /// <summary>
         /// Dictionary which stores all Components.
@@ -112,7 +112,7 @@ namespace Pulsar4X.ECSLib
         public Dictionary<StringIdentifier, CargoTypeSD> CargoTypes = new ();
 
         [JsonIgnore]
-        public Dictionary<StringIdentifier, IndustryTypeSD> IndustryTypes = new Dictionary<StringIdentifier, IndustryTypeSD>();
+        public Dictionary<StringIdentifier, IndustryTypeSD> IndustryTypes = new ();
 
         public Dictionary<StringIdentifier, ArmorSD> ArmorTypes = new ();
 
@@ -156,7 +156,7 @@ namespace Pulsar4X.ECSLib
                     "Minerals", typeof(Dictionary<Guid, MineralSD>)
                 },
                 {
-                    "Techs", typeof(Dictionary<Guid, TechSD>)
+                    "Techs", typeof(Dictionary<StringIdentifier, TechSD>)
                 },
                 {
                     "ProcessedMaterials", typeof(Dictionary<Guid, ProcessedMaterialSD>)
@@ -201,7 +201,7 @@ namespace Pulsar4X.ECSLib
                     typeof(List<MineralSD>), "Minerals"
                 },
                 {
-                    typeof(Dictionary<Guid, TechSD>), "Techs"
+                    typeof(Dictionary<StringIdentifier, TechSD>), "Techs"
                 },
                 {
                     typeof(Dictionary<Guid, ProcessedMaterialSD>), "RefinedMaterials"
@@ -244,9 +244,6 @@ namespace Pulsar4X.ECSLib
             if (cargoGood != null)
                 return cargoGood;
 
-            if (Techs.ContainsKey(id))
-                return Techs[id];
-
             if (ComponentTemplates.ContainsKey(id))
                 return ComponentTemplates[id];
 
@@ -255,6 +252,9 @@ namespace Pulsar4X.ECSLib
 
         public object FindDataObjectUsingID(StringIdentifier id)
         {
+            if (Techs.ContainsKey(id))
+                return Techs[id];
+
             if (CargoTypes.ContainsKey(id))
                 return CargoTypes[id];
             return null;
@@ -345,12 +345,16 @@ namespace Pulsar4X.ECSLib
         /// <summary>
         /// Stores Technology Static Data. Will overwrite any existing Techs with the same ID.
         /// </summary>
-        internal void Store(Dictionary<Guid, TechSD> techs)
+        internal void Store(Dictionary<StringIdentifier, TechSD> techs)
         {
             if (techs != null)
             {
-                foreach (KeyValuePair<Guid, TechSD> tech in techs)
-                    Techs[tech.Key] = tech.Value; // replace existing value or insert a new one as required.
+                foreach (var (key, tech) in techs)
+                {
+                    tech.ID = key;
+                    Techs[key] = tech;
+                    Store(key, tech);
+                }
             }
         }
 

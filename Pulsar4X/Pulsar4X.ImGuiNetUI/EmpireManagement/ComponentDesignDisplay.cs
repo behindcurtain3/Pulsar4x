@@ -137,7 +137,7 @@ namespace Pulsar4X.SDL2UI
                     {
                         _componentDesigner.Name = ImGuiSDL2CSHelper.StringFromBytes(_nameInputBuffer);
                         _componentDesigner.CreateDesign(uiState.Faction);
-                        //we reset the designer here, so we don't end up trying to edit the precious design. 
+                        //we reset the designer here, so we don't end up trying to edit the precious design.
                         var factionTech = uiState.Faction.GetDataBlob<FactionTechDB>();
                         _componentDesigner = new ComponentDesigner(Template.Value, factionTech);
 
@@ -447,7 +447,7 @@ namespace Pulsar4X.SDL2UI
             _techNames = new string[attribute.GuidDictionary.Count];
             foreach (var kvp in attribute.GuidDictionary)
             {
-                TechSD sd = StaticRefLib.StaticData.Techs[Guid.Parse((string)kvp.Key)];
+                TechSD sd = StaticRefLib.StaticData.Techs[new StringIdentifier((string)kvp.Key)];
                 _techSDs[i] = sd;
                 _techNames[i] = sd.Name;
                 i++;
@@ -535,17 +535,17 @@ namespace Pulsar4X.SDL2UI
 
         private void GuiHintTextSelectionFormula(ComponentDesignAttribute attribute)
         {
-            
+
             Dictionary<string, ChainedExpression> dict = new Dictionary<string, ChainedExpression>();
 
             _listNames = new string[dict.Count];
-            
+
             int i = 0;
             foreach (var kvp in attribute.GuidDictionary)
             {
                 _listNames[i] = (string)kvp.Key;
             }
-            
+
             if (compactmod)
             {
                 ImGui.TextWrapped(attribute.Name + ": " + attribute.Description);
@@ -558,7 +558,7 @@ namespace Pulsar4X.SDL2UI
                 ImGui.TextWrapped(attribute.Description);
                 ImGui.NewLine();
             }
-            
+
             ImGui.TextWrapped(attribute.Value.ToString());
 
             if (ImGui.Combo("Select", ref attribute.ListSelection, _listNames, _listNames.Length))

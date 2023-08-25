@@ -24,12 +24,12 @@ namespace Pulsar4X.Tests
             //Tech();
             // @todo: change this so we can look up researched techs by name
             _faction = FactionFactory.CreateFaction(_game, "Terran");
-            _faction.GetDataBlob<FactionTechDB>().ResearchedTechs.Add(new Guid("b8ef73c7-2ef0-445e-8461-1e0508958a0e"),3);
-            _faction.GetDataBlob<FactionTechDB>().ResearchedTechs.Add(new Guid("08fa4c4b-0ddb-4b3a-9190-724d715694de"), 3);
-            _faction.GetDataBlob<FactionTechDB>().ResearchedTechs.Add(new Guid("8557acb9-c764-44e7-8ee4-db2c2cebf0bc"), 5);
-            _faction.GetDataBlob<FactionTechDB>().ResearchedTechs.Add(new Guid("35608fe6-0d65-4a5f-b452-78a3e5e6ce2c"), 1);
-            _faction.GetDataBlob<FactionTechDB>().ResearchedTechs.Add(new Guid("c827d369-3f16-43ef-b112-7d5bcafb74c7"), 1);
-            _faction.GetDataBlob<FactionTechDB>().ResearchedTechs.Add(new Guid("db6818f3-99e9-46c1-b903-f3af978c38b2"), 1);
+            _faction.GetDataBlob<FactionTechDB>().ResearchedTechs.Add(new StringIdentifier("base.tech-engine-max-power"),3);
+            _faction.GetDataBlob<FactionTechDB>().ResearchedTechs.Add(new StringIdentifier("base.tech-engine-min-power"), 3);
+            _faction.GetDataBlob<FactionTechDB>().ResearchedTechs.Add(new StringIdentifier("base.tech-lox-fuel-consumption"), 5);
+            _faction.GetDataBlob<FactionTechDB>().ResearchedTechs.Add(new StringIdentifier("base.tech-conventional-engine"), 1);
+            _faction.GetDataBlob<FactionTechDB>().ResearchedTechs.Add(new StringIdentifier("base.tech-nuclear-thermal-engine"), 1);
+            _faction.GetDataBlob<FactionTechDB>().ResearchedTechs.Add(new StringIdentifier("base.tech-nuclear-pulse-engine"), 1);
             _starSystem = new StarSystem(_game, "Sol", -1);
             /////Ship Class/////
             //_shipClass = ShipFactory.CreateNewShipClass(_game, _faction, "TestClass");
@@ -111,14 +111,14 @@ namespace Pulsar4X.Tests
 
             ComponentDesigner cargoDesigner = new ComponentDesigner(cargo, _faction.GetDataBlob<FactionTechDB>());
             cargoDesigner.ComponentDesignAttributes["Size"].SetValue();
- 
+
             ComponentDesign cargoDesign = cargoDesigner.CreateDesign(_faction);
-            
+
             bool hasAttribute = cargoDesign.TryGetAttribute<VolumeStorageAtb>(out var attributeDB);
             Assert.IsTrue(hasAttribute);
-            
 
-            
+
+
             CargoTypeSD cargotype = _game.StaticData.CargoTypes[attributeDB.StoreTypeID];
 
             Assert.AreEqual(100, attributeDB.MaxVolume);
@@ -261,7 +261,7 @@ namespace Pulsar4X.Tests
             sensorSigDBArgs10.AttributeType = typeof(SensorSignatureAtbDB).ToString();
             sensorSigDBArgs10.AttributeFormula = "AtbConstrArgs(Ability(9),0)";
             component.ComponentAtbSDs.Add(sensorSigDBArgs10);
-            
+
             return component;
         }
 
@@ -281,10 +281,10 @@ namespace Pulsar4X.Tests
             component.CrewReqFormula = "50000";
 
             component.ResearchCostFormula = "0";
-            
+
             component.BuildPointCostFormula = "[Mass]";
 
-            component.ResourceCostFormula = new Dictionary<Guid, string> {{new Guid("2d4b2866-aa4a-4b9a-b8aa-755fe509c0b3"), "60"}, 
+            component.ResourceCostFormula = new Dictionary<Guid, string> {{new Guid("2d4b2866-aa4a-4b9a-b8aa-755fe509c0b3"), "60"},
             {new Guid("2ae2a928-3e14-45d5-befc-5bd6ed16ec0a"), "60"}};
 
             component.CreditCostFormula = "120";
@@ -316,7 +316,7 @@ namespace Pulsar4X.Tests
             mineAttribute.AttributeType = typeof(MineResourcesAtbDB).ToString();
             mineAttribute.AttributeFormula = "AtbConstrArgs([GuidDict])";
             component.ComponentAtbSDs.Add(mineAttribute);
-            
+
             return component;
 
         }
@@ -340,7 +340,7 @@ namespace Pulsar4X.Tests
 
             component.BuildPointCostFormula = "[Mass]";
 
-            component.ResourceCostFormula = new Dictionary<Guid, string> {{new Guid("2dfc78ea-f8a4-4257-bc04-47279bf104ef"), "60"}, 
+            component.ResourceCostFormula = new Dictionary<Guid, string> {{new Guid("2dfc78ea-f8a4-4257-bc04-47279bf104ef"), "60"},
             {new Guid("c3bcb597-a2d1-4b12-9349-26586c8a921c"), "60"}};
 
             component.CreditCostFormula = "120";
@@ -381,7 +381,7 @@ namespace Pulsar4X.Tests
 
             component.BuildPointCostFormula = "[Mass]";
 
-            component.ResourceCostFormula = new Dictionary<Guid, string> {{new Guid("2dfc78ea-f8a4-4257-bc04-47279bf104ef"), "60"}, 
+            component.ResourceCostFormula = new Dictionary<Guid, string> {{new Guid("2dfc78ea-f8a4-4257-bc04-47279bf104ef"), "60"},
             {new Guid("c3bcb597-a2d1-4b12-9349-26586c8a921c"), "60"}};
 
             component.CreditCostFormula = "120";
@@ -389,7 +389,7 @@ namespace Pulsar4X.Tests
             component.MountType = ComponentMountType.PlanetInstallation | ComponentMountType.ShipCargo;
 
             component.ComponentAtbSDs = new List<ComponentTemplateAttributeSD>();
-            
+
             ComponentTemplateAttributeSD refinePointsAttribute = new ComponentTemplateAttributeSD();
             refinePointsAttribute.Name = "RP Amount Per EconTick";
             refinePointsAttribute.DescriptionFormula = "";
@@ -432,7 +432,7 @@ namespace Pulsar4X.Tests
 
             component.BuildPointCostFormula = "[Mass]";
 
-            component.ResourceCostFormula = new Dictionary<Guid, string> {{new Guid("2dfc78ea-f8a4-4257-bc04-47279bf104ef"), "60"}, 
+            component.ResourceCostFormula = new Dictionary<Guid, string> {{new Guid("2dfc78ea-f8a4-4257-bc04-47279bf104ef"), "60"},
             {new Guid("c3bcb597-a2d1-4b12-9349-26586c8a921c"), "60"}};
 
             component.CreditCostFormula = "120";
@@ -539,14 +539,14 @@ namespace Pulsar4X.Tests
             rate.GuiHint = GuiHint.GuiTextDisplay;
             rate.AttributeFormula = "50000";
             component.ComponentAtbSDs.Add(rate);
-            
+
             ComponentTemplateAttributeSD range = new ComponentTemplateAttributeSD();
             range.Name = "Transfer Dv Range";
             range.DescriptionFormula = "";
             range.GuiHint = GuiHint.GuiTextDisplay;
             range.AttributeFormula = "50000";
             component.ComponentAtbSDs.Add(range);
-            
+
             ComponentTemplateAttributeSD generalCargoCapacityAttribute = new ComponentTemplateAttributeSD();
             generalCargoCapacityAttribute.Name = "Construction Points";
             generalCargoCapacityAttribute.DescriptionFormula = "";

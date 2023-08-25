@@ -395,13 +395,13 @@
               "Units": "MJ",
               "DescriptionFormula": "'In MegaJules.'",
               "GuiHint": "None",
-              "AttributeFormula": "TechData('7c23fd4d-6577-4fbe-b15e-77345558c804') * Ability('Max Calibre') * Ability('Max Length')"
+              "AttributeFormula": "TechData('base.tech-capacitors') * Ability('Max Calibre') * Ability('Max Length')"
             },
             {
               "Name": "Power Efficency",
               "Units": "unknown",
               "GuiHint": "None",
-              "AttributeFormula": "45 + TechData('1167a255-b004-4a68-91af-1192169b5a37')"
+              "AttributeFormula": "45 + TechData('base.tech-conductors')"
             },
             {
               "Name": "Launch Force",

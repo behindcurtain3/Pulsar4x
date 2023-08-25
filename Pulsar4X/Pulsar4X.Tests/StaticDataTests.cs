@@ -233,89 +233,89 @@ namespace Pulsar4X.Tests
         [Test]
         public void TestTechSave()
         {
-            Dictionary<Guid, TechSD> techs = new Dictionary<Guid, TechSD>();
+            Dictionary<StringIdentifier, TechSD> techs = new ();
             TechSD enginePowerModMax = new TechSD();
-            enginePowerModMax.ID = new Guid("b8ef73c7-2ef0-445e-8461-1e0508958a0e");
+            enginePowerModMax.ID = new StringIdentifier("base.tech-engine-max-power");
             enginePowerModMax.MaxLevel = 7;
             enginePowerModMax.DataFormula = "[Level] * 1.5";
             enginePowerModMax.Name = "Maximum Engine Power Modifier";
             enginePowerModMax.Description = "";
             enginePowerModMax.Category = ResearchCategories.PowerAndPropulsion;
             enginePowerModMax.CostFormula = "[Level] * 1";
-            enginePowerModMax.Requirements = new Dictionary<Guid, int>();
+            enginePowerModMax.Requirements = new Dictionary<StringIdentifier, int>();
 
             techs.Add(enginePowerModMax.ID, enginePowerModMax);
 
             TechSD enginePowerModMin = new TechSD();
-            enginePowerModMin.ID = new Guid("08fa4c4b-0ddb-4b3a-9190-724d715694de");
+            enginePowerModMin.ID = new StringIdentifier("base.tech-engine-min-power");
             enginePowerModMin.MaxLevel = 7;
             enginePowerModMin.DataFormula = "1.0 - [Level] * 0.05";
             enginePowerModMin.Name = "Minimum Engine Power Modifier";
             enginePowerModMin.Description = "";
             enginePowerModMin.Category = ResearchCategories.PowerAndPropulsion;
             enginePowerModMin.CostFormula = "[Level] * 1";
-            enginePowerModMin.Requirements = new Dictionary<Guid, int>();
+            enginePowerModMin.Requirements = new Dictionary<StringIdentifier, int>();
 
             techs.Add(enginePowerModMin.ID, enginePowerModMin);
 
 
             TechSD fuelUsage = new TechSD();
-            fuelUsage.ID = new Guid("8557acb9-c764-44e7-8ee4-db2c2cebf0bc");
+            fuelUsage.ID = new StringIdentifier("base.tech-fuel-consumption");
             fuelUsage.MaxLevel = 12;
             fuelUsage.DataFormula = "1 - [Level] * 0.1";
             fuelUsage.Name = "Fuel Consumption: 1 Litre per Engine Power Hour";
             fuelUsage.Description = "";
             fuelUsage.Category = ResearchCategories.PowerAndPropulsion;
             fuelUsage.CostFormula = "[Level] * 1";
-            fuelUsage.Requirements = new Dictionary<Guid, int>();
+            fuelUsage.Requirements = new Dictionary<StringIdentifier, int>();
             techs.Add(fuelUsage.ID, fuelUsage);
 
 
             TechSD EngineTech1 = new TechSD();
-            EngineTech1.ID = new Guid("35608fe6-0d65-4a5f-b452-78a3e5e6ce2c");
+            EngineTech1.ID = new StringIdentifier("base.tech-conventional-engine");
             EngineTech1.MaxLevel = 1;
             EngineTech1.DataFormula = "0.2";
             EngineTech1.Name = "Conventional Engine Technology";
             EngineTech1.Description = "";
             EngineTech1.Category = ResearchCategories.PowerAndPropulsion;
             EngineTech1.CostFormula = "[Level] * 500";
-            EngineTech1.Requirements = new Dictionary<Guid, int>();
+            EngineTech1.Requirements = new Dictionary<StringIdentifier, int>();
             techs.Add(EngineTech1.ID, EngineTech1);
 
             TechSD EngineTech2 = new TechSD();
-            EngineTech2.ID = new Guid("c827d369-3f16-43ef-b112-7d5bcafb74c7");
+            EngineTech2.ID = new StringIdentifier("base.tech-nuclear-thermal-engine");
             EngineTech2.MaxLevel = 1;
             EngineTech2.DataFormula = "5";
             EngineTech2.Name = "Nuclear Thermal Engine Technology";
             EngineTech2.Description = "";
             EngineTech2.Category = ResearchCategories.PowerAndPropulsion;
             EngineTech2.CostFormula = "[Level] * 2500";
-            EngineTech2.Requirements = new Dictionary<Guid, int>();
-            EngineTech2.Requirements.Add(new Guid("35608fe6-0d65-4a5f-b452-78a3e5e6ce2c"), 1);
+            EngineTech2.Requirements = new Dictionary<StringIdentifier, int>();
+            EngineTech2.Requirements.Add(new StringIdentifier("base.tech-conventional-engine"), 1);
             techs.Add(EngineTech2.ID, EngineTech2);
 
             TechSD EngineTech3 = new TechSD();
-            EngineTech3.ID = new Guid("db6818f3-99e9-46c1-b903-f3af978c38b2");
+            EngineTech3.ID = new StringIdentifier("base.tech-nuclear-pulse-engine");
             EngineTech3.MaxLevel = 1;
             EngineTech3.DataFormula = "5";
             EngineTech3.Name = "Nuclear Pulse Engine Technology";
             EngineTech3.Description = "";
             EngineTech3.Category = ResearchCategories.PowerAndPropulsion;
             EngineTech3.CostFormula = "[Level] * 5000";
-            EngineTech3.Requirements = new Dictionary<Guid, int>();
-            EngineTech3.Requirements.Add(new Guid("c827d369-3f16-43ef-b112-7d5bcafb74c7"), 1);
+            EngineTech3.Requirements = new Dictionary<StringIdentifier, int>();
+            EngineTech3.Requirements.Add(new StringIdentifier("base.tech-nuclear-thermal-engine"), 1);
             techs.Add(EngineTech3.ID, EngineTech3);
 
             TechSD EngineTech4 = new TechSD();
-            EngineTech4.ID = new Guid("f3f10e56-9345-40cc-af42-342e7240355d");
+            EngineTech4.ID = new StringIdentifier("base.tech-nuclear-ion-engine");
             EngineTech4.MaxLevel = 1;
             EngineTech4.DataFormula = "5";
             EngineTech4.Name = "Ion Drive Technology";
             EngineTech4.Description = "";
             EngineTech4.Category = ResearchCategories.PowerAndPropulsion;
             EngineTech4.CostFormula = "[Level] * 10000"; ;
-            EngineTech4.Requirements = new Dictionary<Guid, int>();
-            EngineTech4.Requirements.Add(new Guid("db6818f3-99e9-46c1-b903-f3af978c38b2"), 1);
+            EngineTech4.Requirements = new Dictionary<StringIdentifier, int>();
+            EngineTech4.Requirements.Add(new StringIdentifier("base.tech-nuclear-pulse-engine"), 1);
             techs.Add(EngineTech4.ID, EngineTech4);
 
             StaticDataManager.ExportStaticData(techs, "TechnologyDataExportTest.json");
@@ -406,10 +406,10 @@ namespace Pulsar4X.Tests
             testObj = staticDataStore.FindDataObjectUsingID(testID);
             Assert.IsNotNull(testObj);
 
-            testID = staticDataStore.Techs.First().Key;
-            testObj = staticDataStore.FindDataObjectUsingID(testID);
+            StringIdentifier stestID = staticDataStore.Techs.First().Key;
+            testObj = staticDataStore.FindDataObjectUsingID(stestID);
             Assert.IsNotNull(testObj);
-            Assert.AreEqual(testID, ((TechSD)testObj).ID);
+            Assert.AreEqual(stestID, ((TechSD)testObj).ID);
         }
 
         //for want of a better place to put it.

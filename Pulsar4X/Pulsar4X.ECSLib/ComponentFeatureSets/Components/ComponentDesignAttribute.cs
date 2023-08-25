@@ -66,9 +66,9 @@ namespace Pulsar4X.ECSLib
                 {
                     foreach (var kvp in _templateSD.GuidDictionary)
                     {
-                        if (factionTech.ResearchedTechs.ContainsKey(Guid.Parse(kvp.Key.ToString())))
+                        if (factionTech.ResearchedTechs.ContainsKey(new StringIdentifier(kvp.Key.ToString())))
                         {
-                            TechSD techSD = staticData.Techs[Guid.Parse(kvp.Key.ToString())];
+                            TechSD techSD = staticData.Techs[new StringIdentifier(kvp.Key.ToString())];
                             GuidDictionary.Add(kvp.Key, new ChainedExpression(ResearchProcessor.DataFormula(factionTech, techSD).ToString(), this, factionTech, staticData));
                         }
                     }
@@ -154,6 +154,12 @@ namespace Pulsar4X.ECSLib
         }
 
         public void SetValueFromGuidList(Guid techguid)
+        {
+            Formula.ReplaceExpression("TechData('" + techguid + "')");
+            ParentComponent.SetAttributes();
+        }
+
+        public void SetValueFromGuidList(StringIdentifier techguid)
         {
             Formula.ReplaceExpression("TechData('" + techguid + "')");
             ParentComponent.SetAttributes();
@@ -631,7 +637,7 @@ namespace Pulsar4X.ECSLib
         {
             string key = "Unknown Key";
             int index = -1;
-            Guid techGuid;
+            StringIdentifier techGuid;
             Guid typeGuid;
 
             switch (name)
@@ -745,14 +751,14 @@ namespace Pulsar4X.ECSLib
                     break;
 
                 case "TechData":
-                    techGuid = Guid.Parse((string)args.EvaluateParameters()[0]);
+                    techGuid = new StringIdentifier((string)args.EvaluateParameters()[0]);
                     TechSD techSD = _staticDataStore.Techs[techGuid];
                     args.Result = ResearchProcessor.DataFormula(_factionTechDB, techSD);
                     break;
 
                 //Returns the tech level for the given guid
                 case "TechLevel":
-                    techGuid = Guid.Parse((string)args.EvaluateParameters()[0]);
+                    techGuid = new StringIdentifier((string)args.EvaluateParameters()[0]);
                     if (_factionTechDB.ResearchedTechs.ContainsKey(techGuid))
                         args.Result = _factionTechDB.ResearchedTechs[techGuid];
                     else args.Result = 0;
