@@ -74,7 +74,7 @@ namespace Pulsar4X.ECSLib
         /// </summary>
         [JsonIgnore]
         public Dictionary<Guid, TechSD> Techs = new Dictionary<Guid, TechSD>();
-        
+
         /// <summary>
         /// Dictionary which stores all Components.
         /// </summary>
@@ -82,11 +82,11 @@ namespace Pulsar4X.ECSLib
         public Dictionary<Guid, ComponentTemplateSD> ComponentTemplates = new Dictionary<Guid, ComponentTemplateSD>();
 
         /// <summary>
-        /// Stores ComponentTemplates by the Attribute Type Name. 
+        /// Stores ComponentTemplates by the Attribute Type Name.
         /// </summary>
-        [JsonIgnore] 
+        [JsonIgnore]
         public Dictionary<string, List<ComponentTemplateSD>> ComponentTemplatesByAttribute = new Dictionary<string, List<ComponentTemplateSD>>();
-        
+
         /// <summary>
         /// Dictionary to store CargoTypes
         /// </summary>
@@ -95,11 +95,11 @@ namespace Pulsar4X.ECSLib
 
         [JsonIgnore]
         public Dictionary<Guid, IndustryTypeSD> IndustryTypes = new Dictionary<Guid, IndustryTypeSD>();
-        
-        public Dictionary<Guid, ArmorSD> ArmorTypes = new Dictionary<Guid, ArmorSD>();
-        
+
+        public Dictionary<StringIdentifier, ArmorSD> ArmorTypes = new ();
+
         /// <summary>
-        /// Settings used by system generation. 
+        /// Settings used by system generation.
         /// @todo make Galaxy gen use this instead of default data (DO NOT DELETE THE HARD CODED DATA THO, that should be a fall back).
         /// </summary>
         public SystemGenSettingsSD SystemGenSettings;
@@ -153,7 +153,7 @@ namespace Pulsar4X.ECSLib
                     "IndustryTypes", typeof(Dictionary<Guid, IndustryTypeSD>)
                 },
                 {
-                    "ArmorTypes", typeof(Dictionary<Guid, ArmorSD>)
+                    "ArmorTypes", typeof(Dictionary<StringIdentifier, ArmorSD>)
                 },
                 {
                     "SystemGenSettings", typeof(SystemGenSettingsSD)
@@ -198,7 +198,7 @@ namespace Pulsar4X.ECSLib
                     typeof(Dictionary<Guid, IndustryTypeSD>), "IndustryTypes"
                 },
                 {
-                    typeof(Dictionary<Guid, ArmorSD>), "ArmorTypes"
+                    typeof(Dictionary<StringIdentifier, ArmorSD>), "ArmorTypes"
                 },
                 {
                     typeof(SystemGenSettingsSD), "SystemGenSettings"
@@ -225,7 +225,7 @@ namespace Pulsar4X.ECSLib
             var cargoGood = CargoGoods.GetAny(id);
             if (cargoGood != null)
                 return cargoGood;
-            
+
             if (Techs.ContainsKey(id))
                 return Techs[id];
 
@@ -243,7 +243,7 @@ namespace Pulsar4X.ECSLib
         {
             StorageTypeMap.Clear();
             var allCargoDefs = CargoGoods.GetAll();
-            foreach (var item in allCargoDefs)          
+            foreach (var item in allCargoDefs)
                 StorageTypeMap.Add(item.Key, item.Value.CargoTypeID);
             foreach (var item in ComponentTemplates)
                 StorageTypeMap.Add(item.Key, item.Value.CargoTypeID);
@@ -394,12 +394,12 @@ namespace Pulsar4X.ECSLib
                 }
             }
         }
-        
-        internal void Store(Dictionary<Guid, ArmorSD> armorTypes)
+
+        internal void Store(Dictionary<StringIdentifier, ArmorSD> armorTypes)
         {
             if (armorTypes != null)
             {
-                foreach (KeyValuePair<Guid,ArmorSD> kvp in armorTypes)
+                foreach (KeyValuePair<StringIdentifier,ArmorSD> kvp in armorTypes)
                 {
                     ArmorTypes[kvp.Key] = kvp.Value;
                 }
@@ -414,8 +414,8 @@ namespace Pulsar4X.ECSLib
         #endregion
 
         /// <summary>
-        /// Returns a type custom string for a type of static data. This string is used to tell 
-        /// what type of static data is being imported (and is thus exported as well). 
+        /// Returns a type custom string for a type of static data. This string is used to tell
+        /// what type of static data is being imported (and is thus exported as well).
         /// </summary>
         public static string GetTypeString(Type type)
         {
@@ -425,7 +425,7 @@ namespace Pulsar4X.ECSLib
         }
 
         /// <summary>
-        /// Gets the matching type for a type string. Used when importing previously exported 
+        /// Gets the matching type for a type string. Used when importing previously exported
         /// static data to know what type to import it as.
         /// </summary>
         public static Type GetType(string typeString)
@@ -446,5 +446,5 @@ namespace Pulsar4X.ECSLib
 
     }
 
-   
+
 }

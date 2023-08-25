@@ -6,7 +6,6 @@ using ImGuiNET;
 using ImGuiSDL2CS;
 using Pulsar4X.ECSLib;
 
-
 namespace Pulsar4X.SDL2UI
 {
     public class ShipDesignUI : PulsarGuiWindow
@@ -17,17 +16,17 @@ namespace Pulsar4X.SDL2UI
         private List<ShipDesign> _exsistingClasses;
         private int _selectedDesign = -1;
         bool _imagecreated = false;
-        
+
         private List<ComponentDesign> _componentDesigns;
         private int _selectedDesignsIndex;
-        
+
         private string[] _shipComponentNames;
         private int _selectedShipIndex;
- 
+
         List<(ComponentDesign design, int count)> _shipComponents = new List<(ComponentDesign design, int count)>();
-        
+
         private IntPtr _shipImgPtr;
-        
+
         //TODO: armor, temporary, maybe density should be an "equvelent" and have a different mass? (damage calcs use density for penetration)
         List<ArmorSD> _armorSelection = new List<ArmorSD>();
         private string[] _armorNames;
@@ -80,7 +79,7 @@ namespace Pulsar4X.SDL2UI
             }
             else
                 thisitem = (ShipDesignUI)_uiState.LoadedWindows[typeof(ShipDesignUI)];
-            
+
             return thisitem;
         }
 
@@ -100,16 +99,16 @@ namespace Pulsar4X.SDL2UI
         {
             _armorNames = new string[StaticRefLib.StaticData.ArmorTypes.Count];
             int i = 0;
-            foreach (var kvp in StaticRefLib.StaticData.ArmorTypes)
+            foreach (var (id, type) in StaticRefLib.StaticData.ArmorTypes)
             {
-                var armorMat = _uiState.Game.StaticData.GetICargoable(kvp.Key);
-                _armorSelection.Add(kvp.Value);
-                
-                _armorNames[i]= armorMat.Name;
+                //var armorMat = _uiState.Game.StaticData.GetICargoable(id);
+                _armorSelection.Add(type);
+
+                _armorNames[i]= id.ToString();
                 i++;
             }
             //TODO: bleed over from mod data to get a default armor...
-            _armor = StaticRefLib.StaticData.ArmorTypes[new Guid("207af637-95a0-4b89-ac4a-6d66a81cfb2f")];
+            _armor = StaticRefLib.StaticData.ArmorTypes[new StringIdentifier("base.armor-types.plastics")];
             _armorThickness = 3;
         }
 
@@ -606,7 +605,7 @@ namespace Pulsar4X.SDL2UI
             if (_shipImgPtr != IntPtr.Zero && displayimage)
             {
 
-                maxwidth = ImGui.GetWindowWidth();// ImGui.GetColumnWidth();;// 
+                maxwidth = ImGui.GetWindowWidth();// ImGui.GetColumnWidth();;//
                 int maxheightint = (int)(maxheight / 4);
                 maxheight = maxheightint * 4;//ImGui.GetWindowHeight() * _imageratio;
                 float scalew = 1;
