@@ -42,16 +42,16 @@ namespace Pulsar4X.ECSLib
 
         public virtual bool Equals(StringIdentifier other)
         {
-            return Scopes.SequenceEqual(other.Scopes) && Name == other.Name;
+            return Name == other.Name;
         }
 
         public override int GetHashCode()
         {
             var hashCode = -2045290805;
-            foreach (var scope in Scopes)
-            {
-                hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(scope);
-            }
+            // foreach (var scope in Scopes)
+            // {
+            //     hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(scope);
+            // }
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
             return hashCode;
         }
