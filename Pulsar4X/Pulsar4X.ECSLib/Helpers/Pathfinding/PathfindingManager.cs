@@ -48,7 +48,7 @@ namespace Pulsar4X.ECSLib
             var factionDB = faction.GetDataBlob<FactionInfoDB>();
             var pathfindingGraph = new Graph();
 
-            foreach (Guid starSystemGuid in factionDB.KnownSystems)
+            foreach (StringIdentifier starSystemGuid in factionDB.KnownSystems)
             {
                 List<Entity> jumpPoints = factionDB.KnownJumpPoints[starSystemGuid];
 
@@ -124,7 +124,7 @@ namespace Pulsar4X.ECSLib
         public Stack<Node> GetPath(Entity source, Entity destination, out double totalCost)
         {
             Graph graph;
-            if (source.FactionOwnerID != Guid.Empty)
+            if (source.FactionOwnerID != null)
             {
                 Entity faction;
                 source.Manager.FindEntityByGuid(source.FactionOwnerID, out faction);

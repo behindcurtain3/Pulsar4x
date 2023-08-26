@@ -90,7 +90,7 @@ namespace Pulsar4X.ECSLib
                 MassVolumeDB starMVDB = MassVolumeDB.NewFromMassAndRadius_m(
                     GeneralMath.Lerp(_galaxyGen.Settings.StarMassBySpectralType[starType], randomSelection),
                     GeneralMath.Lerp(_galaxyGen.Settings.StarRadiusBySpectralType[starType], randomSelection));
-                
+
                 StarInfoDB starData = GenerateStarInfo(starMVDB, starType, randomSelection);
 
                 // Initialize Position as 0,0,0. It will be updated when the star's orbit is calculated.
@@ -98,7 +98,7 @@ namespace Pulsar4X.ECSLib
 
                 var baseDataBlobs = new List<BaseDataBlob> {starMVDB, starData, positionData};
 
-                stars.Add(Entity.Create(system, Guid.Empty, baseDataBlobs));
+                stars.Add(Entity.Create(system, null, baseDataBlobs));
             }
 
             // The root star must be the most massive. Find it.

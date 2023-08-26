@@ -154,7 +154,7 @@ namespace Pulsar4X.ECSLib
             return new TeamObject(this);
         }
 
-        public Guid ID { get; } = Guid.NewGuid();
+        public StringIdentifier ID { get; } = new StringIdentifier("player", Guid.NewGuid().ToString());
         public string Name
         {
             get { return LeaderName; }

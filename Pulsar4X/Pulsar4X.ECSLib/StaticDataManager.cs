@@ -116,7 +116,7 @@ namespace Pulsar4X.ECSLib
 
 
                 //Test the components formula for parsability
-                List<Guid> badComponents = new List<Guid>();
+                List<StringIdentifier> badComponents = new ();
                 foreach (var componentKVP in newStore.ComponentTemplates)
                 {
                     if (!ComponentParseCheck.IsParseable(componentKVP.Value, out var errors))
@@ -182,7 +182,7 @@ namespace Pulsar4X.ECSLib
 
 
                 //Test the components formula for parsability
-                List<Guid> badComponents = new List<Guid>();
+                List<StringIdentifier> badComponents = new ();
                 foreach (var componentKVP in newStore.ComponentTemplates)
                 {
                     if (!ComponentParseCheck.IsParseable(componentKVP.Value, out var errors))
@@ -248,28 +248,13 @@ namespace Pulsar4X.ECSLib
             // we need to work out the type:
             Type type = StaticDataStore.GetType(obj["Type"].ToString());
 
-            string typeStr = obj["Type"].ToString();
-            dynamic data;
-            switch (typeStr)
-            {
-                case "ArmorTypes":
-                case "CargoTypes":
-                case "IndustryTypes":
-                case "Techs":
-                    data = obj["Data"].ToObject(type, Serializer2);
-                    break;
-                default:
-                    data = obj["Data"].ToObject(type, Serializer);
-                    break;
-            }
-
             // grab the data:
             // use dynamic here to avoid having to know/use the exact the types.
             // we are alreading checking the types via StaticDataStore.*Type, so we
             // can rely on there being an overload of StaticDataStore.Store
             // that supports that type.
             //dynamic data = obj["Data"].ToObject(type, Serializer);
-
+            dynamic data = obj["Data"].ToObject(type, Serializer2);
             staticDataStore.Store(data);
         }
 

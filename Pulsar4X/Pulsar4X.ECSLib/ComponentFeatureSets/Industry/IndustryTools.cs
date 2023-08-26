@@ -6,13 +6,13 @@ namespace Pulsar4X.ECSLib.Industry
 {
     public static class IndustryTools
     {
-        public static void AddJob(Entity industryEntity, Guid plineID, IndustryJob job)
+        public static void AddJob(Entity industryEntity, StringIdentifier plineID, IndustryJob job)
         {
             var industryDB = industryEntity.GetDataBlob<IndustryAbilityDB>();
             AddJob(industryDB, plineID, job);
         }
 
-        public static void AddJob(IndustryAbilityDB industryDB, Guid plineID, IndustryJob job)
+        public static void AddJob(IndustryAbilityDB industryDB, StringIdentifier plineID, IndustryJob job)
         {
             lock(industryDB.ProductionLines[plineID])
             {
@@ -21,7 +21,7 @@ namespace Pulsar4X.ECSLib.Industry
             }
         }
 
-        public static void ChangeJobPriority(Entity industryEntity, Guid prodLine, Guid jobID, int delta)
+        public static void ChangeJobPriority(Entity industryEntity, StringIdentifier prodLine, StringIdentifier jobID, int delta)
         {
             var industryDB = industryEntity.GetDataBlob<IndustryAbilityDB>();
             var jobList = industryDB.ProductionLines[prodLine].Jobs;
@@ -49,7 +49,7 @@ namespace Pulsar4X.ECSLib.Industry
             }
         }
 
-        public static void EditExsistingJob(Entity industryEntity, Guid prodLine, Guid jobID, bool RepeatJob = false, ushort NumberOrderd = 1, bool autoInstall = false)
+        public static void EditExsistingJob(Entity industryEntity, StringIdentifier prodLine, StringIdentifier jobID, bool RepeatJob = false, ushort NumberOrderd = 1, bool autoInstall = false)
         {
             var industryDB = industryEntity.GetDataBlob<IndustryAbilityDB>();
             var jobList = industryDB.ProductionLines[prodLine].Jobs;
@@ -68,7 +68,7 @@ namespace Pulsar4X.ECSLib.Industry
             }
         }
 
-        public static void CancelExsistingJob(Entity industryEntity, Guid prodLine, Guid jobID)
+        public static void CancelExsistingJob(Entity industryEntity, StringIdentifier prodLine, StringIdentifier jobID)
         {
             var industryDB = industryEntity.GetDataBlob<IndustryAbilityDB>();
             var jobList = industryDB.ProductionLines[prodLine].Jobs;
@@ -125,7 +125,7 @@ namespace Pulsar4X.ECSLib.Industry
                         //gather availible resorces for this job.
                         //right now we take all the resources we can, for an individual item in the batch.
                         //even if we're taking more than we can use in this turn, we're using/storing it.
-                        IDictionary<Guid, long> resourceCosts = batchJob.ResourcesRequiredRemaining;
+                        IDictionary<StringIdentifier, long> resourceCosts = batchJob.ResourcesRequiredRemaining;
                         //Note: this is editing batchjob.ResourcesRequired variable.
                         ConsumeResources(stockpile, ref resourceCosts);
                         //we calculate the difference between the design resources and the amount of resources we've squirreled away.
@@ -154,9 +154,9 @@ namespace Pulsar4X.ECSLib.Industry
             }
         }
 
-        internal static void ConsumeResources(VolumeStorageDB fromCargo, ref IDictionary<Guid, long> toUse)
+        internal static void ConsumeResources(VolumeStorageDB fromCargo, ref IDictionary<StringIdentifier, long> toUse)
         {
-            foreach (KeyValuePair<Guid, long> kvp in toUse.ToArray())
+            foreach (KeyValuePair<StringIdentifier, long> kvp in toUse.ToArray())
             {
                 ICargoable cargoItem = StaticRefLib.StaticData.CargoGoods.GetAny(kvp.Key);//fromCargo.OwningEntity.Manager.Game.StaticData.GetICargoable(kvp.Key);
 

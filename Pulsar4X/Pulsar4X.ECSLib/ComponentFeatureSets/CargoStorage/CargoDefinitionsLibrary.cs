@@ -16,32 +16,32 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.CargoStorage
         void LoadMaterialsDefinitions(List<ProcessedMaterialSD> materials);
         void LoadOtherDefinitions(List<ICargoable> otherCargo);
 
-        Dictionary<Guid, ICargoable> GetAll();
+        Dictionary<StringIdentifier, ICargoable> GetAll();
 
-        ICargoable GetAny(Guid id);
+        ICargoable GetAny(StringIdentifier id);
 
-        bool IsOther(Guid id);
+        bool IsOther(StringIdentifier id);
         ICargoable GetOther(string nameOfCargo);
-        ICargoable GetOther(Guid guidOfCargo);
+        ICargoable GetOther(StringIdentifier guidOfCargo);
 
-        bool IsMineral(Guid id);
+        bool IsMineral(StringIdentifier id);
         MineralSD GetMineral(string name);
-        MineralSD GetMineral(Guid guid);
-        Dictionary<Guid, MineralSD> GetMinerals();
+        MineralSD GetMineral(StringIdentifier guid);
+        Dictionary<StringIdentifier, MineralSD> GetMinerals();
         List<MineralSD> GetMineralsList();
 
-        bool IsMaterial(Guid id);
+        bool IsMaterial(StringIdentifier id);
         ProcessedMaterialSD GetMaterial(string name);
-        ProcessedMaterialSD GetMaterial(Guid guid);
-        Dictionary<Guid, ProcessedMaterialSD> GetMaterials();
+        ProcessedMaterialSD GetMaterial(StringIdentifier guid);
+        Dictionary<StringIdentifier, ProcessedMaterialSD> GetMaterials();
         List<ProcessedMaterialSD> GetMaterialsList();
     }
 
     public class CargoDefinitionsLibrary : ICargoDefinitionsLibrary
     {
-        private Dictionary<Guid, ICargoable> _definitions;
-        private Dictionary<Guid, MineralSD> _minerals;
-        private Dictionary<Guid, ProcessedMaterialSD> _processedMaterials;
+        private Dictionary<StringIdentifier, ICargoable> _definitions;
+        private Dictionary<StringIdentifier, MineralSD> _minerals;
+        private Dictionary<StringIdentifier, ProcessedMaterialSD> _processedMaterials;
 
         public CargoDefinitionsLibrary() : this(new List<MineralSD>(),
             new List<ProcessedMaterialSD>(),
@@ -53,14 +53,14 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.CargoStorage
             List<ProcessedMaterialSD> processedMaterials,
             List<ICargoable> otherCargo)
         {
-            _definitions = new Dictionary<Guid, ICargoable>();
-            _minerals = new Dictionary<Guid, MineralSD>();
-            _processedMaterials = new Dictionary<Guid, ProcessedMaterialSD>();
+            _definitions = new Dictionary<StringIdentifier, ICargoable>();
+            _minerals = new Dictionary<StringIdentifier, MineralSD>();
+            _processedMaterials = new Dictionary<StringIdentifier, ProcessedMaterialSD>();
 
             LoadDefinitions(minerals, processedMaterials, otherCargo);
         }
 
-        
+
         public void LoadDefinitions(List<MineralSD> minerals,
             List<ProcessedMaterialSD> processedMaterials,
             List<ICargoable> otherCargo)
@@ -107,7 +107,7 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.CargoStorage
             }
         }
 
-        public ICargoable GetAny(Guid id)
+        public ICargoable GetAny(StringIdentifier id)
         {
             if (_minerals.ContainsKey(id))
                 return _minerals[id];
@@ -121,13 +121,13 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.CargoStorage
             return null;
         }
 
-        public Dictionary<Guid, ICargoable> GetAll()
+        public Dictionary<StringIdentifier, ICargoable> GetAll()
         {
             return _definitions;
         }
 
 
-        public bool IsOther(Guid id)
+        public bool IsOther(StringIdentifier id)
         {
             return _definitions.ContainsKey(id) && (IsMineral(id) == false) && (IsMaterial(id) == false);
         }
@@ -142,13 +142,13 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.CargoStorage
             throw new Exception("Cargo item with the name " + nameOfCargo + " not found in TradeGoodLibrary. Was the trade good properly loaded?");
         }
 
-        public ICargoable GetOther(Guid guidOfCargo)
+        public ICargoable GetOther(StringIdentifier guidOfCargo)
         {
             return _definitions[guidOfCargo];
         }
 
 
-        public bool IsMineral(Guid id)
+        public bool IsMineral(StringIdentifier id)
         {
             return _minerals.ContainsKey(id);
         }
@@ -159,13 +159,13 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.CargoStorage
             return _minerals[result.ID];
         }
 
-        public MineralSD GetMineral(Guid guid)
+        public MineralSD GetMineral(StringIdentifier guid)
         {
             var result = GetOther(guid);
             return _minerals[result.ID];
         }
 
-        public Dictionary<Guid, MineralSD> GetMinerals()
+        public Dictionary<StringIdentifier, MineralSD> GetMinerals()
         {
             return _minerals;
         }
@@ -176,7 +176,7 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.CargoStorage
         }
 
 
-        public bool IsMaterial(Guid id)
+        public bool IsMaterial(StringIdentifier id)
         {
             return _processedMaterials.ContainsKey(id);
         }
@@ -187,13 +187,13 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.CargoStorage
             return _processedMaterials[result.ID];
         }
 
-        public ProcessedMaterialSD GetMaterial(Guid guid)
+        public ProcessedMaterialSD GetMaterial(StringIdentifier guid)
         {
             var result = GetOther(guid);
             return _processedMaterials[result.ID];
         }
 
-        public Dictionary<Guid, ProcessedMaterialSD> GetMaterials()
+        public Dictionary<StringIdentifier, ProcessedMaterialSD> GetMaterials()
         {
             return _processedMaterials;
         }

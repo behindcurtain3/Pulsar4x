@@ -9,8 +9,8 @@ namespace Pulsar4X.ECSLib
     public class SensorReceverAbility : ComponentAbilityState
     {
         [JsonProperty]
-        public Dictionary<Guid, SensorProcessorTools.SensorReturnValues> CurrentContacts = new Dictionary<Guid, SensorProcessorTools.SensorReturnValues>();
-        public Dictionary<Guid, SensorProcessorTools.SensorReturnValues> OldContacts = new Dictionary<Guid, SensorProcessorTools.SensorReturnValues>();
+        public Dictionary<StringIdentifier, SensorProcessorTools.SensorReturnValues> CurrentContacts = new Dictionary<StringIdentifier, SensorProcessorTools.SensorReturnValues>();
+        public Dictionary<StringIdentifier, SensorProcessorTools.SensorReturnValues> OldContacts = new Dictionary<StringIdentifier, SensorProcessorTools.SensorReturnValues>();
 
         public SensorReceverAbility(ComponentInstance componentInstance) : base(componentInstance)
         {
@@ -19,8 +19,8 @@ namespace Pulsar4X.ECSLib
 
     public class SensorAbilityDB : BaseDataBlob
     {
-        internal Dictionary<Guid, SensorProcessorTools.SensorReturnValues> CurrentContacts = new Dictionary<Guid, SensorProcessorTools.SensorReturnValues>();
-        internal Dictionary<Guid, SensorProcessorTools.SensorReturnValues> OldContacts = new Dictionary<Guid, SensorProcessorTools.SensorReturnValues>();
+        internal Dictionary<StringIdentifier, SensorProcessorTools.SensorReturnValues> CurrentContacts = new Dictionary<StringIdentifier, SensorProcessorTools.SensorReturnValues>();
+        internal Dictionary<StringIdentifier, SensorProcessorTools.SensorReturnValues> OldContacts = new Dictionary<StringIdentifier, SensorProcessorTools.SensorReturnValues>();
 
         public SensorAbilityDB()
         {
@@ -28,8 +28,8 @@ namespace Pulsar4X.ECSLib
 
         public SensorAbilityDB(SensorAbilityDB db)
         {
-            CurrentContacts = new Dictionary<Guid, SensorProcessorTools.SensorReturnValues>(db.CurrentContacts);
-            OldContacts = new Dictionary<Guid, SensorProcessorTools.SensorReturnValues>(db.OldContacts);
+            CurrentContacts = new Dictionary<StringIdentifier, SensorProcessorTools.SensorReturnValues>(db.CurrentContacts);
+            OldContacts = new Dictionary<StringIdentifier, SensorProcessorTools.SensorReturnValues>(db.OldContacts);
         }
 
         public override object Clone()
@@ -42,13 +42,13 @@ namespace Pulsar4X.ECSLib
     {
         [JsonProperty]
         public EMWaveForm RecevingWaveformCapabilty { get; internal set; }
-        
+
         /// <summary>
-        /// Sensitivity at the ideal wavelength, lower is better, 0 is (imposible) best. should not be negitive. 
+        /// Sensitivity at the ideal wavelength, lower is better, 0 is (imposible) best. should not be negitive.
         /// </summary>
         [JsonProperty]
         public double BestSensitivity_kW { get; internal set; }//sensitivity at ideal wavelength
-        
+
         /// <summary>
         /// The sensitivity at worst detectable wavelengths, lower is better, should be higher than BestSensitivity_kW
         /// </summary>
@@ -63,7 +63,7 @@ namespace Pulsar4X.ECSLib
         /// In Seconds
         /// </summary>
         [JsonProperty]
-        public int ScanTime { get; internal set; } //the time it takes to complete a full 360 degree sweep. 
+        public int ScanTime { get; internal set; } //the time it takes to complete a full 360 degree sweep.
         //internal int Size; //basicly increases sensitivity at the cost of mass
 
 
@@ -73,7 +73,7 @@ namespace Pulsar4X.ECSLib
 
         //ParserConstrutor
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="peakWaveLength">nm</param>
         /// <param name="bandwidth">nm</param>
@@ -83,7 +83,7 @@ namespace Pulsar4X.ECSLib
         /// <param name="scanTime">sec</param>
         public SensorReceverAtbDB(double peakWaveLength, double bandwidth, double bestSensitivity, double worstSensitivity, double resolution, double scanTime)
         {
-            //TODO:  should make this component invalid. 
+            //TODO:  should make this component invalid.
             if (bestSensitivity < 0)
             {
                 var ev = new Event("Sensitivity is" + bestSensitivity + " *Must* be a positiveNumber Sensitivity is the kilowatt threshhold");
@@ -91,9 +91,9 @@ namespace Pulsar4X.ECSLib
                 bestSensitivity = 0;
 
             }
-            if (bestSensitivity > worstSensitivity) 
+            if (bestSensitivity > worstSensitivity)
             {
-                var ev = new Event("bestSensitivity " + bestSensitivity + " *Must* be < than worstSensitivity" + worstSensitivity + 
+                var ev = new Event("bestSensitivity " + bestSensitivity + " *Must* be < than worstSensitivity" + worstSensitivity +
                                    "(lower is better) Sensitivity is the kilowatt threshhold");
                 StaticRefLib.EventLog.AddEvent(ev);
                 worstSensitivity = bestSensitivity;
@@ -121,7 +121,7 @@ namespace Pulsar4X.ECSLib
 
         public void OnComponentInstallation(Entity parentEntity, ComponentInstance componentInstance)
         {
-            //we're cloning the design to the instance here. when we do another pass on the sensors we'll likely change this. 
+            //we're cloning the design to the instance here. when we do another pass on the sensors we'll likely change this.
             if (!componentInstance.HasAblity<SensorReceverAbility>())
                 componentInstance.SetAbilityState<SensorReceverAbility>(new SensorReceverAbility(componentInstance));//'this' should be the instance's designs db.
             if (!parentEntity.HasDataBlob<SensorAbilityDB>())
@@ -131,7 +131,7 @@ namespace Pulsar4X.ECSLib
             //SensorProcessorTools.(componentInstance);
 
         }
-        
+
         public string AtbName()
         {
             return "Sensor Recever";
@@ -142,6 +142,6 @@ namespace Pulsar4X.ECSLib
 
             return " ";
         }
-        
+
     }
 }

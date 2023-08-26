@@ -64,8 +64,8 @@ namespace Pulsar4X.ECSLib
     {
         public double MaxVolume;
         internal double FreeVolume;
-        public Dictionary<Guid, long> CurrentStoreInUnits = new Dictionary<Guid, long>();
-        public Dictionary<Guid, ICargoable> Cargoables =  new Dictionary<Guid, ICargoable>();
+        public Dictionary<StringIdentifier, long> CurrentStoreInUnits = new Dictionary<StringIdentifier, long>();
+        public Dictionary<StringIdentifier, ICargoable> Cargoables =  new Dictionary<StringIdentifier, ICargoable>();
         public TypeStore(double maxVolume)
         {
             MaxVolume = maxVolume;
@@ -78,8 +78,8 @@ namespace Pulsar4X.ECSLib
         {
             TypeStore clone = new TypeStore(MaxVolume);
             clone.FreeVolume = FreeVolume;
-            clone.CurrentStoreInUnits = new Dictionary<Guid, long>(CurrentStoreInUnits);
-            clone.Cargoables = new Dictionary<Guid, ICargoable>(Cargoables);
+            clone.CurrentStoreInUnits = new Dictionary<StringIdentifier, long>(CurrentStoreInUnits);
+            clone.Cargoables = new Dictionary<StringIdentifier, ICargoable>(Cargoables);
             return clone;
         }
 

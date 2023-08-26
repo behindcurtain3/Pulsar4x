@@ -11,16 +11,16 @@ using Pulsar4X.ECSLib.ComponentFeatureSets.Missiles;
 
 namespace Pulsar4X.ECSLib
 {
-    
+
     public class WeaponProcessor : IInstanceProcessor
     {
         internal override void ProcessEntity(Entity entity, DateTime atDate)
         {
             var instances = entity.GetDataBlob<ComponentInstancesDB>();
             var fireControl = entity.GetDataBlob<FireControlAbilityDB>();
-            
-            
-            
+
+
+
             if(instances.TryGetComponentsWithStates<WeaponState>(out var wpnList))
             {
                 foreach (ComponentInstance wpn in wpnList)
@@ -41,12 +41,12 @@ namespace Pulsar4X.ECSLib
                 }
             }
         }
-        
-   
+
+
 
         public static void FireBeamWeapons(ComponentInstance beamWeapon, DateTime atDate)
         {
-            //TODO: all this needs to get re-written. 
+            //TODO: all this needs to get re-written.
             WeaponState stateInfo = beamWeapon.GetAbilityState<WeaponState>();
             FireControlAbilityState fireControl = (FireControlAbilityState)stateInfo.ParentState;
             if(!fireControl.Target.IsValid)
@@ -55,7 +55,7 @@ namespace Pulsar4X.ECSLib
                 fireControl.IsEngaging = false;
                 return;
             }
-            
+
             //var myPos = beamWeapon.GetDataBlob<ComponentInstanceData>().ParentEntity.GetDataBlob<PositionDB>();
             var targetPos = fireControl.Target.GetDataBlob<PositionDB>();
 
@@ -67,33 +67,33 @@ namespace Pulsar4X.ECSLib
 
             double range = 1000;// myPos.GetDistanceTo_AU(targetPos);
 
-            // only fire if target is in range TODO: fire anyway, but miss. TODO: this will be wrong if we do movement last, this needs to be done after movement. 
+            // only fire if target is in range TODO: fire anyway, but miss. TODO: this will be wrong if we do movement last, this needs to be done after movement.
             if (range <= designAtb.MaxRange)//TODO: firecontrol shoudl have max range too?: Math.Min(designAtb.MaxRange, stateInfo.FireControl.GetDataBlob<BeamFireControlAtbDB>().Range))
             {
                 /*
                 DamageFragment damage = new DamageFragment()
                 {
-                    Density = 
+                    Density =
                 };
-                
+
                 DamageTools.DealDamage(fireControl.Target, new DamageFragment())
                 //DamageProcessor.OnTakingDamage(, damageAmount, atDate);
                 */
                 int reloadRate = designAtb.ReloadRate;
                 stateInfo.CoolDown = atDate + TimeSpan.FromSeconds(reloadRate);
-                stateInfo.ReadyToFire = false;    
-                
+                stateInfo.ReadyToFire = false;
+
             }
 
 
 
         }
     }
-    
-    
+
+
 /// <summary>
 /// Currently this has some problems, it needs to be able to remove itself from an entity after the weapons are no longer firing and all weapons have been reloaded,
-/// or can't be reloaded due to lack of ordnance. currently it doesn't do this. 
+/// or can't be reloaded due to lack of ordnance. currently it doesn't do this.
 /// </summary>
     public class HotWpnProcessor : IHotloopProcessor
     {
@@ -101,7 +101,7 @@ namespace Pulsar4X.ECSLib
         private static readonly int _obtDBIdx = EntityManager.GetTypeIndex<OrbitDB>();
         public void Init(Game game)
         {
-            
+
         }
 
         public void ProcessEntity(Entity entity, int deltaSeconds)
@@ -112,10 +112,10 @@ namespace Pulsar4X.ECSLib
         public int ProcessManager(EntityManager manager, int deltaSeconds)
         {
             var blobs = manager.GetAllDataBlobsOfType<GenericFiringWeaponsDB>(_wpnDBIdx);
-            
+
             //when firing weapons we need to have the parent in the right place.
             //orbits don't update every subtick, so we update just this entity for this tick, if it's an orbiting entity.
-            foreach (var blob in blobs) 
+            foreach (var blob in blobs)
             {
                 var entity = blob.OwningEntity; //
                 if (entity.HasDataBlob<OrbitDB>())
@@ -162,8 +162,8 @@ namespace Pulsar4X.ECSLib
         {
             for (int i = 0; i < reloadingWeapons.WpnIDs.Length; i++)
             {
-                if(reloadingWeapons.WpnIDs[i] == Guid.Empty)
-                    continue;//just incase a weapon gets removed from the array and leaves an empty spot. 
+                // if(reloadingWeapons.WpnIDs[i] == Guid.Empty)
+                //     continue;//just incase a weapon gets removed from the array and leaves an empty spot.
                 if (reloadingWeapons.InternalMagQty[i] < reloadingWeapons.InternalMagSizes[i])
                 {
                     reloadingWeapons.InternalMagQty[i] += Math.Min(reloadingWeapons.ReloadAmountsPerSec[i], reloadingWeapons.InternalMagSizes[i]);
@@ -172,30 +172,30 @@ namespace Pulsar4X.ECSLib
                 if (reloadingWeapons.InternalMagQty[i] >= reloadingWeapons.AmountPerShot[i] * reloadingWeapons.MinShotsPerfire[i])
                 {
 
-                    
-                    //if this is not attached to a fire control, 
+
+                    //if this is not attached to a fire control,
                     if (reloadingWeapons.FireControlStates[i] == null)
                     {   //and is fully reloaded.
-                        if(reloadingWeapons.InternalMagQty[i] >= reloadingWeapons.InternalMagSizes[i]) 
+                        if(reloadingWeapons.InternalMagQty[i] >= reloadingWeapons.InternalMagSizes[i])
                             reloadingWeapons.RemoveWeapons(reloadingWeapons.WpnIDs[i]);//remove it from being processed every second.
                     }
-                    //if it *is* attached to a firecontrol, and is firing. 
+                    //if it *is* attached to a firecontrol, and is firing.
                     else if(reloadingWeapons.FireControlStates[i].IsEngaging)
-                    { //then fire 
+                    { //then fire
                         int numshots = reloadingWeapons.InternalMagQty[i] / reloadingWeapons.AmountPerShot[i];
                         reloadingWeapons.ShotsFiredThisTick[i] = numshots;
                         int depleteinternalMag = numshots * reloadingWeapons.AmountPerShot[i];
                         reloadingWeapons.InternalMagQty[i] -= depleteinternalMag;
                     }
                     // if it's attached to firecontrol, but not firing and is fully reloaded
-                    else if(reloadingWeapons.InternalMagQty[i] >= reloadingWeapons.InternalMagSizes[i]) 
+                    else if(reloadingWeapons.InternalMagQty[i] >= reloadingWeapons.InternalMagSizes[i])
                     {   //remove it from being processed every second.
                         reloadingWeapons.RemoveWeapons(reloadingWeapons.WpnIDs[i]);
                     }
                 }
             }
         }
-        
+
         public static void ProcessWeaponFire(GenericFiringWeaponsDB firingWeapons)
         {
             for (int i = 0; i < firingWeapons.WpnIDs.Length; i++)
@@ -243,8 +243,8 @@ namespace Pulsar4X.ECSLib
     public class GenericFiringWeaponsDB : BaseDataBlob
     {
 
-        
-        public Guid[] WpnIDs = new Guid[0];
+
+        public StringIdentifier[] WpnIDs = new StringIdentifier[0];
         public int[] InternalMagSizes = new int[0];
         public int[] InternalMagQty = new int[0];
         public int[] ReloadAmountsPerSec = new int[0];
@@ -288,28 +288,28 @@ namespace Pulsar4X.ECSLib
             }
             if (weaponsToAdd.Count == 0)
                 return;
-            
+
             int count = WpnIDs.Length + weaponsToAdd.Count;
             int currentCount = WpnIDs.Length;
             int addCount = weaponsToAdd.Count;
-            
-            
-            Guid[] wpnIDs = new Guid[count];
+
+
+            StringIdentifier[] wpnIDs = new StringIdentifier[count];
             int[] internalMagSizes = new int[count];
             int[] internalMagQty = new int[count];
             int[] reloadAmountsPerSec = new int[count];
             int[] amountPerShot = new int[count];
-            int[] minShotsPerfire = new int[count];  
+            int[] minShotsPerfire = new int[count];
             int[] shotsfireThisTick = new int[count];
             IFireWeaponInstr[] fireInstr = new IFireWeaponInstr[count];
             double[] launchForce =  new double[count];
-            
+
             FireControlAbilityState[] fcStates = new FireControlAbilityState[count];
-            
-            
+
+
             if(WpnIDs.Length > 0)
             {
-                Array.Copy(WpnIDs, wpnIDs, currentCount); //we can't blockcopy a non primitive. 
+                Array.Copy(WpnIDs, wpnIDs, currentCount); //we can't blockcopy a non primitive.
                 Array.Copy(FireControlStates, fcStates, currentCount);
                 Array.Copy(FireInstructions, fireInstr, currentCount);
                 Buffer.BlockCopy(InternalMagSizes, 0, internalMagSizes, 0, currentCount);
@@ -325,10 +325,10 @@ namespace Pulsar4X.ECSLib
             {
                 GenericWeaponAtb wpnAtb = wpns[i].Design.GetAttribute<GenericWeaponAtb>();
                 var wpnState = wpns[i].GetAbilityState<WeaponState>();
-                
+
                 wpnIDs[i + offset] = wpns[i].ID;
                 internalMagSizes[i + offset] = wpnAtb.InternalMagSize;
-                internalMagQty[i + offset] = wpnState.InternalMagCurAmount; 
+                internalMagQty[i + offset] = wpnState.InternalMagCurAmount;
                 reloadAmountsPerSec[i + offset] = wpnAtb.ReloadAmountPerSec;
                 amountPerShot[i + offset] = wpnAtb.AmountPerShot;
                 minShotsPerfire[i + offset] = wpnAtb.MinShotsPerfire;
@@ -341,7 +341,7 @@ namespace Pulsar4X.ECSLib
                 {
                     launchForce[i] = 1;
                 }
-                
+
             }
 
             WpnIDs = wpnIDs;
@@ -355,15 +355,15 @@ namespace Pulsar4X.ECSLib
             ShotsFiredThisTick = shotsfireThisTick;
             LaunchForces = launchForce;
         }
-        
-        internal void RemoveWeapons(Guid wpnId)
+
+        internal void RemoveWeapons(StringIdentifier wpnId)
         {
             ComponentInstance[] wpnInstances = new ComponentInstance[1];
             wpnInstances[0]= OwningEntity.GetDataBlob<ComponentInstancesDB>().AllComponents[wpnId];
             RemoveWeapons(wpnInstances);
         }
-        
-        internal void RemoveWeapons(Guid[] wpnIds)
+
+        internal void RemoveWeapons(StringIdentifier[] wpnIds)
         {
             ComponentInstance[] wpnInstances = new ComponentInstance[wpnIds.Length];
             for (int i = 0; i < wpnIds.Length; i++)
@@ -372,21 +372,21 @@ namespace Pulsar4X.ECSLib
             }
             RemoveWeapons(wpnInstances);
         }
-        
-        
+
+
         /// <summary>
-        /// removes weapons from the index. 
+        /// removes weapons from the index.
         /// </summary>
         /// <param name="wpns"></param>
         internal void RemoveWeapons(ComponentInstance[] wpns)
         {
             //Guid[] wpnToRemoveIDs = new Guid[wpns.Length];
             //bool[] keepOrRemove = new bool[WpnIDs.Length];
-            List<(Guid id, int index)> wpnsToKeep = new List<(Guid, int)>();
+            List<(StringIdentifier id, int index)> wpnsToKeep = new List<(StringIdentifier, int)>();
             //List<int> removeIndexs;
-            
-            
-            
+
+
+
             for (int i = 0; i < WpnIDs.Length; i++)
             {
                 bool keep = true;
@@ -403,15 +403,15 @@ namespace Pulsar4X.ECSLib
                 if(keep)
                     wpnsToKeep.Add((WpnIDs[i], i));
             }
-            
+
             int count = wpnsToKeep.Count;
-            
-            Guid[] wpnIDs = new Guid[count];
+
+            StringIdentifier[] wpnIDs = new StringIdentifier[count];
             int[] internalMagSizes = new int[count];
             int[] internalMagQty = new int[count];
             int[] reloadAmountsPerSec = new int[count];
             int[] amountPerShot = new int[count];
-            int[] minShotsPerfire = new int[count];            
+            int[] minShotsPerfire = new int[count];
             //GenericWeaponAtb.WpnTypes[] wpnTypes = new GenericWeaponAtb.WpnTypes[count];
             IFireWeaponInstr[] fireInstr = new IFireWeaponInstr[count];
             double[] launchForce =  new double[count];
@@ -430,10 +430,10 @@ namespace Pulsar4X.ECSLib
                 fireInstr[newIndex] = FireInstructions[oldIndex];
                 launchForce[newIndex] = LaunchForces[oldIndex];
                 fcStates[newIndex] = FireControlStates[oldIndex];
-                
+
                 newIndex++;
             }
-            
+
             WpnIDs = wpnIDs;
             InternalMagSizes = internalMagSizes;
             InternalMagQty = internalMagQty;
@@ -447,19 +447,19 @@ namespace Pulsar4X.ECSLib
         }
 
         /// <summary>
-        /// Sets weapons, this will remove exsisting. 
+        /// Sets weapons, this will remove exsisting.
         /// </summary>
         /// <param name="wpns"></param>
         internal void SetWeapons(ComponentInstance[] wpns)
         {
             int count = wpns.Length;
-            
-            Guid[] wpnIDs = new Guid[count];
+
+            StringIdentifier[] wpnIDs = new StringIdentifier[count];
             int[] internalMagSizes = new int[count];
             int[] internalMagQty = new int[count];
             int[] reloadAmountsPerSec = new int[count];
             int[] amountPerShot = new int[count];
-            int[] minShotsPerfire = new int[count];  
+            int[] minShotsPerfire = new int[count];
             //GenericWeaponAtb.WpnTypes[] wpnTypes = new GenericWeaponAtb.WpnTypes[count];
             FireControlAbilityState[] fcStates = new FireControlAbilityState[count];
             IFireWeaponInstr[] fireInstr = new IFireWeaponInstr[count];
@@ -469,10 +469,10 @@ namespace Pulsar4X.ECSLib
             {
                 GenericWeaponAtb wpnAtb = wpns[i].Design.GetAttribute<GenericWeaponAtb>();
                 var wpnState = wpns[i].GetAbilityState<WeaponState>();
-                
+
                 wpnIDs[i] = wpns[i].ID;
                 internalMagSizes[i] = wpnAtb.InternalMagSize;
-                internalMagQty[i] = wpnState.InternalMagCurAmount; 
+                internalMagQty[i] = wpnState.InternalMagCurAmount;
                 reloadAmountsPerSec[i] = wpnAtb.ReloadAmountPerSec;
                 amountPerShot[i] = wpnAtb.AmountPerShot;
                 minShotsPerfire[i] = wpnAtb.MinShotsPerfire;
@@ -506,5 +506,5 @@ namespace Pulsar4X.ECSLib
             throw new NotImplementedException();
         }
     }
-    
+
 }

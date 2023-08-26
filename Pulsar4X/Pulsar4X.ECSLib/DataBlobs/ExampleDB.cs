@@ -60,7 +60,7 @@ namespace Pulsar4X.ECSLib
         [PublicAPI]
         [JsonProperty]
         public int ViewableInt2 { get; internal set; }
-        
+
         [PublicAPI]
         public void BadFunction()
         {
@@ -110,7 +110,7 @@ namespace Pulsar4X.ECSLib
 
         // Instead, either store the guid and look up the system when needed (from the Game.Systems dictionary)
         [JsonProperty]
-        public Guid MySystemGuid;
+        public StringIdentifier MySystemGuid;
 
         // Or if you want to get really fancy, use a deserialization callback to resolve the star system after load-time.
         public StarSystem MyStarSystem;

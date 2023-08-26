@@ -106,23 +106,23 @@ namespace Pulsar4X.ECSLib.Industry
     {
         ConstructableGuiHints GuiHints { get; }
 
-        Guid ID { get;  }
+        StringIdentifier ID { get;  }
         string Name { get;  } //player defined name. ie "5t 2kn Thruster".
 
-        Dictionary<Guid, long> ResourceCosts { get; }
+        Dictionary<StringIdentifier, long> ResourceCosts { get; }
 
         long IndustryPointCosts { get; }
         StringIdentifier IndustryTypeID { get; }
         ushort OutputAmount { get; }
-        void OnConstructionComplete(Entity industryEntity, VolumeStorageDB storage, Guid productionLine, IndustryJob batchJob, IConstrucableDesign designInfo);
+        void OnConstructionComplete(Entity industryEntity, VolumeStorageDB storage, StringIdentifier productionLine, IndustryJob batchJob, IConstrucableDesign designInfo);
 
     }
 
     public abstract class JobBase
     {
         public virtual string Name { get; internal set; }
-        public Guid JobID = Guid.NewGuid();
-        public Guid ItemGuid { get; protected set; }
+        public StringIdentifier JobID = new StringIdentifier("player", Guid.NewGuid().ToString());
+        public StringIdentifier ItemGuid { get; protected set; }
         public ushort NumberOrdered { get; set; }
         public ushort NumberCompleted { get; internal set; }
 
@@ -141,14 +141,14 @@ namespace Pulsar4X.ECSLib.Industry
         public long ProductionPointsCost { get; protected set; }
         public bool Auto { get; internal set; }
 
-        public Dictionary<Guid, long> ResourcesRequiredRemaining { get; internal set; } = new Dictionary<Guid, long>();
-        public Dictionary<Guid, long> ResourcesCosts { get; internal set; } = new Dictionary<Guid, long>();
+        public Dictionary<StringIdentifier, long> ResourcesRequiredRemaining { get; internal set; } = new ();
+        public Dictionary<StringIdentifier, long> ResourcesCosts { get; internal set; } = new ();
 
         public JobBase()
         {
         }
 
-        public JobBase(Guid guid, ushort numberOrderd, int jobPoints, bool auto)
+        public JobBase(StringIdentifier guid, ushort numberOrderd, int jobPoints, bool auto)
         {
             ItemGuid = guid;
             NumberOrdered = numberOrderd;
@@ -166,13 +166,13 @@ namespace Pulsar4X.ECSLib.Industry
     {
         internal StringIdentifier TypeID;
 
-        public IndustryJob(FactionInfoDB factionInfo, Guid itemID)
+        public IndustryJob(FactionInfoDB factionInfo, StringIdentifier itemID)
         {
             ItemGuid = itemID;
             var design = factionInfo.IndustryDesigns[itemID];
             TypeID = design.IndustryTypeID;
             Name = design.Name;
-            ResourcesRequiredRemaining = new Dictionary<Guid, long>(design.ResourceCosts);
+            ResourcesRequiredRemaining = new Dictionary<StringIdentifier, long>(design.ResourceCosts);
             ResourcesCosts = design.ResourceCosts;
             ProductionPointsLeft = design.IndustryPointCosts;
             ProductionPointsCost = design.IndustryPointCosts;
@@ -189,7 +189,7 @@ namespace Pulsar4X.ECSLib.Industry
         }
     }
 
-    public class IndustryOrder2:EntityCommand
+    public class IndustryOrder2 : EntityCommand
     {
 
         public override string Name
@@ -212,7 +212,7 @@ namespace Pulsar4X.ECSLib.Industry
         }
         public OrderTypeEnum OrderType;
 
-        public Guid ItemID { get; set; }
+        public StringIdentifier ItemID { get; set; }
         public ushort NumberOrderd { get; set; }
         public bool RepeatJob { get; set; } = false;
         public bool AutoInstall { get; set; } = false;
@@ -225,7 +225,7 @@ namespace Pulsar4X.ECSLib.Industry
 
         private Entity _entityCommanding;
 
-        private Guid productionLineID;
+        private StringIdentifier productionLineID;
         internal override Entity EntityCommanding{get{return _entityCommanding;}}
 
 
@@ -236,7 +236,7 @@ namespace Pulsar4X.ECSLib.Industry
 
 
         public static IndustryOrder2 CreateNewJobOrder(
-            Guid factionGuid, Entity thisEntity, Guid productionLineID,
+            StringIdentifier factionGuid, Entity thisEntity, StringIdentifier productionLineID,
             IndustryJob jobItem
         )
         {
@@ -252,8 +252,8 @@ namespace Pulsar4X.ECSLib.Industry
 
 
         public static IndustryOrder2 CreateCancelJobOrder(
-            Guid factionGuid, Entity thisEntity, Guid productionLineID,
-            Guid OrderID
+            StringIdentifier factionGuid, Entity thisEntity, StringIdentifier productionLineID,
+            StringIdentifier OrderID
         )
         {
             IndustryOrder2 order = new IndustryOrder2(factionGuid, thisEntity);
@@ -264,9 +264,9 @@ namespace Pulsar4X.ECSLib.Industry
         }
 
         public static IndustryOrder2 CreateChangePriorityOrder(
-            Guid factionGuid, Entity thisEntity,
-            Guid productionLineID,
-            Guid OrderID, short delta
+            StringIdentifier factionGuid, Entity thisEntity,
+            StringIdentifier productionLineID,
+            StringIdentifier OrderID, short delta
         )
         {
             IndustryOrder2 order = new IndustryOrder2(factionGuid, thisEntity);
@@ -278,8 +278,8 @@ namespace Pulsar4X.ECSLib.Industry
         }
 
         public static IndustryOrder2 CreateEditJobOrder(
-            Guid factionGuid, Entity thisEntity, Guid productionLineID,
-            Guid OrderID, ushort quantity = 1, bool repeatJob = false, bool autoInstall = false
+            StringIdentifier factionGuid, Entity thisEntity, StringIdentifier productionLineID,
+            StringIdentifier OrderID, ushort quantity = 1, bool repeatJob = false, bool autoInstall = false
         )
         {
             IndustryOrder2 order = new IndustryOrder2(factionGuid, thisEntity);
@@ -293,7 +293,7 @@ namespace Pulsar4X.ECSLib.Industry
         }
 
 
-        private IndustryOrder2(Guid factionGuid, Entity thisEntity)
+        private IndustryOrder2(StringIdentifier factionGuid, Entity thisEntity)
         {
             RequestingFactionGuid = factionGuid;
             EntityCommandingGuid = thisEntity.Guid;

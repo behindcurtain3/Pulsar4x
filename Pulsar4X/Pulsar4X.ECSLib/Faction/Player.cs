@@ -49,15 +49,15 @@ namespace Pulsar4X.ECSLib
         EditOwners      = 2147483648,
             SM              = 4294967295    // Player can do anything with this faction.
     }
-    
+
     public class AuthenticationToken
     {
-        public Guid PlayerID { get; set; }
+        public StringIdentifier PlayerID { get; set; }
         public string Password { get; set; }
 
         public AuthenticationToken() { }
 
-        public AuthenticationToken(Guid playerID, string password = "")
+        public AuthenticationToken(StringIdentifier playerID, string password = "")
         {
             PlayerID = playerID;
             Password = password;
@@ -76,7 +76,7 @@ namespace Pulsar4X.ECSLib
         #region Properties
         [PublicAPI]
         [JsonProperty]
-        public Guid ID { get; protected set; }
+        public StringIdentifier ID { get; protected set; }
 
         [PublicAPI]
         [JsonProperty]
@@ -97,14 +97,14 @@ namespace Pulsar4X.ECSLib
 
         [JsonProperty]
         public Dictionary<EventType, bool> HaltsOnEvent { get; } = new Dictionary<EventType, bool>();
-        
+
         #endregion
 
         #region Constructors
 
         public Player(SerializationInfo info, StreamingContext context)
         {
-            ID = (Guid)info.GetValue(nameof(ID), typeof(Guid));
+            ID = (StringIdentifier)info.GetValue(nameof(ID), typeof(StringIdentifier));
             Name = info.GetString(nameof(Name));
 
             if (context.State != StreamingContextStates.Persistence)
@@ -116,16 +116,16 @@ namespace Pulsar4X.ECSLib
             Salt = info.GetString(nameof(Salt));
             FactionAccessRoles = (Dictionary<Entity, uint>)info.GetValue(nameof(FactionAccessRoles), typeof(Dictionary<Entity, uint>));
             //Orders = new OrderQueue();
-            HaltsOnEvent = (Dictionary<EventType, bool>)info.GetValue(nameof(HaltsOnEvent), typeof(Dictionary<EventType, bool>)); 
+            HaltsOnEvent = (Dictionary<EventType, bool>)info.GetValue(nameof(HaltsOnEvent), typeof(Dictionary<EventType, bool>));
         }
 
-        internal Player(string name, string password = "") : this(name, password, Guid.NewGuid())
+        internal Player(string name, string password = "") : this(name, password, new StringIdentifier("player", Guid.NewGuid().ToString()))
         { }
 
-        internal Player(string name, string password, Guid id) : this(name, password, id, new Dictionary<Entity, uint>())
+        internal Player(string name, string password, StringIdentifier id) : this(name, password, id, new Dictionary<Entity, uint>())
         { }
 
-        internal Player(string name, string password, Guid id, Dictionary<Entity, uint> factionAccessRoles)
+        internal Player(string name, string password, StringIdentifier id, Dictionary<Entity, uint> factionAccessRoles)
         {
             ID = id;
             Name = string.IsNullOrEmpty(name) ? "Unnamed Player" : name;
@@ -269,7 +269,7 @@ namespace Pulsar4X.ECSLib
         }
 
         public void ClearOrders()
-        {   
+        {
             Orders.ClearOrders();
         }
 */
@@ -362,6 +362,6 @@ namespace Pulsar4X.ECSLib
         #endregion
 
         #endregion
-        
+
     }
 }

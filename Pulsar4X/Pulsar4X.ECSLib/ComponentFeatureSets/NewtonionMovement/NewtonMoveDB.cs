@@ -9,7 +9,7 @@ namespace Pulsar4X.ECSLib
     {
 
         //public double SpecificImpulseASL; //maybe future do stuff with planet to space efficencies.
-        
+
         /// <summary>
         /// in m/s
         /// </summary>
@@ -17,21 +17,21 @@ namespace Pulsar4X.ECSLib
         /// <summary>
         /// this is a specific mineral/refined materal etc, rather than a cargo type
         /// </summary>
-        public Guid FuelType;
-        
+        public StringIdentifier FuelType;
+
         /// <summary>
         /// in kg/s (mass)
         /// </summary>
         public double FuelBurnRate;
 
-        public NewtonionThrustAtb(double exhaustVelocity, Guid fuelType, double fuelBurnRate)
+        public NewtonionThrustAtb(double exhaustVelocity, StringIdentifier fuelType, double fuelBurnRate)
         {
             //ThrustInNewtons = thrust;
             ExhaustVelocity = exhaustVelocity;
             FuelType = fuelType;
             FuelBurnRate = fuelBurnRate;
         }
-        
+
 
         public void OnComponentInstallation(Entity parentEntity, ComponentInstance componentInstance)
         {
@@ -53,7 +53,7 @@ namespace Pulsar4X.ECSLib
             db.ExhaustVelocity = ExhaustVelocity;
             db.FuelBurnRate += FuelBurnRate;
             db.ThrustInNewtons += ExhaustVelocity * FuelBurnRate;
-            
+
             /*
             var wetmass = parentEntity.GetDataBlob<MassVolumeDB>().Mass;
             ProcessedMaterialSD foo = StaticRefLib.StaticData.CargoGoods.GetMaterials()[FuelType];
@@ -63,7 +63,7 @@ namespace Pulsar4X.ECSLib
             db.DeltaV = OrbitMath.TsiolkovskyRocketEquation(wetmass, dryMass, ExhaustVelocity);
             */
         }
-        
+
         public string AtbName()
         {
             return "Newton Thrust";
@@ -78,23 +78,23 @@ namespace Pulsar4X.ECSLib
 
     public class NewtonThrustAbilityDB : BaseDataBlob, IAbilityDescription
     {
-        
+
         public double ThrustInNewtons = 0;
         //public double SpecificImpulseASL = 0;
         public double ExhaustVelocity = 0;
-        public Guid FuelType; //todo: change this to a list and enable multple fuel types. 
-        
+        public StringIdentifier FuelType; //todo: change this to a list and enable multple fuel types.
+
         /// <summary>
         /// in Kg/s
         /// </summary>
         public double FuelBurnRate = 0;
         public double TotalFuel_kg { get; private set; }
-        
+
         /// <summary>
         /// non fuel mass. will need updating when non fuel cargo is added/removed.
         /// (should be the mass of the ship plus any cargo including fuel not usable by this ship).
         /// </summary>
-        //public double DryMass_kg { get; internal set; } 
+        //public double DryMass_kg { get; internal set; }
         public double DeltaV { get; private set; } = 0;
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace Pulsar4X.ECSLib
             double dryMass = wetMass_kg - fuel;
             DeltaV = OrbitMath.TsiolkovskyRocketEquation(wetMass_kg, dryMass, ExhaustVelocity);
         }
-        
+
         /// <summary>
         /// Sets a given amount of fuel, and updates DeltaV.
         /// </summary>
@@ -149,7 +149,7 @@ namespace Pulsar4X.ECSLib
         {
         }
 
-        public NewtonThrustAbilityDB(Guid fuelType)
+        public NewtonThrustAbilityDB(StringIdentifier fuelType)
         {
             FuelType = fuelType;
         }
@@ -185,12 +185,12 @@ namespace Pulsar4X.ECSLib
     }
 
     /// <summary>
-    /// This gets added to an entity when it's doing a newton thrust manuver. 
+    /// This gets added to an entity when it's doing a newton thrust manuver.
     /// </summary>
     public class NewtonMoveDB : BaseDataBlob
     {
         internal DateTime LastProcessDateTime = new DateTime();
-        
+
 
         /// <summary>
         /// This is the parent ralitive manuver deltaV (ie within SOI not StarSystem Global)
@@ -209,9 +209,9 @@ namespace Pulsar4X.ECSLib
         //public Vector3 DeltaVForManuver_FoRO_m { get; private set; }
 
         public DateTime ActionOnDateTime { get; internal set; }
-        
+
         /// <summary>
-        /// Parent relative velocity vector. 
+        /// Parent relative velocity vector.
         /// </summary>
         public Vector3 CurrentVector_ms { get; internal set; }
 
@@ -238,7 +238,7 @@ namespace Pulsar4X.ECSLib
         private NewtonMoveDB() { }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="sphereOfInfluenceParent"></param>
         /// <param name="velocity_ms">Parentrelative Velocity</param>
@@ -250,11 +250,11 @@ namespace Pulsar4X.ECSLib
             ManuverDeltaV = manuverDeltaV;
             ParentMass = SOIParent.GetDataBlob<MassVolumeDB>().MassDry;
             LastProcessDateTime = sphereOfInfluenceParent.Manager.ManagerSubpulses.StarSysDateTime;
-            
+
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="sphereOfInfluenceParent"></param>
         /// <param name="velocity_ms">Parentrelative Velocity</param>
@@ -264,7 +264,7 @@ namespace Pulsar4X.ECSLib
             SOIParent = sphereOfInfluenceParent;
             ParentMass = SOIParent.GetDataBlob<MassVolumeDB>().MassDry;
             LastProcessDateTime = sphereOfInfluenceParent.Manager.ManagerSubpulses.StarSysDateTime;
-            
+
         }
 
         public NewtonMoveDB(NewtonMoveDB db)
@@ -273,7 +273,7 @@ namespace Pulsar4X.ECSLib
             CurrentVector_ms = db.CurrentVector_ms;
             SOIParent = db.SOIParent;
             ParentMass = db.ParentMass;
-            
+
         }
         public override object Clone()
         {
@@ -294,7 +294,7 @@ namespace Pulsar4X.ECSLib
             {
                 OwningEntity.RemoveDataBlob<WarpMovingDB>();
             }
-            
+
             UpdateKeplerElements();
         }
 

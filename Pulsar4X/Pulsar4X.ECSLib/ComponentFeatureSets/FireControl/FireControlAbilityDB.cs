@@ -10,7 +10,7 @@ namespace Pulsar4X.ECSLib
 {
     /// <summary>
     /// Other than giving an entity a datablob that says it can do fire control,
-    /// it just links component instsances for convenience.  
+    /// it just links component instsances for convenience.
     /// </summary>
     public class FireControlAbilityDB : BaseDataBlob
     {
@@ -26,7 +26,7 @@ namespace Pulsar4X.ECSLib
 
         FireControlAbilityDB(FireControlAbilityDB db)
         {
-            
+
         }
 
         public override object Clone()
@@ -75,10 +75,10 @@ namespace Pulsar4X.ECSLib
                 _TargetNameDB = null;
             else
                 _TargetNameDB = target.GetDataBlob<NameDB>();
-            
+
         }
 
-        private Guid _factionOwner;
+        private StringIdentifier _factionOwner;
         public string TargetName
         {
             get
@@ -95,7 +95,7 @@ namespace Pulsar4X.ECSLib
         //public ComponentInstance[] AssignedWeapons {get{return GetChildrenOfType<WeaponState>()}}
 
         public bool IsEngaging { get; internal set; } = false;
-        
+
 
         public FireControlAbilityState(ComponentInstance componentInstance) : base(componentInstance)
         {

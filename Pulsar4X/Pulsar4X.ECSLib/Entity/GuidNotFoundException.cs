@@ -6,10 +6,10 @@ namespace Pulsar4X.ECSLib
     public class GuidNotFoundException : Exception
     {
         [PublicAPI]
-        public Guid MissingGuid { get; private set; }
+        public StringIdentifier MissingGuid { get; private set; }
 
         [PublicAPI]
-        public GuidNotFoundException(Guid missingGuid)
+        public GuidNotFoundException(StringIdentifier missingGuid)
         {
             MissingGuid = missingGuid;
         }

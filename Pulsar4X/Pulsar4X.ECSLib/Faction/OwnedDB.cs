@@ -10,7 +10,7 @@ namespace Pulsar4X.ECSLib
     {
         [JsonIgnore]
         FactionOwnerDB FactionOwnerDB { get; set; }
-        
+
         [JsonProperty]
         private Entity _factionOwner;
         internal Entity OwnedByFaction
@@ -18,7 +18,7 @@ namespace Pulsar4X.ECSLib
             get
             {
                 return _factionOwner;
-            } 
+            }
             set
             {
                 if (_factionOwner != value)
@@ -72,7 +72,7 @@ namespace Pulsar4X.ECSLib
             _factionOwner = objectOwnerDB.OwningEntity;
             ObjectOwnerDB = objectOwnerDB;
         }
-        
+
 
 
         // Json Constructor
@@ -108,7 +108,7 @@ namespace Pulsar4X.ECSLib
         {
             hash = Misc.ValueHash(_factionOwner.ID, hash);
             //hash = Misc.ValueHash(_obectOwner.ID, hash);
-            return hash; 
+            return hash;
         }
 
         // JSON deserialization callback.
@@ -180,13 +180,13 @@ namespace Pulsar4X.ECSLib
     public class FactionOwnerDB : BaseDataBlob, IGetValuesHash
     {
         [JsonProperty]
-        internal Dictionary<Guid, Entity> OwnedEntities { get; set; } = new Dictionary<Guid, Entity>();
-        private Dictionary<Guid, List<Entity>> ByStarSystem { get; set; } = new Dictionary<Guid, List<Entity>>();
+        internal Dictionary<StringIdentifier, Entity> OwnedEntities { get; set; } = new Dictionary<StringIdentifier, Entity>();
+        private Dictionary<StringIdentifier, List<Entity>> ByStarSystem { get; set; } = new Dictionary<StringIdentifier, List<Entity>>();
         public FactionOwnerDB() { }
 
         public FactionOwnerDB(FactionOwnerDB db)
         {
-            OwnedEntities = new Dictionary<Guid, Entity>(db.OwnedEntities);
+            OwnedEntities = new Dictionary<StringIdentifier, Entity>(db.OwnedEntities);
         }
 
         internal void SetOwned(Entity entity)
@@ -206,7 +206,7 @@ namespace Pulsar4X.ECSLib
             if (OwnedEntities.ContainsKey(entity.Guid))
             {
                 OwnedEntities.Remove(entity.Guid);
-                entity.FactionOwnerID = Guid.Empty;
+                entity.FactionOwnerID = null;
             }
         }
 

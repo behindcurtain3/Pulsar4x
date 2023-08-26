@@ -14,7 +14,7 @@ namespace Pulsar4X.ECSLib
 
     public class SensorContact
     {
-        public Guid ActualEntityGuid;
+        public StringIdentifier ActualEntityGuid;
         public Entity ActualEntity;
 
         public SensorInfoDB SensorInfo;
@@ -55,7 +55,7 @@ namespace Pulsar4X.ECSLib
         public Entity FactionEntity;
 
         public EntityManager ParentManager;
-        Dictionary<Guid, SensorContact> _sensorContactsByActualGuid = new Dictionary<Guid, SensorContact>();
+        Dictionary<StringIdentifier, SensorContact> _sensorContactsByActualGuid = new Dictionary<StringIdentifier, SensorContact>();
 
         public XThreadData<EntityChangeData> Changes = new XThreadData<EntityChangeData>();
 
@@ -66,34 +66,34 @@ namespace Pulsar4X.ECSLib
             parentManager.FactionSensorContacts.Add(faction.Guid, this);
         }
 
-        public bool SensorContactExists(Guid actualEntityGuid)
+        public bool SensorContactExists(StringIdentifier actualEntityGuid)
         {
             return _sensorContactsByActualGuid.ContainsKey(actualEntityGuid);
         }
 
-        public SensorContact GetSensorContact(Guid actualEntityGuid)
+        public SensorContact GetSensorContact(StringIdentifier actualEntityGuid)
         {
             return (_sensorContactsByActualGuid[actualEntityGuid]);
         }
         internal void AddContact(SensorContact sensorContact)
         {
             _sensorContactsByActualGuid.Add(sensorContact.ActualEntityGuid, sensorContact);
-            Changes.Write(new EntityChangeData() 
-            { 
-                Entity = sensorContact.ActualEntity, 
-                ChangeType = EntityChangeData.EntityChangeType.EntityAdded 
+            Changes.Write(new EntityChangeData()
+            {
+                Entity = sensorContact.ActualEntity,
+                ChangeType = EntityChangeData.EntityChangeType.EntityAdded
             });
         }
-        internal void RemoveContact(Guid ActualEntityGuid)
+        internal void RemoveContact(StringIdentifier ActualEntityGuid)
         {
             if (_sensorContactsByActualGuid.ContainsKey(ActualEntityGuid))
             {
                 var entity = _sensorContactsByActualGuid[ActualEntityGuid].ActualEntity;
                 _sensorContactsByActualGuid.Remove(ActualEntityGuid);
-                Changes.Write(new EntityChangeData() 
-                { 
-                    Entity = entity, 
-                    ChangeType = EntityChangeData.EntityChangeType.EntityAdded 
+                Changes.Write(new EntityChangeData()
+                {
+                    Entity = entity,
+                    ChangeType = EntityChangeData.EntityChangeType.EntityAdded
                 });
             }
         }
@@ -101,7 +101,7 @@ namespace Pulsar4X.ECSLib
         {
             return _sensorContactsByActualGuid.Values.ToList();
         }
-        public List<Guid> GetAllContactGuids()
+        public List<StringIdentifier> GetAllContactGuids()
         {
             return _sensorContactsByActualGuid.Keys.ToList();
         }
@@ -115,7 +115,7 @@ namespace Pulsar4X.ECSLib
         {
             foreach (ConcurrentQueue<T> sub in _subscribers)
             {
-                sub.Enqueue(data);            
+                sub.Enqueue(data);
             }
 
         }
@@ -124,7 +124,7 @@ namespace Pulsar4X.ECSLib
         {
             ConcurrentQueue<T> newQueue = new ConcurrentQueue<T>();
             _subscribers.Add(newQueue);
-            return newQueue; 
+            return newQueue;
         }
 
         public void Unsubscribe(ConcurrentQueue<T> queue)

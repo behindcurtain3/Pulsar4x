@@ -112,7 +112,7 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.Missiles
     public class OrdnanceDesign : ICargoable, IConstrucableDesign, ISerializable
     {
         public ConstructableGuiHints GuiHints { get; } = ConstructableGuiHints.IsOrdinance;
-        public Guid ID { get; } = Guid.NewGuid();
+        public StringIdentifier ID { get; } = new StringIdentifier("player", Guid.NewGuid().ToString());
         public string Name { get; set; }
         public StringIdentifier CargoTypeID { get; }
         public int DesignVersion = 0;
@@ -132,11 +132,11 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.Missiles
         public double Volume;
         public List<(ComponentDesign design, int count)> Components;
         public (ArmorSD type, float thickness) Armor;
-        public Dictionary<Guid, long> ResourceCosts { get; internal set; } = new Dictionary<Guid, long>();
-        public Dictionary<Guid, long> MineralCosts = new Dictionary<Guid, long>();
-        public Dictionary<Guid, long> MaterialCosts = new Dictionary<Guid, long>();
-        public Dictionary<Guid, long> ComponentCosts = new Dictionary<Guid, long>();
-        public Dictionary<Guid, long> ShipInstanceCost = new Dictionary<Guid, long>();
+        public Dictionary<StringIdentifier, long> ResourceCosts { get; internal set; } = new ();
+        public Dictionary<StringIdentifier, long> MineralCosts = new ();
+        public Dictionary<StringIdentifier, long> MaterialCosts = new ();
+        public Dictionary<StringIdentifier, long> ComponentCosts = new ();
+        public Dictionary<StringIdentifier, long> ShipInstanceCost = new ();
         public int CrewReq;
         public long IndustryPointCosts { get; }
 
@@ -148,7 +148,7 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.Missiles
             get { return 1; }
         }
 
-        public void OnConstructionComplete(Entity industryEntity, VolumeStorageDB storage, Guid productionLine, IndustryJob batchJob, IConstrucableDesign designInfo)
+        public void OnConstructionComplete(Entity industryEntity, VolumeStorageDB storage, StringIdentifier productionLine, IndustryJob batchJob, IConstrucableDesign designInfo)
         {
             var industrydb = industryEntity.GetDataBlob<IndustryAbilityDB>();
         }
@@ -171,7 +171,7 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.Missiles
             //TODO! we're leaking softcode into hard code here! this is the "ordnance" cargo type, tells us to store this missile in "ordnance" type cargo.
             CargoTypeID = new StringIdentifier("base.storage-ordnance");//new Guid("055E2026-20A4-4CFA-A8CA-A01915A48B5E");
             BurnRate = 0;
-            Guid fuelType = Guid.Empty;
+            StringIdentifier fuelType;
             double fuelMass = fuelAmountKG;
             double mass = 0;
             double vol = 0;

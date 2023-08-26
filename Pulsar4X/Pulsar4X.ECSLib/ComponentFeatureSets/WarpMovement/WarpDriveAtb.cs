@@ -8,15 +8,15 @@ namespace Pulsar4X.ECSLib
     public class WarpDriveAtb : IComponentDesignAttribute
     {
 
-        
+
         [JsonProperty]
         public int WarpPower { get; internal set; }
 
-        public Guid EnergyType { get; internal set; }
+        public StringIdentifier EnergyType { get; internal set; }
         public double BubbleCreationCost { get; internal set; }
         public double BubbleSustainCost { get; internal set; }
         public double BubbleCollapseCost { get; internal set; }
-        
+
         public WarpDriveAtb()
         {
         }
@@ -36,7 +36,7 @@ namespace Pulsar4X.ECSLib
             WarpPower = ability.WarpPower;
         }
 
-        public WarpDriveAtb(double warpPower, Guid energyType, double creationCost, double sustainCost, double bubbleCollapseCost)
+        public WarpDriveAtb(double warpPower, StringIdentifier energyType, double creationCost, double sustainCost, double bubbleCollapseCost)
         {
             WarpPower = (int)warpPower;
             EnergyType = energyType;
@@ -47,7 +47,7 @@ namespace Pulsar4X.ECSLib
 
         public void OnComponentInstallation(Entity parentEntity, ComponentInstance componentInstance)
         {
-            
+
             if (!parentEntity.HasDataBlob<WarpAbilityDB>())
             {
                 var ablty = new WarpAbilityDB();
@@ -66,7 +66,7 @@ namespace Pulsar4X.ECSLib
             }
             ShipMovementProcessor.CalcMaxWarpAndEnergyUsage(parentEntity);
         }
-        
+
         public string AtbName()
         {
             return "Warp Drive";
@@ -83,15 +83,15 @@ namespace Pulsar4X.ECSLib
     public class WarpAbilityDB : BaseDataBlob, IAbilityDescription
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public double MaxSpeed { get; internal set; }
         public double TotalWarpPower { get; internal set; }
-        public Guid EnergyType { get; internal set; }
+        public StringIdentifier EnergyType { get; internal set; }
         public double BubbleCreationCost { get; internal set; }
         public double BubbleSustainCost { get; internal set; }
         public double BubbleCollapseCost { get; internal set; }
-        
+
         public Vector3 CurrentVectorMS { get; internal set; }
 
         public WarpAbilityDB()

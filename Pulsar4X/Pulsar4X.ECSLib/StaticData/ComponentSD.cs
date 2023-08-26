@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Pulsar4X.ECSLib.Industry;
 
 namespace Pulsar4X.ECSLib
 {
@@ -15,7 +14,7 @@ namespace Pulsar4X.ECSLib
         public string VolumeFormula;
         public string HTKFormula;
         public string CrewReqFormula;
-        public Dictionary<Guid,string> ResourceCostFormula; //mins, mats and components can also be included here.
+        public Dictionary<StringIdentifier, string> ResourceCostFormula; //mins, mats and components can also be included here.
         public string ResearchCostFormula;
         public string CreditCostFormula;
         public string BuildPointCostFormula;

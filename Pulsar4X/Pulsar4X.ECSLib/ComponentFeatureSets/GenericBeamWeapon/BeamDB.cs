@@ -23,7 +23,7 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.GenericBeamWeapon
         {
             var dbs = manager.GetAllDataBlobsOfType<BeamInfoDB>(_beamInfoIndex);
             foreach (BeamInfoDB db in dbs)
-            { 
+            {
                 BeamMovePhysics(db, deltaSeconds);
             }
 
@@ -44,7 +44,7 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.GenericBeamWeapon
                 var futurePosTime = PredictTgtPositionAndTime(state, nowTime, beamInfo.TargetEntity, beamInfo.VelocityVector.Length());
                 var normVector = Vector3.Normalise(futurePosTime.pos - state.AbsolutePosition);
                 var absVector =  normVector * beamInfo.VelocityVector.Length();
-                
+
                 beamInfo.VelocityVector = absVector;
 
                 if (futurePosTime.seconds <= seconds)
@@ -58,7 +58,7 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.GenericBeamWeapon
                     var ralitiveVel = shipFutureVel - beamInfo.VelocityVector;
                     var ralitiveSpeed = ralitiveVel.Length();
                     var freq = beamInfo.Frequency;
-                    
+
                     DamageFragment damage = new DamageFragment()
                     {
                         Velocity = new Vector2( ralitiveVel.X, ralitiveVel.Y),
@@ -81,7 +81,7 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.GenericBeamWeapon
                     }
                 }
             }
-            
+
             else
             {
                 beamInfo.PosDB.AbsolutePosition += beamInfo.VelocityVector * seconds;
@@ -91,13 +91,13 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.GenericBeamWeapon
                 }
             }
         }
-        
+
         public static void FireBeamWeapon(Entity launchingEntity, Entity targetEntity, bool hitsTarget,double freqency, double beamVelocity, double beamLenInSeconds)
         {
             var nowTime = launchingEntity.StarSysDateTime;
             var ourState = launchingEntity.GetAbsoluteState();
             var futurePosTime = PredictTgtPositionAndTime(ourState, nowTime, targetEntity, beamVelocity);
-            
+
             var ourAbsPos = launchingEntity.GetAbsoluteFuturePosition(nowTime);
             var normVector = Vector3.Normalise(futurePosTime.pos - ourAbsPos);
             var absVector =  normVector * beamVelocity;
@@ -120,7 +120,7 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.GenericBeamWeapon
 
         public static (Vector3 pos, double seconds) PredictTgtPositionAndTime((Vector3 pos, Vector3 Velocity) ourState, DateTime atTime, Entity targetEntity, double beamVelocity)
         {
-            
+
             var tgtState = targetEntity.GetAbsoluteState();
             Vector3 leadToTgt = (ourState.Velocity - tgtState.Velocity);
             Vector3 vectorToTgt = (ourState.pos -tgtState.pos);
@@ -131,24 +131,24 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.GenericBeamWeapon
             return (futurePosition, timeToTarget);
 
         }
-        
+
         Vector3 LeadVector(
-            double dvToUse, 
-            double burnTime, 
+            double dvToUse,
+            double burnTime,
             Entity targetEntity,
-            (Vector3 pos, Vector3 Velocity) ourState, 
-            (Vector3 pos, Vector3 Velocity) tgtState, 
+            (Vector3 pos, Vector3 Velocity) ourState,
+            (Vector3 pos, Vector3 Velocity) tgtState,
             DateTime atDateTime )
         {
             var distanceToTgt = (ourState.pos - tgtState.pos).Length();
             var tgtBearing = tgtState.pos - ourState.pos;
-            
+
             Vector3 leadToTgt = tgtState.Velocity - ourState.Velocity;
             var closingSpeed = leadToTgt.Length() ;
             double newttt = distanceToTgt / closingSpeed;
             double oldttt = 0;
             int itterations = 0;
-            
+
             while (Math.Abs(newttt - oldttt) > 1) //itterate till we get a solution that's less than a second difference from last.
             {
                 oldttt = newttt;
@@ -160,24 +160,24 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.GenericBeamWeapon
                 }
                 DateTime futureDate = atDateTime + timespanToIntercept;
                 var futurePosition = targetEntity.GetRelativeFuturePosition(futureDate);
-                    
+
                 tgtBearing = futurePosition - ourState.pos;
                 distanceToTgt = (tgtBearing).Length();
 
                 leadToTgt = tgtState.Velocity - ourState.Velocity;
                 closingSpeed = leadToTgt.Length() ;
                 newttt = distanceToTgt / closingSpeed;
-                
+
                 itterations++;
 
             }
-            
+
             var vectorToTgt = Vector3.Normalise(tgtBearing);
             var deltaVVector = vectorToTgt * dvToUse;
-            
+
             return vectorToTgt * dvToUse;
         }
-        
+
         public static double TimeToTarget(double distanceToTgt, Vector3 ourVelocity, Vector3 targetVelocity)
         {
             Vector3 leadToTgt = targetVelocity - ourVelocity;
@@ -190,7 +190,7 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.GenericBeamWeapon
     public class BeamInfoDB : BaseDataBlob
     {
         public double Frequency;
-        public Guid FiredBy;
+        public StringIdentifier FiredBy;
         public Vector3 VelocityVector;
         public Vector3[] Positions;
         public bool HitsTarget;
@@ -204,7 +204,7 @@ namespace Pulsar4X.ECSLib.ComponentFeatureSets.GenericBeamWeapon
                 return _posDB;
             }}
 
-        public BeamInfoDB(Guid launchedBy, Entity targetEntity, bool hitsTarget)
+        public BeamInfoDB(StringIdentifier launchedBy, Entity targetEntity, bool hitsTarget)
         {
             FiredBy = launchedBy;
             TargetEntity = targetEntity;

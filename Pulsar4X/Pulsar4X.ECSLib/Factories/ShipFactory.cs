@@ -13,7 +13,7 @@ namespace Pulsar4X.ECSLib
     public class ShipDesign : ICargoable, IConstrucableDesign, ISerializable
     {
         public ConstructableGuiHints GuiHints { get; } = ConstructableGuiHints.CanBeLaunched;
-        public Guid ID { get; private set; } = Guid.NewGuid();
+        public StringIdentifier ID { get; private set; } = new StringIdentifier("player", Guid.NewGuid().ToString());
         public string Name { get; set; }
         public StringIdentifier CargoTypeID { get; }
         public int DesignVersion = 0;
@@ -22,7 +22,7 @@ namespace Pulsar4X.ECSLib
         public double VolumePerUnit { get; private set; }
         public double Density { get; }
 
-        private Guid _factionGuid;
+        private StringIdentifier _factionGuid;
 
         /// <summary>
         /// m^3
@@ -37,11 +37,11 @@ namespace Pulsar4X.ECSLib
         /// </summary>
         public List<(ComponentDesign design, int count)> Components;
         public (ArmorSD type, float thickness) Armor;
-        public Dictionary<Guid, long> ResourceCosts { get; internal set; } = new Dictionary<Guid, long>();
-        public Dictionary<Guid, long> MineralCosts = new Dictionary<Guid, long>();
-        public Dictionary<Guid, long> MaterialCosts = new Dictionary<Guid, long>();
-        public Dictionary<Guid, long> ComponentCosts = new Dictionary<Guid, long>();
-        public Dictionary<Guid, long> ShipInstanceCost = new Dictionary<Guid, long>();
+        public Dictionary<StringIdentifier, long> ResourceCosts { get; internal set; } = new ();
+        public Dictionary<StringIdentifier, long> MineralCosts = new ();
+        public Dictionary<StringIdentifier, long> MaterialCosts = new ();
+        public Dictionary<StringIdentifier, long> ComponentCosts = new Dictionary<StringIdentifier, long>();
+        public Dictionary<StringIdentifier, long> ShipInstanceCost = new Dictionary<StringIdentifier, long>();
         public int CrewReq;
         public long IndustryPointCosts { get; private set; }
 
@@ -50,7 +50,7 @@ namespace Pulsar4X.ECSLib
         public StringIdentifier IndustryTypeID { get; } = new StringIdentifier("base.ship-assembly");
         public ushort OutputAmount { get; } = 1;
 
-        public void OnConstructionComplete(Entity industryEntity, VolumeStorageDB storage, Guid productionLine, IndustryJob batchJob, IConstrucableDesign designInfo)
+        public void OnConstructionComplete(Entity industryEntity, VolumeStorageDB storage, StringIdentifier productionLine, IndustryJob batchJob, IConstrucableDesign designInfo)
         {
             var industrydb = industryEntity.GetDataBlob<IndustryAbilityDB>();
         }
@@ -76,8 +76,8 @@ namespace Pulsar4X.ECSLib
             if (info == null)
                 throw new ArgumentNullException("info");
 
-            ID = (Guid)info.GetValue(nameof(ID), typeof(Guid));
-            _factionGuid = (Guid)info.GetValue(nameof(_factionGuid), typeof(Guid));
+            ID = (StringIdentifier)info.GetValue(nameof(ID), typeof(StringIdentifier));
+            _factionGuid = (StringIdentifier)info.GetValue(nameof(_factionGuid), typeof(StringIdentifier));
             var name = (string)info.GetValue(nameof(Name), typeof(string));
             var components = (List<(ComponentDesign design, int count)>)info.GetValue(nameof(Components), typeof(List<(ComponentDesign design, int count)>));
             var armor = ((ArmorSD armorType, float thickness))info.GetValue(nameof(Armor), typeof((ArmorSD armorType, float thickness)));
@@ -230,7 +230,7 @@ namespace Pulsar4X.ECSLib
             ComponentDesign integratedfireControl;
 
 
-            ComponentTemplateSD bfcSD = staticdata.ComponentTemplates[new Guid("33fcd1f5-80ab-4bac-97be-dbcae19ab1a0")];
+            ComponentTemplateSD bfcSD = staticdata.ComponentTemplates[new StringIdentifier("base.beamfirecontrol")];
             fireControlDesigner = new ComponentDesigner(bfcSD, ownerFaction.GetDataBlob<FactionTechDB>());
             fireControlDesigner.Name = "Bridge Computer Systems";
             fireControlDesigner.ComponentDesignAttributes["Range"].SetValueFromInput(0);

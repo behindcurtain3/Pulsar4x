@@ -10,10 +10,10 @@ namespace Pulsar4X.ECSLib
         {
         }
 
-        
+
         /*
-         This was used when warp drive used fuel instead of energy. 
-         keeping it around incase we do a simular non newtonion drive that uses fuel. 
+         This was used when warp drive used fuel instead of energy.
+         keeping it around incase we do a simular non newtonion drive that uses fuel.
         public static double CalcMaxFuelDistance_KM(Entity shipEntity)
         {
             CargoStorageDB storedResources = shipEntity.GetDataBlob<CargoStorageDB>();
@@ -43,11 +43,11 @@ namespace Pulsar4X.ECSLib
         /// <param name="ship"></param>
         public static void CalcMaxWarpAndEnergyUsage(Entity ship)
         {
-            Dictionary<Guid, double> totalFuelUsage = new Dictionary<Guid, double>();
+            Dictionary<StringIdentifier, double> totalFuelUsage = new Dictionary<StringIdentifier, double>();
             var instancesDB = ship.GetDataBlob<ComponentInstancesDB>();
             int totalEnginePower = instancesDB.GetTotalEnginePower(out totalFuelUsage);
-            
-            //Note: TN aurora uses the TCS for max speed calcs. 
+
+            //Note: TN aurora uses the TCS for max speed calcs.
             WarpAbilityDB warpDB = ship.GetDataBlob<WarpAbilityDB>();
             warpDB.TotalWarpPower = totalEnginePower;
             //propulsionDB.FuelUsePerKM = totalFuelUsage;
@@ -55,7 +55,7 @@ namespace Pulsar4X.ECSLib
             var mass = ship.GetDataBlob<MassVolumeDB>().MassTotal;
             var maxSpeed = MaxSpeedCalc(totalEnginePower, mass);
             warpDB.MaxSpeed = maxSpeed;
-            
+
         }
 
         /// <summary>

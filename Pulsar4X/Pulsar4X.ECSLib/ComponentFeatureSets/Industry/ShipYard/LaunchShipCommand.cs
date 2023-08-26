@@ -14,15 +14,15 @@ namespace Pulsar4X.ECSLib.Industry
         Entity _entityCommanding;
         internal override Entity EntityCommanding { get { return _entityCommanding; } }
         IndustryJob _yardJob;
-        private Guid _launchSlot;
-        private Guid _jobID;
+        private StringIdentifier _launchSlot;
+        private StringIdentifier _jobID;
         public double FuelCost;
 
         private Vector3 targetPosition;
         private Entity orbitalParent = null;
         private bool _hasLaunched = false;
-        
-        public static void CreateCommand(Guid faction, Entity orderEntity, Guid lauchSlot, Guid jobID)
+
+        public static void CreateCommand(StringIdentifier faction, Entity orderEntity, StringIdentifier lauchSlot, StringIdentifier jobID)
         {
             var cmd = new LaunchShipCmd()
             {
@@ -35,7 +35,7 @@ namespace Pulsar4X.ECSLib.Industry
             };
 
             var parent = orderEntity.GetSOIParentEntity();
-            
+
             StaticRefLib.Game.OrderHandler.HandleOrder(cmd);
         }
 
@@ -44,7 +44,7 @@ namespace Pulsar4X.ECSLib.Industry
             if (!IsRunning)
             {
                 var portDB = _entityCommanding.GetDataBlob<IndustryAbilityDB>();
-                
+
                 foreach (var job in portDB.ProductionLines[_launchSlot].Jobs)
                 {
                     if (job.ItemGuid == _jobID)
@@ -54,7 +54,7 @@ namespace Pulsar4X.ECSLib.Industry
                         if(_entityCommanding.HasDataBlob<ColonyInfoDB>())
                         {
                             var planet = _entityCommanding.GetDataBlob<ColonyInfoDB>().PlanetEntity;
-                            
+
                             FuelCost = OrbitMath.FuelCostToLowOrbit(planet, design.MassPerUnit);
                             targetPosition = new Vector3(0, OrbitMath.LowOrbitRadius(planet), 0);
                             IsRunning = true;
@@ -66,7 +66,7 @@ namespace Pulsar4X.ECSLib.Industry
                             targetPosition = _entityCommanding.GetDataBlob<PositionDB>().RelativePosition;
                             IsRunning = true;
                         }
-                        
+
                     }
                 }
             }

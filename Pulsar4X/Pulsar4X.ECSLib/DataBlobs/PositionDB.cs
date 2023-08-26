@@ -14,16 +14,16 @@ namespace Pulsar4X.ECSLib
     {
 
         [JsonProperty]
-        public Guid SystemGuid;
+        public StringIdentifier SystemGuid;
 
         /// <summary>
         /// The Position as a Vec3, in m.
         /// </summary>
-        public Vector3 AbsolutePosition 
-        {             
+        public Vector3 AbsolutePosition
+        {
             get
             {
-                if ( Parent == null || !Parent.IsValid ) //migth be better than crashing if parent is suddenly not valid. should be handled before this though. 
+                if ( Parent == null || !Parent.IsValid ) //migth be better than crashing if parent is suddenly not valid. should be handled before this though.
                     return _positionInMeters;
                 else if (Parent == OwningEntity)
                     throw new Exception("Infinite loop triggered");
@@ -52,38 +52,38 @@ namespace Pulsar4X.ECSLib
         /// <summary>
         /// Get or Set the position relative to the parent Entity's abolutePositon
         /// </summary>
-        public Vector3 RelativePosition         
+        public Vector3 RelativePosition
         {
             get { return _positionInMeters; }
             internal set { _positionInMeters = value; }
         }
 
         /// <summary>
-        /// Initialized 
+        /// Initialized
         /// .
         /// </summary>
         /// <param name="x">X value.</param>
         /// <param name="y">Y value.</param>
         /// <param name="z">Z value.</param>
-        public PositionDB(double x, double y, double z, Guid systemGuid, Entity parent = null) : base(parent)
+        public PositionDB(double x, double y, double z, StringIdentifier systemGuid, Entity parent = null) : base(parent)
         {
             AbsolutePosition = new Vector3(x, y, z);
             SystemGuid = systemGuid;
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="relativePos_m"></param>
         /// <param name="systemGuid"></param>
         /// <param name="parent"></param>
-        public PositionDB(Vector3 relativePos, Guid systemGuid, Entity parent = null) : base(parent)
+        public PositionDB(Vector3 relativePos, StringIdentifier systemGuid, Entity parent = null) : base(parent)
         {
             RelativePosition = relativePos;
             SystemGuid = systemGuid;
         }
 
-        public PositionDB(Guid systemGuid, Entity parent = null) : base(parent)
+        public PositionDB(StringIdentifier systemGuid, Entity parent = null) : base(parent)
         {
             Vector3? parentPos = (ParentDB as PositionDB)?.AbsolutePosition;
             AbsolutePosition = parentPos ?? Vector3.Zero;
@@ -104,9 +104,9 @@ namespace Pulsar4X.ECSLib
             RelativePosition = relativePos_m;
         }
 
-        
+
         [UsedImplicitly]
-        private PositionDB() : this(Guid.Empty) { }
+        private PositionDB() : this(null) { }
 
         /// <summary>
         /// changes the positions relative to
@@ -138,15 +138,15 @@ namespace Pulsar4X.ECSLib
             /* Operator not supported as it can lead to unintended consequences,
              * especially when trying to do "posA += posB;"
              * Instead of posA += posB, do "posA.Position += posB.Position;"
-             * 
+             *
              * Datablobs are stored in an entity manager, and contain important metadata.
              * posA += posB evaluates to posA = posA + posB;
              * This operator has to return a "new" datablob. This new datablob is not the
              * one current stored in the EntityManager. Further requests to get the positionDB
              * will return the old positionDB after a += operation.
-             * 
+             *
              * Ask a senior developer for further clarification if required.
-             * 
+             *
              * Explicitly thrown to prevent new developers from adding this.
             */
         }

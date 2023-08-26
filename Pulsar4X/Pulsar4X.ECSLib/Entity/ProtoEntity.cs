@@ -17,7 +17,7 @@ namespace Pulsar4X.ECSLib
         public List<BaseDataBlob> DataBlobs { get; set; } = EntityManager.BlankDataBlobList();
 
         [PublicAPI]
-        public Guid Guid { get; protected internal set; }
+        public StringIdentifier Guid { get; protected internal set; }
 
         [NotNull]
         [PublicAPI]
@@ -26,7 +26,7 @@ namespace Pulsar4X.ECSLib
         protected ComparableBitArray _protectedDataBlobMask_ = EntityManager.BlankDataBlobMask();
 
         [PublicAPI]
-        public static ProtoEntity Create(Guid guid, IEnumerable<BaseDataBlob> dataBlobs = null)
+        public static ProtoEntity Create(StringIdentifier guid, IEnumerable<BaseDataBlob> dataBlobs = null)
         {
             var protoEntity = new ProtoEntity
             {
@@ -49,7 +49,7 @@ namespace Pulsar4X.ECSLib
         [PublicAPI]
         public static ProtoEntity Create(IEnumerable<BaseDataBlob> dataBlobs = null)
         {
-            return Create(Guid.Empty, dataBlobs);
+            return Create(null, dataBlobs);
         }
 
         [PublicAPI]
@@ -124,7 +124,7 @@ namespace Pulsar4X.ECSLib
                 //StarObject (Entity)
                 reader.Read(); // PropertyName ID
                 reader.Read(); // Actual ID
-                protoEntity.Guid = serializer.Deserialize<Guid>(reader); // Deserialize the ID
+                protoEntity.Guid = serializer.Deserialize<StringIdentifier>(reader); // Deserialize the ID
                 //bool exists2 = Testing.manager.EntityExistsGlobaly(Testing.entityID);
                 // Deserialize the dataBlobs
                 reader.Read(); // PropertyName DATABLOB

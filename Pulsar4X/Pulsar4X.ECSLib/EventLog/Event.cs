@@ -7,15 +7,15 @@ namespace Pulsar4X.ECSLib
     public class Event : ISerializable
     {
         public DateTime Time { get; internal set; }
-        
+
         public string Message { get; internal set; }
-        
+
         [CanBeNull]
         public Entity Faction { get; internal set; }
-        
+
         [CanBeNull]
-        public Guid SystemGuid { get; internal set; }
-        
+        public StringIdentifier SystemGuid { get; internal set; }
+
         [CanBeNull]
         public Entity Entity { get; internal set; }
 
@@ -23,20 +23,20 @@ namespace Pulsar4X.ECSLib
 
         public EventType EventType { get; internal set; }
 
-        internal List<Guid> ConcernedFaction { get; set; } = new List<Guid>();
+        internal List<StringIdentifier> ConcernedFaction { get; set; } = new List<StringIdentifier>();
 
 
         public Event(string message)
         {
             Time = StaticRefLib.CurrentDateTime;
             Message = message;
-            
+
         }
 
-        public Event(DateTime time, string message, Entity faction= null, Entity entity = null, List<Guid> concernedPlayers = null) : this(time, message, Guid.Empty, faction, entity, concernedPlayers)
+        public Event(DateTime time, string message, Entity faction= null, Entity entity = null, List<StringIdentifier> concernedPlayers = null) : this(time, message, null, faction, entity, concernedPlayers)
         { }
 
-        public Event(DateTime time, string message, Guid systemGuid, Entity faction= null, Entity entity = null, List<Guid> concernedFaction = null)
+        public Event(DateTime time, string message, StringIdentifier systemGuid, Entity faction= null, Entity entity = null, List<StringIdentifier> concernedFaction = null)
         {
             Time = time;
             Message = message;
@@ -65,12 +65,12 @@ namespace Pulsar4X.ECSLib
             Time = (DateTime)info.GetValue(nameof(Time), typeof(DateTime));
             Message = (string)info.GetValue(nameof(Message), typeof(string));
             Faction = (Entity)info.GetValue(nameof(Faction), typeof(Entity));
-            SystemGuid = (Guid)info.GetValue(nameof(SystemGuid), typeof(Guid));
+            SystemGuid = (StringIdentifier)info.GetValue(nameof(SystemGuid), typeof(StringIdentifier));
             Entity = (Entity)info.GetValue(nameof(Entity), typeof(Entity));
 
             if ((context.State & StreamingContextStates.Persistence) != 0)
             {
-                ConcernedFaction = (List<Guid>)info.GetValue(nameof(ConcernedFaction), typeof(List<Guid>));
+                ConcernedFaction = (List<StringIdentifier>)info.GetValue(nameof(ConcernedFaction), typeof(List<StringIdentifier>));
             }
         }
 

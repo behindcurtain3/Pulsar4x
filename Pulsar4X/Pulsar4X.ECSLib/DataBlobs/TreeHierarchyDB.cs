@@ -12,9 +12,9 @@ namespace Pulsar4X.ECSLib
     /// <remarks>
     /// An example of this is our 2-body OrbitDB's.
     /// Earth's OrbitDB is a child of the Sun's OrbitDB in the tree hierarchy.
-    /// 
+    ///
     /// Another example would be a subordinate fleet is a child to a higher-level fleet in the fleet heirarchy
-    /// 
+    ///
     /// DataBlobs that derive from this type have functions to maintain the tree hierarchy as changes are made.
     /// </remarks>
     public abstract class TreeHierarchyDB : BaseDataBlob
@@ -45,7 +45,7 @@ namespace Pulsar4X.ECSLib
         public Entity Parent { get; private set; }
 
         /// <summary>
-        /// Same type DataBlob of my parent node. 
+        /// Same type DataBlob of my parent node.
         /// </summary>
         /// <example>
         /// EarthOrbitDB.ParentDB == SunOrbitDB;
@@ -76,7 +76,7 @@ namespace Pulsar4X.ECSLib
         public Entity Root => ParentDB?.Root ?? OwningEntity;
 
         /// <summary>
-        /// Same type DataBlob of my root node. 
+        /// Same type DataBlob of my root node.
         /// </summary>
         [NotNull]
         [PublicAPI]
@@ -121,10 +121,6 @@ namespace Pulsar4X.ECSLib
 
         private void AddChild(Entity child)
         {
-            if (child.Guid == Guid.Empty)
-            {
-                
-            }
             if (Children.Contains(child))
             {
                 return;
@@ -217,14 +213,14 @@ namespace Pulsar4X.ECSLib
                 var parent1Children = new List<ConcreteTreeHierarchyDB> { parent1Child1DB, parent1Child2DB };
                 var parent2Children = new List<ConcreteTreeHierarchyDB> { parent2Child1DB, parent2Child2DB };
 
-                parent1ChildEntities.Sort((entity1, entity2) => entity1.Guid.CompareTo(entity2.Guid));
-                parent2ChildEntities.Sort((entity1, entity2) => entity1.Guid.CompareTo(entity2.Guid));
+                parent1ChildEntities.Sort((entity1, entity2) => entity1.Guid.GetHashCode().CompareTo(entity2.Guid.GetHashCode()));
+                parent2ChildEntities.Sort((entity1, entity2) => entity1.Guid.GetHashCode().CompareTo(entity2.Guid.GetHashCode()));
                 // Ensure listed child entities concur with our child list.
                 Assert.AreEqual(parent1ChildEntities, parent1DB.Children);
                 Assert.AreEqual(parent2ChildEntities, parent2DB.Children);
 
-                parent1Children.Sort((entity1, entity2) => entity1.OwningEntity.Guid.CompareTo(entity2.OwningEntity.Guid));
-                parent2Children.Sort((entity1, entity2) => entity1.OwningEntity.Guid.CompareTo(entity2.OwningEntity.Guid));
+                parent1Children.Sort((entity1, entity2) => entity1.OwningEntity.Guid.GetHashCode().CompareTo(entity2.OwningEntity.Guid.GetHashCode()));
+                parent2Children.Sort((entity1, entity2) => entity1.OwningEntity.Guid.GetHashCode().CompareTo(entity2.OwningEntity.Guid.GetHashCode()));
                 // Ensure listen child DBs concur with our stored list.
                 Assert.AreEqual(parent1Children, parent1DB.ChildrenDBs);
                 Assert.AreEqual(parent2Children, parent2DB.ChildrenDBs);
@@ -237,7 +233,7 @@ namespace Pulsar4X.ECSLib
 
                 // Make sure P1's children list updated.
                 parent1ChildEntities.Add(parent2Child1);
-                parent1ChildEntities.Sort((entity1, entity2) => entity1.Guid.CompareTo(entity2.Guid));
+                parent1ChildEntities.Sort((entity1, entity2) => entity1.Guid.GetHashCode().CompareTo(entity2.Guid.GetHashCode()));
                 Assert.AreEqual(parent1ChildEntities, parent1DB.Children);
 
                 // Make sure P2's children list updated.

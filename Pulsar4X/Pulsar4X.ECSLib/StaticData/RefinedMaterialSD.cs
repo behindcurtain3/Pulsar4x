@@ -8,7 +8,7 @@ namespace Pulsar4X.ECSLib
     public class ProcessedMaterialSD : ICargoable, IConstrucableDesign
     {
         public string Name { get; init; }
-        public Dictionary<Guid, long> ResourceCosts { get; } = new Dictionary<Guid, long>();
+        public Dictionary<StringIdentifier, long> ResourceCosts { get; } = new ();
 
         public long IndustryPointCosts
         {
@@ -17,7 +17,7 @@ namespace Pulsar4X.ECSLib
         }
         public StringIdentifier IndustryTypeID { get; set; }
 
-        public void OnConstructionComplete(Entity industryEntity, VolumeStorageDB storage, Guid productionLine, IndustryJob batchJob, IConstrucableDesign designInfo)
+        public void OnConstructionComplete(Entity industryEntity, VolumeStorageDB storage, StringIdentifier productionLine, IndustryJob batchJob, IConstrucableDesign designInfo)
         {
             var industryDB = industryEntity.GetDataBlob<IndustryAbilityDB>();
             ProcessedMaterialSD material = (ProcessedMaterialSD)designInfo;
@@ -37,10 +37,10 @@ namespace Pulsar4X.ECSLib
 
         public string Description;
         public ConstructableGuiHints GuiHints { get; } = ConstructableGuiHints.None;
-        public Guid ID { get; init; }
+        public StringIdentifier ID { get; init; }
 
-        public Dictionary<Guid, long> MineralsRequired;
-        public Dictionary<Guid, long> MaterialsRequired;
+        public Dictionary<StringIdentifier, long> MineralsRequired;
+        public Dictionary<StringIdentifier, long> MaterialsRequired;
 
         public ushort WealthCost;
         public ushort OutputAmount { get; init; }

@@ -6,17 +6,17 @@ namespace Pulsar4X.ECSLib
 {
     public class CargoUnloadToOrder:EntityCommand
     {
-        public List<(Guid ID, long amount)> ItemsGuidsToTransfer;
+        public List<(StringIdentifier ID, long amount)> ItemsGuidsToTransfer;
 
         [JsonIgnore]
         public List<(ICargoable item, long amount)> ItemICargoablesToTransfer = new List<(ICargoable item, long amount)>();
 
-        public Guid SendCargoToEntityGuid { get; set; }
+        public StringIdentifier SendCargoToEntityGuid { get; set; }
 
         public override ActionLaneTypes ActionLanes => ActionLaneTypes.Movement | ActionLaneTypes.InteractWithExternalEntity;
 
         public override bool IsBlocking => true;
-        
+
         public override string Name { get; } = "Cargo Transfer";
 
         public override string Details
@@ -41,10 +41,10 @@ namespace Pulsar4X.ECSLib
 
         [JsonIgnore]
         Entity sendToEntity;
-        
-        public static void CreateCommand(Guid faction, Entity cargoFromEntity, Entity cargoToEntity, List<(ICargoable item, long amount)> itemsToMove )
+
+        public static void CreateCommand(StringIdentifier faction, Entity cargoFromEntity, Entity cargoToEntity, List<(ICargoable item, long amount)> itemsToMove )
         {
-            List<(Guid item, long amount)> itemGuidAmounts = new List<(Guid, long)>();
+            List<(StringIdentifier item, long amount)> itemGuidAmounts = new ();
             foreach (var tup in itemsToMove)
             {
                 itemGuidAmounts.Add((tup.item.ID, tup.amount));
@@ -64,8 +64,8 @@ namespace Pulsar4X.ECSLib
         }
 
         /// <summary>
-        /// Validates and actions the command. 
-        /// may eventualy need to return a responce instead of void. 
+        /// Validates and actions the command.
+        /// may eventualy need to return a responce instead of void.
         /// This creates a CargoTranferDB from the command, which does all the work.
         /// the command is to create and enqueue a CargoTransferDB.
         /// </summary>
@@ -120,7 +120,7 @@ namespace Pulsar4X.ECSLib
             return amount;
          }
     }
-    
+
     public class CargoLoadFromOrder : EntityCommand
     {
         public CargoUnloadToOrder Order;
@@ -157,10 +157,10 @@ namespace Pulsar4X.ECSLib
             return false;
         }
 
-        public static void CreateCommand(Guid faction, Entity cargoFromEntity, Entity cargoToEntity, List<(ICargoable item, long amount)> itemsToMove )
+        public static void CreateCommand(StringIdentifier faction, Entity cargoFromEntity, Entity cargoToEntity, List<(ICargoable item, long amount)> itemsToMove )
         {
-            List<(Guid item, long amount)> itemGuidAmounts = new List<(Guid, long)>();
-             
+            List<(StringIdentifier item, long amount)> itemGuidAmounts = new ();
+
             foreach (var tup in itemsToMove)
             {
                 itemGuidAmounts.Add((tup.item.ID, tup.amount));
@@ -186,10 +186,10 @@ namespace Pulsar4X.ECSLib
                 _cargoFrom = cargoFromEntity
             };
 
-            
+
             StaticRefLib.Game.OrderHandler.HandleOrder(loadCmd);
         }
-        
+
         internal override void ActionCommand(DateTime atDateTime)
         {
             //this needs to happen on a given trigger,ie a finished move command.

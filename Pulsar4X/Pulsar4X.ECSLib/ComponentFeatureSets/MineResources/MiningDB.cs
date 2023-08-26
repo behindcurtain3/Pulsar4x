@@ -5,22 +5,22 @@ namespace Pulsar4X.ECSLib
 {
     public class MiningDB : BaseDataBlob, IAbilityDescription
     {
-        public Dictionary<Guid, long> BaseMiningRate { get; set; }
-        public Dictionary<Guid, long> ActualMiningRate { get; set; }
+        public Dictionary<StringIdentifier, long> BaseMiningRate { get; set; }
+        public Dictionary<StringIdentifier, long> ActualMiningRate { get; set; }
 
         public int NumberOfMines { get; set;} = 0;
 
-        public Dictionary<Guid, MineralDeposit> MineralDeposit => OwningEntity.GetDataBlob<ColonyInfoDB>().PlanetEntity.GetDataBlob<MineralsDB>().Minerals;
+        public Dictionary<StringIdentifier, MineralDeposit> MineralDeposit => OwningEntity.GetDataBlob<ColonyInfoDB>().PlanetEntity.GetDataBlob<MineralsDB>().Minerals;
 
         public MiningDB()
         {
-            BaseMiningRate = new Dictionary<Guid, long>();
-            ActualMiningRate = new Dictionary<Guid, long>();
+            BaseMiningRate = new Dictionary<StringIdentifier, long>();
+            ActualMiningRate = new Dictionary<StringIdentifier, long>();
         }
 
         public MiningDB(MiningDB db)
         {
-            
+
         }
 
         public override object Clone()

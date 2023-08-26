@@ -10,13 +10,13 @@ namespace Pulsar4X.ECSLib
         private readonly Game _game;
         private readonly DateTime _loadTime;
         private readonly List<Event> _events = new List<Event>();
-        private readonly Dictionary<Guid, List<Event>> _newEvents = new Dictionary<Guid, List<Event>>();
+        private readonly Dictionary<StringIdentifier, List<Event>> _newEvents = new Dictionary<StringIdentifier, List<Event>>();
         //private readonly Dictionary<FactionInfoDB, List<Event>> _newEvents = new Dictionary<FactionInfoDB, List<Event>>();
         //todo: get rid of player, use factions instead.
 
         //private Player SpaceMaster => _game.SpaceMaster;
 
-        private Guid _spaceMaster => _game.GameMasterFaction.Guid;
+        private StringIdentifier _spaceMaster => _game.GameMasterFaction.Guid;
         //internal EventLog() { }
 
         internal EventLog(Game game)
@@ -35,11 +35,11 @@ namespace Pulsar4X.ECSLib
             var factionKeys = _game.Factions.Select((f) => f.Guid);
 
             // Remove _newEvent entries that are not for a faction in the current game
-            foreach (Guid f in _newEvents.Keys.Where((k) => !factionKeys.Contains(k)).ToList())
+            foreach (StringIdentifier f in _newEvents.Keys.Where((k) => !factionKeys.Contains(k)).ToList())
                 _newEvents.Remove(f);
 
-            // Add _newEvent entries for factions in the current game that don't have _newEvent entries 
-            foreach (Guid f in factionKeys.Where((k) => !_newEvents.ContainsKey(k)).ToList())
+            // Add _newEvent entries for factions in the current game that don't have _newEvent entries
+            foreach (StringIdentifier f in factionKeys.Where((k) => !_newEvents.ContainsKey(k)).ToList())
                 _newEvents.Add(f, new List<Event>());
         }
 
@@ -49,11 +49,11 @@ namespace Pulsar4X.ECSLib
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="authToken"></param>
         /// <returns>all events for a given authToken</returns>
-        public List<Event> GetAllEvents(Guid factionID)
+        public List<Event> GetAllEvents(StringIdentifier factionID)
         {
             Entity faction = _game.GlobalManager.GetGlobalEntityByGuid(factionID);
 
@@ -156,7 +156,7 @@ namespace Pulsar4X.ECSLib
         }
 
         /// <summary>
-        /// checks if the given player should be aware of this event. 
+        /// checks if the given player should be aware of this event.
         /// </summary>
         /// <param name="event"></param>
         /// <param name="player"></param>
@@ -183,7 +183,7 @@ namespace Pulsar4X.ECSLib
             //var ownedDB = @event.Entity?.GetDataBlob<OwnedDB>();
             if (@event.Entity != null)
             {
-                if (@event.Entity.FactionOwnerID != Guid.Empty)
+                if (@event.Entity.FactionOwnerID != null)
                 {
                     foreach (KeyValuePair<Entity, AccessRole> keyValuePair in factionInfo.AccessRoles)
                     {
@@ -206,7 +206,7 @@ namespace Pulsar4X.ECSLib
                 }
             }
 
-            if (@event.SystemGuid != Guid.Empty)
+            if (@event.SystemGuid != null)
             {
                 foreach (KeyValuePair<Entity, AccessRole> keyValuePair in factionInfo.AccessRoles)
                 {
@@ -219,7 +219,7 @@ namespace Pulsar4X.ECSLib
                         continue;
                     }
 
-                    foreach (Guid knownSystem in arFacInfo.KnownSystems)
+                    foreach (StringIdentifier knownSystem in arFacInfo.KnownSystems)
                     {
                         if (knownSystem != @event.SystemGuid)
                         {
@@ -257,7 +257,7 @@ namespace Pulsar4X.ECSLib
 
 
         /// <summary>
-        /// checks if the given player should be aware of this event. 
+        /// checks if the given player should be aware of this event.
         /// </summary>
         /// <param name="event"></param>
         /// <param name="player"></param>
@@ -281,7 +281,7 @@ namespace Pulsar4X.ECSLib
             //var ownedDB = @event.Entity?.GetDataBlob<OwnedDB>();
             if (@event.Entity != null)
             {
-                if (@event.Entity.FactionOwnerID != Guid.Empty)
+                if (@event.Entity.FactionOwnerID != null)
                 {
                     foreach (KeyValuePair<Entity, AccessRole> keyValuePair in player.AccessRoles)
                     {
@@ -304,7 +304,7 @@ namespace Pulsar4X.ECSLib
                 }
             }
 
-            if (@event.SystemGuid != Guid.Empty)
+            if (@event.SystemGuid != null)
             {
                 foreach (KeyValuePair<Entity, AccessRole> keyValuePair in player.AccessRoles)
                 {
@@ -317,7 +317,7 @@ namespace Pulsar4X.ECSLib
                         continue;
                     }
 
-                    foreach (Guid knownSystem in factionInfo.KnownSystems)
+                    foreach (StringIdentifier knownSystem in factionInfo.KnownSystems)
                     {
                         if (knownSystem != @event.SystemGuid)
                         {

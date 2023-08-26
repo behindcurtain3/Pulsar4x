@@ -13,9 +13,9 @@ namespace Pulsar4X.ECSLib
 
     public class EntityDataRequest: NetMessageBase
     {
-        Guid MangerGuid;
-        Guid FactionGuid;
-        Guid EntityGuid;
+        StringIdentifier MangerGuid;
+        StringIdentifier FactionGuid;
+        StringIdentifier EntityGuid;
 
         public override void HandleMessage(Game game)
         {
@@ -26,12 +26,12 @@ namespace Pulsar4X.ECSLib
                 //serialise entity and send it
                 throw new NotImplementedException();
             }
-        }        
+        }
     }
 
     public class UpdateEntityAdded : NetMessageBase
     {
-        Guid ManagerGuid;
+        StringIdentifier ManagerGuid;
         Entity NewEntity;
 
         public UpdateEntityAdded(EntityManager manager, Entity newEntity)
@@ -42,13 +42,13 @@ namespace Pulsar4X.ECSLib
 
         public override void HandleMessage(Game game)
         {
-            //game.GlobalManagerDictionary[ManagerGuid]        
+            //game.GlobalManagerDictionary[ManagerGuid]
         }
     }
     public class UpdateEntityRemoved : NetMessageBase
     {
-        Guid ManagerGuid;
-        Guid RemovedEntity;
+        StringIdentifier ManagerGuid;
+        StringIdentifier RemovedEntity;
 
         public override void HandleMessage(Game game)
         {

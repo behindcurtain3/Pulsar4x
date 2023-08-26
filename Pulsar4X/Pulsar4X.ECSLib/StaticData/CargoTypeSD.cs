@@ -12,7 +12,7 @@ namespace Pulsar4X.ECSLib
 
     public interface ICargoable
     {
-        Guid ID { get; }
+        StringIdentifier ID { get; }
         string Name { get; }
         StringIdentifier CargoTypeID { get;  }
 

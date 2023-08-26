@@ -39,13 +39,13 @@ namespace Pulsar4X.ECSLib
 
             var dataBlobs = new List<BaseDataBlob> { jpNameDB, jpTransitableDB, jpPositionDB};
 
-            Entity jumpPoint = Entity.Create(system, Guid.Empty, dataBlobs);
+            Entity jumpPoint = Entity.Create(system, null, dataBlobs);
             return jumpPoint;
         }
 
         /// <summary>
         /// Gets the number of jumppoints that should generated for a system.
-        /// Based on Aurora 7.0 mechanics as described here: 
+        /// Based on Aurora 7.0 mechanics as described here:
         /// http://aurora2.pentarch.org/index.php?topic=7255.msg80028#msg80028
         /// </summary>
         public static int GetNumJPForSystem(StarSystem system)

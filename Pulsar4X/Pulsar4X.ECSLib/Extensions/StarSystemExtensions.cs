@@ -84,7 +84,7 @@ namespace Pulsar4X.ECSLib
 
         public static Dictionary<string, double> GetTotalSystemMinerals(this StarSystem system, StaticDataStore staticData)
         {
-            var minerals = new Dictionary<Guid, double>();
+            var minerals = new Dictionary<StringIdentifier, double>();
             var bodies = system.GetAllEntitiesWithDataBlob<MineralsDB>().Select(x => x.GetDataBlob<MineralsDB>());
             foreach (var body in bodies)
             {
@@ -93,7 +93,7 @@ namespace Pulsar4X.ECSLib
                     if (!minerals.ContainsKey(kvp.Key))
                     {
                         minerals.Add(kvp.Key, kvp.Value.Amount * 1.0);
-                    } 
+                    }
                     else
                     {
                         minerals[kvp.Key] += kvp.Value.Amount * 1.0;

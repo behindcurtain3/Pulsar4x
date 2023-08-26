@@ -26,18 +26,18 @@ namespace Pulsar4X.ECSLib
         internal static IProgress<double> Progress { get; private set; }
         internal static int ManagersProcessed { get; set; }
         private static readonly object SyncRoot = new object();
-        private static readonly JsonSerializer PersistenceSerializer = new JsonSerializer { 
-            Context = new StreamingContext(StreamingContextStates.Persistence), 
-            NullValueHandling = NullValueHandling.Ignore, 
-            Formatting = Formatting.Indented, 
-            ContractResolver = new ForceUseISerializable(), 
-            PreserveReferencesHandling = PreserveReferencesHandling.None 
+        private static readonly JsonSerializer PersistenceSerializer = new JsonSerializer {
+            Context = new StreamingContext(StreamingContextStates.Persistence),
+            NullValueHandling = NullValueHandling.Ignore,
+            Formatting = Formatting.Indented,
+            ContractResolver = new ForceUseISerializable(),
+            PreserveReferencesHandling = PreserveReferencesHandling.None
         };
         private static readonly JsonSerializer RemoteSerializer = new JsonSerializer {
-            Context = new StreamingContext(StreamingContextStates.Remoting), 
-            NullValueHandling = NullValueHandling.Ignore, 
-            Formatting = Formatting.None, 
-            ContractResolver = new ForceUseISerializable(), 
+            Context = new StreamingContext(StreamingContextStates.Remoting),
+            NullValueHandling = NullValueHandling.Ignore,
+            Formatting = Formatting.None,
+            ContractResolver = new ForceUseISerializable(),
             PreserveReferencesHandling = PreserveReferencesHandling.None
         };
 
@@ -149,7 +149,7 @@ namespace Pulsar4X.ECSLib
         }
 
         public static void Export(Dictionary<DateTime, List<string>> procDict, Stream outputStream, bool compress = false)
-        { 
+        {
             JsonSerializer serialiser = new JsonSerializer
             {
                 NullValueHandling = NullValueHandling.Ignore,
@@ -174,7 +174,7 @@ namespace Pulsar4X.ECSLib
         }
 
         public static Dictionary<DateTime, List<string>> ImportInstanceProcessorDict(Stream inputStream)
-        { 
+        {
             JsonSerializer serialiser = new JsonSerializer
             {
                 NullValueHandling = NullValueHandling.Ignore,
@@ -218,7 +218,7 @@ namespace Pulsar4X.ECSLib
 
         private static Dictionary<DateTime, List<string>> populateProcDict(Stream inputStream)
         {
-            
+
             JsonSerializer serialiser = new JsonSerializer
             {
                 NullValueHandling = NullValueHandling.Ignore,
@@ -293,7 +293,7 @@ namespace Pulsar4X.ECSLib
                 {
                     GameSettings settings = new GameSettings();
                     serialiser.Populate(reader, settings);
-   
+
                     return settings;
                 }
             }
@@ -313,7 +313,7 @@ namespace Pulsar4X.ECSLib
             {
                 return ImportEntity(game, stream, manager);
             }
-            
+
         }
         public static StarSystem ImportSystemJson([NotNull] Game game, string jsonString)
         {
@@ -372,23 +372,23 @@ namespace Pulsar4X.ECSLib
             }
 
 
-            var protoEntity = new ProtoEntity(); 
+            var protoEntity = new ProtoEntity();
             protoEntity = Import(game, inputStream, protoEntity);
 
-            //the block of code below is a somewhat hacky way of fixing a problem where an entity has a datablob that refers back to the entity. 
-            //eg a faction entitiy with a NameDB. in such cases the Import above creates an empty entity because of the NameDB's reference. 
-            //then Entity.Create below checks for an exsisting entity guid, finds it, then returns an entity with a new GUID. 
-            //this then gives us two entities, one with the correct guid but with no datablobs, and a second one with a new different guid and all the datablobs. 
+            //the block of code below is a somewhat hacky way of fixing a problem where an entity has a datablob that refers back to the entity.
+            //eg a faction entitiy with a NameDB. in such cases the Import above creates an empty entity because of the NameDB's reference.
+            //then Entity.Create below checks for an exsisting entity guid, finds it, then returns an entity with a new GUID.
+            //this then gives us two entities, one with the correct guid but with no datablobs, and a second one with a new different guid and all the datablobs.
             //checking if the datablob count is 0 is a poor and not guarenteed way of seeing if the entity hasn't been created some other way previously.
-            //I'm wondering if we shouldn't throw an exception if we try to add an entity with the same guid, instead of just changing the guid. 
+            //I'm wondering if we shouldn't throw an exception if we try to add an entity with the same guid, instead of just changing the guid.
             Entity entity;
-            if (manager.FindEntityByGuid(protoEntity.Guid, out entity) && entity.DataBlobs.Count == 0) 
+            if (manager.FindEntityByGuid(protoEntity.Guid, out entity) && entity.DataBlobs.Count == 0)
                 manager.RemoveEntity(entity);
 
 
 
             //TODO: #Seralisation we may need to find the entity owner from the json and put that in the second parameter.
-            entity = Entity.Create(manager, Guid.Empty, protoEntity);
+            entity = Entity.Create(manager, new StringIdentifier("player", Guid.NewGuid().ToString()), protoEntity);
             game.PostGameLoad();
             return entity;
         }
@@ -489,7 +489,7 @@ namespace Pulsar4X.ECSLib
             var xmlDoc = new XmlDocument();
             XmlNode toplevelNode = xmlDoc.CreateNode(XmlNodeType.Element, "Systems", "NS");
 
-            foreach (KeyValuePair<Guid, StarSystem> kvp in game.Systems)
+            foreach (KeyValuePair<StringIdentifier, StarSystem> kvp in game.Systems)
             {
                 StarSystem system = kvp.Value;
                 var rootStar = system.GetFirstEntityWithDataBlob<OrbitDB>();
@@ -755,7 +755,7 @@ namespace Pulsar4X.ECSLib
                         if (typeof(TObj) == typeof(ProtoEntity) || typeof(TObj) == typeof(StarSystem))
                         {
                             obj = PersistenceSerializer.Deserialize<TObj>(reader);
-                            //at this point in the code, if the entity has a datablob which references entities, those entites will be created in the manager. 
+                            //at this point in the code, if the entity has a datablob which references entities, those entites will be created in the manager.
                         }
                         else
                         {

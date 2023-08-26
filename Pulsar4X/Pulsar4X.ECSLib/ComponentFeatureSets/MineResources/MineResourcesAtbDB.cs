@@ -5,7 +5,7 @@ namespace Pulsar4X.ECSLib
 {
     public class MineResourcesAtbDB : BaseDataBlob, IComponentDesignAttribute
     {
-        public Dictionary<Guid, long> ResourcesPerEconTick { get; internal set; }
+        public Dictionary<StringIdentifier, long> ResourcesPerEconTick { get; internal set; }
 
         public MineResourcesAtbDB() { }
 
@@ -13,9 +13,9 @@ namespace Pulsar4X.ECSLib
         /// Component factory constructor.
         /// </summary>
         /// <param name="resources">values will be cast to longs!</param>
-        public MineResourcesAtbDB(Dictionary<Guid, double> resources)
+        public MineResourcesAtbDB(Dictionary<StringIdentifier, double> resources)
         {
-            ResourcesPerEconTick = new Dictionary<Guid, long>();
+            ResourcesPerEconTick = new Dictionary<StringIdentifier, long>();
             foreach (var kvp in resources)
             {
                 ResourcesPerEconTick.Add(kvp.Key,(long)kvp.Value);
@@ -38,7 +38,7 @@ namespace Pulsar4X.ECSLib
                 parentEntity.SetDataBlob(new MiningDB());
             MineResourcesProcessor.CalcMaxRate(parentEntity);
         }
-        
+
         public string AtbName()
         {
             return "Resource Mining";

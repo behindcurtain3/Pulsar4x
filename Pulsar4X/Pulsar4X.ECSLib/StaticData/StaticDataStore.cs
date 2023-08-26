@@ -97,13 +97,13 @@ namespace Pulsar4X.ECSLib
         /// Dictionary which stores all Components.
         /// </summary>
         [JsonIgnore]
-        public Dictionary<Guid, ComponentTemplateSD> ComponentTemplates = new Dictionary<Guid, ComponentTemplateSD>();
+        public Dictionary<StringIdentifier, ComponentTemplateSD> ComponentTemplates = new ();
 
         /// <summary>
         /// Stores ComponentTemplates by the Attribute Type Name.
         /// </summary>
         [JsonIgnore]
-        public Dictionary<string, List<ComponentTemplateSD>> ComponentTemplatesByAttribute = new Dictionary<string, List<ComponentTemplateSD>>();
+        public Dictionary<string, List<ComponentTemplateSD>> ComponentTemplatesByAttribute = new ();
 
         /// <summary>
         /// Dictionary to store CargoTypes
@@ -153,13 +153,13 @@ namespace Pulsar4X.ECSLib
                     "CommanderNameThemes", typeof(List<CommanderNameThemeSD>)
                 },
                 {
-                    "Minerals", typeof(Dictionary<Guid, MineralSD>)
+                    "Minerals", typeof(Dictionary<StringIdentifier, MineralSD>)
                 },
                 {
                     "Techs", typeof(Dictionary<StringIdentifier, TechSD>)
                 },
                 {
-                    "ProcessedMaterials", typeof(Dictionary<Guid, ProcessedMaterialSD>)
+                    "ProcessedMaterials", typeof(Dictionary<StringIdentifier, ProcessedMaterialSD>)
                 },
                 {
                     "ComponentTemplates", typeof(Dictionary<Guid, ComponentTemplateSD>)
@@ -198,13 +198,13 @@ namespace Pulsar4X.ECSLib
                     typeof(List<CommanderNameThemeSD>), "CommanderNameThemes"
                 },
                 {
-                    typeof(List<MineralSD>), "Minerals"
+                    typeof(Dictionary<StringIdentifier, MineralSD>), "Minerals"
                 },
                 {
                     typeof(Dictionary<StringIdentifier, TechSD>), "Techs"
                 },
                 {
-                    typeof(Dictionary<Guid, ProcessedMaterialSD>), "RefinedMaterials"
+                    typeof(Dictionary<StringIdentifier, ProcessedMaterialSD>), "RefinedMaterials"
                 },
                 {
                     typeof(Dictionary<Guid, ComponentTemplateSD>), "Components"
@@ -238,7 +238,7 @@ namespace Pulsar4X.ECSLib
         /// </summary>
         [PublicAPI]
         [CanBeNull]
-        public object FindDataObjectUsingID(Guid id)
+        public object FindDataObjectUsingID(StringIdentifier id)
         {
             var cargoGood = CargoGoods.GetAny(id);
             if (cargoGood != null)
@@ -247,11 +247,6 @@ namespace Pulsar4X.ECSLib
             if (ComponentTemplates.ContainsKey(id))
                 return ComponentTemplates[id];
 
-            return null;
-        }
-
-        public object FindDataObjectUsingID(StringIdentifier id)
-        {
             if (Techs.ContainsKey(id))
                 return Techs[id];
 
@@ -260,7 +255,7 @@ namespace Pulsar4X.ECSLib
             return null;
         }
 
-        public Dictionary<Guid, StringIdentifier> StorageTypeMap = new ();
+        public Dictionary<StringIdentifier, StringIdentifier> StorageTypeMap = new ();
         internal void SetStorageTypeMap()
         {
             StorageTypeMap.Clear();
@@ -272,7 +267,7 @@ namespace Pulsar4X.ECSLib
         }
 
 
-        public ICargoable GetICargoable(Guid id)
+        public ICargoable GetICargoable(StringIdentifier id)
         {
             return (ICargoable)CargoGoods.GetAny(id);
         }
@@ -334,7 +329,7 @@ namespace Pulsar4X.ECSLib
         /// <summary>
         /// Stores Mineral Static Data. Will overwrite an existing mineral if the IDs match.
         /// </summary>
-        internal void Store(Dictionary<Guid, MineralSD> minerals)
+        internal void Store(Dictionary<StringIdentifier, MineralSD> minerals)
         {
             if (minerals != null)
             {
@@ -362,7 +357,7 @@ namespace Pulsar4X.ECSLib
         /// <summary>
         /// Stores ConstructableObj Static Data. Will overwrite any existing ConstructableObjs with the same ID.
         /// </summary>
-        internal void Store(Dictionary<Guid, ProcessedMaterialSD> recipes)
+        internal void Store(Dictionary<StringIdentifier, ProcessedMaterialSD> recipes)
         {
             if (recipes != null)
             {
@@ -373,12 +368,12 @@ namespace Pulsar4X.ECSLib
         /// <summary>
         /// Stores Component Static Data. Will overwrite any existing Component with the same ID.
         /// </summary>
-        internal void Store(Dictionary<Guid, ComponentTemplateSD> components)
+        internal void Store(Dictionary<StringIdentifier, ComponentTemplateSD> components)
         {
             if (components != null)
             {
                 //ComponentTemplatesByAttribute = new Dictionary<string, List<ComponentTemplateSD>>();
-                foreach (KeyValuePair<Guid, ComponentTemplateSD> component in components)
+                foreach (KeyValuePair<StringIdentifier, ComponentTemplateSD> component in components)
                 {
                     ComponentTemplates[component.Key] = component.Value;
                     foreach (ComponentTemplateAttributeSD attrbSD in component.Value.ComponentAtbSDs)

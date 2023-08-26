@@ -14,7 +14,7 @@ namespace Pulsar4X.ECSLib
         private readonly Random RNG;
 
         [PublicAPI]
-        public Guid Guid
+        public StringIdentifier Guid
         {
             get
             {
@@ -83,7 +83,7 @@ namespace Pulsar4X.ECSLib
             game.Systems.Add(Guid, this);
         }
 
-        internal StarSystem(Game game, string name, int seed, Guid systemID): base(game, false)
+        internal StarSystem(Game game, string name, int seed, StringIdentifier systemID): base(game, false)
         {
             NameDB = new NameDB(name);
 
@@ -96,7 +96,7 @@ namespace Pulsar4X.ECSLib
         public StarSystem(SerializationInfo info, StreamingContext context) : base(info, context)
         {
 
-            ManagerGuid = (Guid)info.GetValue("ID", typeof(Guid));
+            ManagerGuid = (StringIdentifier)info.GetValue("ID", typeof(StringIdentifier));
             Seed = (int)info.GetValue("Seed", typeof(int));
             NameDB = (NameDB)info.GetValue("Name", typeof(NameDB));
         }
@@ -114,7 +114,7 @@ namespace Pulsar4X.ECSLib
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            
+
             info.AddValue("ID", Guid);
             info.AddValue("Seed", Seed);
             info.AddValue("Name", NameDB);

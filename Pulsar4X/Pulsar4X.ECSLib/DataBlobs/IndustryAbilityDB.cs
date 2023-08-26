@@ -24,18 +24,18 @@ namespace Pulsar4X.ECSLib
         //public Dictionary<Guid, List<JobBase>> JobsBytype = new Dictionary<Guid, List<JobBase>>();
 
 
-        public Dictionary<Guid, ProductionLine> ProductionLines { get; } = new Dictionary<Guid, ProductionLine>();
+        public Dictionary<StringIdentifier, ProductionLine> ProductionLines { get; } = new ();
 
         [JsonConstructor]
         private IndustryAbilityDB()
         {
         }
 
-        public IndustryAbilityDB(Dictionary<Guid, ProductionLine> productionLines)
+        public IndustryAbilityDB(Dictionary<StringIdentifier, ProductionLine> productionLines)
         {
             ProductionLines = productionLines;
         }
-        public IndustryAbilityDB(Guid componentID, ProductionLine productionLine)
+        public IndustryAbilityDB(StringIdentifier componentID, ProductionLine productionLine)
         {
             ProductionLines.Add(componentID, productionLine);
         }
@@ -43,7 +43,7 @@ namespace Pulsar4X.ECSLib
         public IndustryAbilityDB(IndustryAbilityDB db)
         {
             //IndustryTypeRates = new Dictionary<Guid, int>(db.IndustryTypeRates);
-            ProductionLines = new Dictionary<Guid, ProductionLine>(db.ProductionLines);
+            ProductionLines = new Dictionary<StringIdentifier, ProductionLine>(db.ProductionLines);
         }
 
         public override object Clone()

@@ -16,7 +16,7 @@ namespace Pulsar4X.ECSLib
         /// NOTE! this is an entites *Design* ID, not the EntitesID.
         /// </summary>
         [JsonIgnore]
-        public Guid ID {
+        public StringIdentifier ID {
             get
             {
                 if (OwningEntity.HasDataBlob<DesignInfoDB>())

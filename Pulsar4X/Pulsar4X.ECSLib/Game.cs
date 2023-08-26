@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-//this allows the test project to see internal functions of this project. 
+//this allows the test project to see internal functions of this project.
 using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("Pulsar4X.Tests")]
 
@@ -29,17 +29,17 @@ namespace Pulsar4X.ECSLib
         [PublicAPI]
         public bool IsLoaded { get; internal set; } = false;
 
-        //internal ProcessorManager ProcessorManager; 
+        //internal ProcessorManager ProcessorManager;
 
         /// <summary>
         /// List of StarSystems currently in the game.
         /// </summary>
         [JsonProperty]
-        public Dictionary<Guid, StarSystem> Systems { get; private set; } = new Dictionary<Guid, StarSystem>();
+        public Dictionary<StringIdentifier, StarSystem> Systems { get; private set; } = new Dictionary<StringIdentifier, StarSystem>();
 
         [JsonProperty]
         public readonly EntityManager GlobalManager;
-        internal readonly Dictionary<Guid, EntityManager> GlobalManagerDictionary = new Dictionary<Guid, EntityManager>();
+        internal readonly Dictionary<StringIdentifier, EntityManager> GlobalManagerDictionary = new Dictionary<StringIdentifier, EntityManager>();
         [PublicAPI]
         [JsonProperty]
         public StaticDataStore StaticData { get; } = new StaticDataStore();
@@ -57,7 +57,7 @@ namespace Pulsar4X.ECSLib
         internal GalaxyFactory GalaxyGen { get; private set; }
 
 
-        
+
         private PathfindingManager _pathfindingManager;
 
         [PublicAPI]
@@ -80,8 +80,8 @@ namespace Pulsar4X.ECSLib
         {
 
             OrderHandler = new StandAloneOrderHandler(this);
-            
-            
+
+
             StaticRefLib.Setup(this);
 
             GlobalManager = new EntityManager(this, true);
@@ -101,7 +101,7 @@ namespace Pulsar4X.ECSLib
 
             StaticRefLib.GameSettings = newGameSettings;
             GamePulse.GameGlobalDateTime = newGameSettings.StartDateTime;
-            
+
             // Load Static Data
             if (newGameSettings.DataSets != null)
             {
@@ -120,11 +120,11 @@ namespace Pulsar4X.ECSLib
             SpaceMaster.ChangePassword(new AuthenticationToken(SpaceMaster, ""), newGameSettings.SMPassword);
             GameMasterFaction = FactionFactory.CreatePlayerFaction(this, SpaceMaster, "SpaceMaster Faction");
 
-            
-            
+
+
             if (newGameSettings.CreatePlayerFaction ?? false)
             {
-                
+
                 foreach (var kvp in newGameSettings.DefaultHaltOnEvents)
                 {
                     //defaultPlayer.HaltsOnEvent.Add(kvp.Key, kvp.Value);
@@ -207,7 +207,7 @@ namespace Pulsar4X.ECSLib
                 // TODO: Implement vision access roles.
                 if ((accessRole.Value & AccessRole.FullAccess) == AccessRole.FullAccess)
                 {
-                    foreach (Guid systemGuid in accessRole.Key.GetDataBlob<FactionInfoDB>().KnownSystems)
+                    foreach (StringIdentifier systemGuid in accessRole.Key.GetDataBlob<FactionInfoDB>().KnownSystems)
                     {
                         StarSystem system = Systems[systemGuid];
                         if (!systems.Contains(system))
@@ -222,7 +222,7 @@ namespace Pulsar4X.ECSLib
 
         [PublicAPI]
         [CanBeNull]
-        public StarSystem GetSystem(AuthenticationToken authToken, Guid systemGuid)
+        public StarSystem GetSystem(AuthenticationToken authToken, StringIdentifier systemGuid)
         {
             Player player = GetPlayerForToken(authToken);
 

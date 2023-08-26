@@ -83,7 +83,7 @@ namespace Pulsar4X.ECSLib
     public class ComponentDesign : ICargoable, IConstrucableDesign
     {
         public ConstructableGuiHints GuiHints { get; set; }
-        public Guid ID { get; internal set; }
+        public StringIdentifier ID { get; internal set; }
         public string Name { get; internal set; } //player defined name. ie "5t 2kn Thruster".
 
         public StringIdentifier CargoTypeID { get; internal set; }
@@ -111,7 +111,7 @@ namespace Pulsar4X.ECSLib
         public int CreditCost;
 
         //public int ResearchCostValue;
-        public Dictionary<Guid, long> ResourceCosts { get; internal set; } = new Dictionary<Guid, long>();
+        public Dictionary<StringIdentifier, long> ResourceCosts { get; internal set; } = new ();
 
         public ComponentMountType ComponentMountType;
         //public List<ComponentDesignAtbData> ComponentDesignAttributes;
@@ -124,11 +124,11 @@ namespace Pulsar4X.ECSLib
         public DamageResist DamageResistance;
 
 
-        public void OnConstructionComplete(Entity industryEntity, VolumeStorageDB storage, Guid productionLine, IndustryJob batchJob, IConstrucableDesign designInfo)
+        public void OnConstructionComplete(Entity industryEntity, VolumeStorageDB storage, StringIdentifier productionLine, IndustryJob batchJob, IConstrucableDesign designInfo)
         {
             var colonyConstruction = industryEntity.GetDataBlob<IndustryAbilityDB>();
             batchJob.NumberCompleted++;
-            batchJob.ResourcesRequiredRemaining = new Dictionary<Guid, long>(designInfo.ResourceCosts);
+            batchJob.ResourcesRequiredRemaining = new Dictionary<StringIdentifier, long>(designInfo.ResourceCosts);
             batchJob.ProductionPointsLeft = designInfo.IndustryPointCosts;
 
             if (batchJob.InstallOn != null)
@@ -201,7 +201,7 @@ namespace Pulsar4X.ECSLib
             TypeName = componentSD.Name;
             Name = componentSD.Name;
 
-            _design.ID = Guid.NewGuid();
+            _design.ID = new StringIdentifier("player", Guid.NewGuid().ToString());
             MassFormula = new ChainedExpression(componentSD.MassFormula, this, factionTech, staticData);
             VolumeFormula = new ChainedExpression(componentSD.VolumeFormula, this, factionTech, staticData);
             CrewFormula = new ChainedExpression(componentSD.CrewReqFormula, this, factionTech, staticData);
@@ -218,7 +218,7 @@ namespace Pulsar4X.ECSLib
             if(!string.IsNullOrEmpty(componentSD.DescriptionFormula))
                 DescriptionFormula = new ChainedExpression(componentSD.DescriptionFormula, this, factionTech, staticData);
 
-            Dictionary<Guid, ChainedExpression> resourceCostForulas = new Dictionary<Guid, ChainedExpression>();
+            Dictionary<StringIdentifier, ChainedExpression> resourceCostForulas = new ();
 
             foreach (var kvp in componentSD.ResourceCostFormula)
             {
@@ -411,11 +411,11 @@ namespace Pulsar4X.ECSLib
             _design.IndustryPointCosts = BuildCostFormula.LongResult;
         }
 
-        public Dictionary<Guid, long> ResourceCostValues => _design.ResourceCosts;
-        internal Dictionary<Guid, ChainedExpression> ResourceCostFormulas { get; set; }
+        public Dictionary<StringIdentifier, long> ResourceCostValues => _design.ResourceCosts;
+        internal Dictionary<StringIdentifier, ChainedExpression> ResourceCostFormulas { get; set; }
         public void SetResourceCosts()
         {
-            Dictionary<Guid, long> dict = new Dictionary<Guid, long>();
+            Dictionary<StringIdentifier, long> dict = new ();
             foreach (var kvp in ResourceCostFormulas)
             {
                 kvp.Value.Evaluate();

@@ -13,12 +13,12 @@ namespace Pulsar4X.ECSLib
     public class EntityManager : ISerializable
     {
         [CanBeNull]
-        internal Guid ManagerGuid;
+        internal StringIdentifier ManagerGuid;
         internal Game Game { get;  set; }
         protected readonly List<Entity> _entities = new List<Entity>();
         private readonly List<List<BaseDataBlob>> _dataBlobMap = new List<List<BaseDataBlob>>();
-        private readonly Dictionary<Guid, Entity> _localEntityDictionary = new Dictionary<Guid, Entity>();
-        private readonly Dictionary<Guid, EntityManager> _globalEntityDictionary;
+        private readonly Dictionary<StringIdentifier, Entity> _localEntityDictionary = new ();
+        private readonly Dictionary<StringIdentifier, EntityManager> _globalEntityDictionary;
         private readonly ReaderWriterLockSlim _globalGuidDictionaryLock;
         public int NumberOfEntites { get { return _entities.Count; } }
         public int NumberOfGlobalEntites { get { return _globalEntityDictionary.Count; } }
@@ -36,15 +36,15 @@ namespace Pulsar4X.ECSLib
 
         internal List<AEntityChangeListner> EntityListners = new List<AEntityChangeListner>();
 
-        internal Dictionary<Guid, SystemSensorContacts> FactionSensorContacts = new Dictionary<Guid, SystemSensorContacts>();
-        public SystemSensorContacts GetSensorContacts(Guid factionGuid)
+        internal Dictionary<StringIdentifier, SystemSensorContacts> FactionSensorContacts = new Dictionary<StringIdentifier, SystemSensorContacts>();
+        public SystemSensorContacts GetSensorContacts(StringIdentifier factionGuid)
         {
             if (!FactionSensorContacts.ContainsKey(factionGuid))
                 return new SystemSensorContacts(this, GetGlobalEntityByGuid(factionGuid));
             return FactionSensorContacts[factionGuid];
         }
-        Dictionary<Guid, List<Entity>> EntitesByFaction = new Dictionary<Guid, List<Entity>>();  
-        public List<Entity> GetEntitiesByFaction(Guid factionGuid)
+        Dictionary<StringIdentifier, List<Entity>> EntitesByFaction = new ();
+        public List<Entity> GetEntitiesByFaction(StringIdentifier factionGuid)
         {
             if (factionGuid == StaticRefLib.Game.GameMasterFaction.Guid)
                 return _entities;
@@ -54,8 +54,8 @@ namespace Pulsar4X.ECSLib
                 return new List<Entity>();
         }
         [JsonProperty]
-        public ManagerSubPulse ManagerSubpulses { 
-            get; 
+        public ManagerSubPulse ManagerSubpulses {
+            get;
             protected set; }
 
         /// <summary>
@@ -64,17 +64,17 @@ namespace Pulsar4X.ECSLib
         [NotNull]
         [PublicAPI]
         public static readonly EntityManager InvalidManager = new EntityManager();
-        
+
         #region Constructors
         protected EntityManager() { }
         internal EntityManager(Game game, bool isGlobalManager = false)
         {
             Game = game;
-            ManagerGuid = Guid.NewGuid();
+            ManagerGuid = new StringIdentifier("player", Guid.NewGuid().ToString());
             game.GlobalManagerDictionary.Add(ManagerGuid, this);
             if (isGlobalManager)
             {
-                _globalEntityDictionary = new Dictionary<Guid,EntityManager>();
+                _globalEntityDictionary = new Dictionary<StringIdentifier,EntityManager>();
                 _globalGuidDictionaryLock = new ReaderWriterLockSlim();
             }
             else
@@ -110,7 +110,7 @@ namespace Pulsar4X.ECSLib
 
         /// <summary>
         /// Used to add the provided entity to this entity manager.
-        /// Sets up the entity slot and assigns it to the entity while preserving 
+        /// Sets up the entity slot and assigns it to the entity while preserving
         /// entity object references.
         /// </summary>
         internal void SetupEntity(Entity entity, IEnumerable<BaseDataBlob> dataBlobs = null)
@@ -169,7 +169,7 @@ namespace Pulsar4X.ECSLib
             entity.ID = entityID;
             entity.SetMask();
 
-            //the below chunk of code was moved from Entity constructor. this allows the entity to be fully populated and helps with entityChangeLisnters. 
+            //the below chunk of code was moved from Entity constructor. this allows the entity to be fully populated and helps with entityChangeLisnters.
             if(dataBlobs != null)
             foreach (BaseDataBlob dataBlob in dataBlobs)
             {
@@ -187,7 +187,7 @@ namespace Pulsar4X.ECSLib
                     EntitesByFaction.Add(entity.FactionOwnerID, new List<Entity>());
                 EntitesByFaction[entity.FactionOwnerID].Add(entity);
             }
-                //return entityID; //commented this out since we're now setting the entity.ID in here instead of returning the ID to be set by the entity. this was due to UpdateListners needing a valid entity. 
+                //return entityID; //commented this out since we're now setting the entity.ID in here instead of returning the ID to be set by the entity. this was due to UpdateListners needing a valid entity.
         }
 
         /// <summary>
@@ -215,19 +215,19 @@ namespace Pulsar4X.ECSLib
             {
                 throw new ArgumentException("Provided Entity is not valid in this manager.");
             }
-            
+
             Event logevent = new Event(StaticRefLib.CurrentDateTime, "Entity Removed From Manager");
             logevent.Entity = entity;
-            if(entity.FactionOwnerID != Guid.Empty)
+            if(entity.FactionOwnerID != null)
                 logevent.Faction = GetGlobalEntityByGuid(entity.FactionOwnerID);
             logevent.SystemGuid = ManagerGuid;
             logevent.EventType = EventType.EntityDestroyed;
             if (entity.IsValid && entity.HasDataBlob<NameDB>())
                 logevent.EntityName = entity.GetDataBlob<NameDB>().OwnersName;
-            
-            
-            StaticRefLib.EventLog.AddEvent(logevent);          
-            
+
+
+            StaticRefLib.EventLog.AddEvent(logevent);
+
             int entityID = entity.ID;
             _entities[entityID] = null;
             EntityMasks[entityID] = null;
@@ -256,7 +256,7 @@ namespace Pulsar4X.ECSLib
                 {
                     _globalGuidDictionaryLock.ExitWriteLock();
                 }
-                
+
             }
             else
             {
@@ -367,7 +367,7 @@ namespace Pulsar4X.ECSLib
 
         private void UpdateListners(Entity entity, BaseDataBlob db, EntityChangeType change)
         {
-            //listners to this work on thier own threads and are not affected by this one. 
+            //listners to this work on thier own threads and are not affected by this one.
             if (EntityListners.Count > 0)
             {
                 var changeData = new EntityChangeData() {
@@ -383,7 +383,7 @@ namespace Pulsar4X.ECSLib
 
 
             //this one works on the active (ie this) thread
-            entity.InvokeChangeEvent(change, db); 
+            entity.InvokeChangeEvent(change, db);
         }
 
         #region Public API Functions
@@ -440,7 +440,7 @@ namespace Pulsar4X.ECSLib
 
             return GetAllEntitiesWithDataBlobs(dataBlobMask);
         }
-        
+
         /// <summary>
         /// Returns a list of entities that have datablob type T.
         /// <para></para>
@@ -543,7 +543,7 @@ namespace Pulsar4X.ECSLib
             return authorizedEntities;
         }
 
-        internal virtual List<Entity> GetAllEntitiesWithOUTDataBlobs([NotNull] ComparableBitArray dataBlobMask) 
+        internal virtual List<Entity> GetAllEntitiesWithOUTDataBlobs([NotNull] ComparableBitArray dataBlobMask)
         {
             if (dataBlobMask == null)
             {
@@ -664,7 +664,7 @@ namespace Pulsar4X.ECSLib
         /// <returns><c>true</c>, if entity does exist globaly <c>false</c> otherwise.</returns>
         /// <param name="entityGuid">Entity GUID.</param>
         [PublicAPI]
-        public bool EntityExistsGlobaly(Guid entityGuid)
+        public bool EntityExistsGlobaly(StringIdentifier entityGuid)
         {
             bool exsits;
             if (Game == null)
@@ -686,12 +686,12 @@ namespace Pulsar4X.ECSLib
         /// <returns><c>true</c>, if entity exsist localy <c>false</c> otherwise.</returns>
         /// <param name="entityGuid">Entity GUID.</param>
         [PublicAPI]
-        public bool EntityExistsLocaly(Guid entityGuid)
+        public bool EntityExistsLocaly(StringIdentifier entityGuid)
         {
             if (_localEntityDictionary.ContainsKey(entityGuid))
                 return true;
             return false;
-               
+
         }
 
         /// <summary>
@@ -700,7 +700,7 @@ namespace Pulsar4X.ECSLib
         /// <returns>True if entityID is found.</returns>
         /// <exception cref="GuidNotFoundException">ID was found in Global list, but not locally. Should not be possible.</exception>
         [PublicAPI]
-        public bool FindEntityByGuid(Guid entityGuid, out Entity entity)
+        public bool FindEntityByGuid(StringIdentifier entityGuid, out Entity entity)
         {
             if (Game == null)
             {
@@ -740,7 +740,7 @@ namespace Pulsar4X.ECSLib
         /// <returns>Entity if found</returns>
         /// <exception cref="GuidNotFoundException">ID was not found</exception>
         [PublicAPI]
-        public Entity GetGlobalEntityByGuid(Guid entityGuid)
+        public Entity GetGlobalEntityByGuid(StringIdentifier entityGuid)
         {
             Entity entity;
             if (!FindEntityByGuid(entityGuid, out entity))
@@ -754,7 +754,7 @@ namespace Pulsar4X.ECSLib
         /// <returns>The Entity if found</returns>
         /// <exception cref="GuidNotFoundException">ID was not found in Global list, orlocally</exception>
         [PublicAPI]
-        public Entity GetLocalEntityByGuid(Guid entityGuid)
+        public Entity GetLocalEntityByGuid(StringIdentifier entityGuid)
         {
             Entity entity;
             if (!TryGetEntityByGuid(entityGuid, out entity))
@@ -771,7 +771,7 @@ namespace Pulsar4X.ECSLib
         /// </summary>
         /// <returns>True if entityID exists in this manager.</returns>
         [PublicAPI]
-        public bool TryGetEntityByGuid(Guid entityGuid, out Entity entity)
+        public bool TryGetEntityByGuid(StringIdentifier entityGuid, out Entity entity)
         {
             if (Game != null)
             {
@@ -845,8 +845,8 @@ namespace Pulsar4X.ECSLib
                 }
                 else
                 {
-                    // Entity has not been previously deserialized. TODO: check whether the faction guid will deserialise after this or if we need to read it and input it into the constructor here. 
-                    Entity.Create(this, Guid.Empty, protoEntity);
+                    // Entity has not been previously deserialized. TODO: check whether the faction guid will deserialise after this or if we need to read it and input it into the constructor here.
+                    Entity.Create(this, null, protoEntity);
                 }
             }
         }

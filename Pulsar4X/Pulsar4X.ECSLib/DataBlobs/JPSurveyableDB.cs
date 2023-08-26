@@ -8,11 +8,11 @@ namespace Pulsar4X.ECSLib
     /// Attached to entities that are surveyed for the discovery of JumpPoints.
     /// </summary>
     /// <remarks>
-    /// This is very inefficient implementation of jump points. 
+    /// This is very inefficient implementation of jump points.
     /// Every system has 30 of these entities.
     /// This clogs EntityManager space too.
     /// Each of these entities individually stores every faction that scans it?
-    /// 
+    ///
     /// PERFORMANCE OPTIMIZE:
     /// If we ever need to optimize memory usage, this may be something to look at.
     /// </remarks>
@@ -25,7 +25,7 @@ namespace Pulsar4X.ECSLib
         [JsonProperty]
         public Entity JumpPointTo;
         [JsonProperty]
-        public Guid SystemToGuid;
+        public StringIdentifier SystemToGuid;
         [JsonProperty]
         public double MinimumDistanceToJump_m;
 
@@ -35,14 +35,14 @@ namespace Pulsar4X.ECSLib
         public JPSurveyableDB() { }
 
 
-        public JPSurveyableDB(int pointsRequired, IDictionary<Entity, int> pointsAccumulated, double minimumDistanceToJump_m): this(pointsRequired, pointsAccumulated, null, Guid.Empty, minimumDistanceToJump_m){
+        public JPSurveyableDB(int pointsRequired, IDictionary<Entity, int> pointsAccumulated, double minimumDistanceToJump_m): this(pointsRequired, pointsAccumulated, null, null, minimumDistanceToJump_m){
 
         }
 
         /// <summary>
         /// Copy constructor
         /// </summary>
-        public JPSurveyableDB(int pointsRequired, IDictionary<Entity, int> pointsAccumulated, Entity jumpPointTo, Guid systemToGuid, double minimumDistanceToJump_m)
+        public JPSurveyableDB(int pointsRequired, IDictionary<Entity, int> pointsAccumulated, Entity jumpPointTo, StringIdentifier systemToGuid, double minimumDistanceToJump_m)
         {
             SurveyPointsRequired = pointsRequired;
             SurveyPointsAccumulated = new Dictionary<Entity, int>(pointsAccumulated);

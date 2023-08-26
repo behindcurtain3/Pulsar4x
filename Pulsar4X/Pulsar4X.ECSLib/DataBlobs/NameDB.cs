@@ -13,10 +13,10 @@ namespace Pulsar4X.ECSLib
         /// Each faction can have a different name for whatever entity has this blob.
         /// </summary>
         [JsonProperty]
-        private readonly Dictionary<Guid, string> _names = new Dictionary<Guid, string>();
+        private readonly Dictionary<StringIdentifier, string> _names = new ();
 
         [PublicAPI]
-        public string DefaultName => _names[Guid.Empty];
+        public string DefaultName => _names[new StringIdentifier("player", "default")];
 
         public string OwnersName
         {
@@ -28,16 +28,16 @@ namespace Pulsar4X.ECSLib
             }
         }
 
-        public NameDB() { _names.Add(Guid.Empty, "Un-Named");}
+        public NameDB() { _names.Add(new StringIdentifier("player", "default"), "Un-Named");}
 
         public NameDB(string defaultName)
         {
-            _names.Add(Guid.Empty, defaultName);
+            _names.Add(new StringIdentifier("player", "default"), defaultName);
         }
 
-        public NameDB(string defaultName, Guid factionID, string factionsName)
+        public NameDB(string defaultName, StringIdentifier factionID, string factionsName)
         {
-            _names.Add(Guid.Empty, defaultName);
+            _names.Add(new StringIdentifier("player", "default"), defaultName);
             _names.Add(factionID, factionsName);
         }
 
@@ -45,7 +45,7 @@ namespace Pulsar4X.ECSLib
 
         public NameDB(NameDB nameDB)
         {
-            _names = new Dictionary<Guid, string>(nameDB._names);
+            _names = new Dictionary<StringIdentifier, string>(nameDB._names);
         }
 
         public override object Clone()
@@ -56,7 +56,7 @@ namespace Pulsar4X.ECSLib
         #endregion
 
         [PublicAPI]
-        public string GetName(Guid requestingFaction)
+        public string GetName(StringIdentifier requestingFaction)
         {
             string name;
             if (!_names.TryGetValue(requestingFaction, out name))
@@ -83,10 +83,10 @@ namespace Pulsar4X.ECSLib
         {
             return GetName(requestingFaction.Guid);
         }
-        
+
 
         [PublicAPI]
-        public void SetName(Guid requestingFaction, string specifiedName)
+        public void SetName(StringIdentifier requestingFaction, string specifiedName)
         {
             _names[requestingFaction] = specifiedName;
             if (requestingFaction == OwningEntity.FactionOwnerID)
@@ -112,12 +112,12 @@ namespace Pulsar4X.ECSLib
 
         public void SensorUpdate(SensorInfoDB sensorInfo)
         {
-            //do nothing for this. 
+            //do nothing for this.
         }
 
         NameDB(NameDB db, SensorInfoDB sensorInfo)
-        {            
-            _names.Add(Guid.Empty, db.DefaultName);
+        {
+            _names.Add(new StringIdentifier("player", "default"), db.DefaultName);
             _names[sensorInfo.Faction.Guid] = db.GetName(sensorInfo.Faction.Guid);
         }
     }

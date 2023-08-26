@@ -8,21 +8,21 @@ namespace Pulsar4X.ECSLib
     {
         public static Game Game { get; private set; }
         public static StaticDataStore StaticData { get; internal set; }
-        public static Dictionary<Guid, ICargoable> AllICargoableDesigns;
+        public static Dictionary<StringIdentifier, ICargoable> AllICargoableDesigns;
         internal static ProcessorManager ProcessorManager { get; private set; }
         public static DateTime CurrentDateTime { get { return GamePulse.GameGlobalDateTime; } }
         public static EventLog EventLog { get; private set; }
         internal static MasterTimePulse GamePulse { get; private set; }
 
         public static IOrderHandler OrderHandler { get; private set; }
-        
+
         public static Entity SpaceMaster
         {
             get { return Game.GameMasterFaction; }
         }
-        
+
         /// <summary>
-        /// this is used to marshal events to the UI thread. 
+        /// this is used to marshal events to the UI thread.
         /// </summary>
         public static SynchronizationContext SyncContext { get; private set; }
 
@@ -30,7 +30,7 @@ namespace Pulsar4X.ECSLib
 
         internal static void SetEventlog(EventLog eventLog)
         {
-            EventLog = eventLog; 
+            EventLog = eventLog;
         }
 
         public static void Setup(Game game)

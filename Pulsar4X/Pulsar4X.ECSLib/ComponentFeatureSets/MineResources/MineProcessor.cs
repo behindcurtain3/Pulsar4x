@@ -7,7 +7,7 @@ namespace Pulsar4X.ECSLib
 {
     internal class MineResourcesProcessor : IHotloopProcessor, IRecalcProcessor
     {
-        private Dictionary<Guid, MineralSD> _minerals;
+        private Dictionary<StringIdentifier, MineralSD> _minerals;
 
         public TimeSpan RunFrequency => TimeSpan.FromDays(1);
 
@@ -39,8 +39,8 @@ namespace Pulsar4X.ECSLib
 
         private void MineResources(Entity colonyEntity)
         {
-            Dictionary<Guid, long> actualMiningRates = colonyEntity.GetDataBlob<MiningDB>().ActualMiningRate;
-            Dictionary<Guid,MineralDeposit> planetMinerals = colonyEntity.GetDataBlob<ColonyInfoDB>().PlanetEntity.GetDataBlob<MineralsDB>().Minerals;
+            Dictionary<StringIdentifier, long> actualMiningRates = colonyEntity.GetDataBlob<MiningDB>().ActualMiningRate;
+            Dictionary<StringIdentifier, MineralDeposit> planetMinerals = colonyEntity.GetDataBlob<ColonyInfoDB>().PlanetEntity.GetDataBlob<MineralsDB>().Minerals;
             VolumeStorageDB stockpile = colonyEntity.GetDataBlob<VolumeStorageDB>();
 
             foreach (var kvp in actualMiningRates)
@@ -85,7 +85,7 @@ namespace Pulsar4X.ECSLib
         /// <param name="colonyEntity"></param>
         internal static void CalcMaxRate(Entity colonyEntity)
         {
-            var rates = new Dictionary<Guid, long>();
+            var rates = new Dictionary<StringIdentifier, long>();
             var instancesDB = colonyEntity.GetDataBlob<ComponentInstancesDB>();
 
             if (instancesDB.TryGetComponentsByAttribute<MineResourcesAtbDB>(out var instances))

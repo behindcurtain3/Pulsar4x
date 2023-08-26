@@ -7,7 +7,7 @@ namespace Pulsar4X.ECSLib
     /// <summary>
     /// A Node is uniquely identified by its string Key.  A Node also has a Data property of type object
     /// that can be used to store any extra information associated with the Node.
-    /// 
+    ///
     /// The Node has a property of type AdjacencyList, which represents the node's neighbors.  To add a neighbor,
     /// the Node class exposes an AddDirected() method, which adds a directed edge with an (optional) weight to
     /// some other Node.  These methods are marked internal, and are called by the Graph class.
@@ -81,8 +81,8 @@ namespace Pulsar4X.ECSLib
         {
             Data = new Tuple<Entity, Entity>(jp1, jp2);
             Neighbors = neighbors;
-            
-            if (jp1.Guid.CompareTo(jp2.Guid) <= 0)
+
+            if (jp1.Guid.GetHashCode().CompareTo(jp2.Guid.GetHashCode()) <= 0)
             {
                 Key = $"{jp1.Guid} - {jp2.Guid}";
             }
@@ -117,12 +117,12 @@ namespace Pulsar4X.ECSLib
                 return false;
             }
 
-            Guid jp1System = jp1PositionDB.SystemGuid;
-            Guid jp2System = jp2PositionDB.SystemGuid;
-            Guid otherJP1System = otherJP1PositionDB.SystemGuid;
-            Guid otherJP2System = otherJP2PositionDB.SystemGuid;
+            StringIdentifier jp1System = jp1PositionDB.SystemGuid;
+            StringIdentifier jp2System = jp2PositionDB.SystemGuid;
+            StringIdentifier otherJP1System = otherJP1PositionDB.SystemGuid;
+            StringIdentifier otherJP2System = otherJP2PositionDB.SystemGuid;
 
-            if (jp1System != Guid.Empty)
+            if (jp1System != null)
             {
                 if (jp1System == otherJP1System)
                 {
@@ -136,7 +136,7 @@ namespace Pulsar4X.ECSLib
                 }
             }
 
-            if (jp2System != Guid.Empty)
+            if (jp2System != null)
             {
                 if (jp2System == otherJP1System)
                 {

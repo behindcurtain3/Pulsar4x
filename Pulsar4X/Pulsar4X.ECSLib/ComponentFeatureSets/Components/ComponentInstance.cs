@@ -13,7 +13,7 @@ namespace Pulsar4X.ECSLib
     {
         public string Name { get; internal set; }
 
-        public Guid ID { get; private set; }
+        public StringIdentifier ID { get; private set; }
 
         public ComponentInstance ComponentInstance { get; private set; }
 
@@ -185,9 +185,9 @@ namespace Pulsar4X.ECSLib
         }
 
 
-        public Guid[] GetChildrenIDs()
+        public StringIdentifier[] GetChildrenIDs()
         {
-            Guid[] ids = new Guid[ChildrenStates.Count];
+            StringIdentifier[] ids = new StringIdentifier[ChildrenStates.Count];
             for (int i = 0; i < ChildrenStates.Count; i++)
             {
                 ids[i] = ChildrenStates[i].ID;
@@ -204,7 +204,7 @@ namespace Pulsar4X.ECSLib
 
         #region ICargoable
 
-        public Guid ID { get; }
+        public StringIdentifier ID { get; }
         public string Name { get; }
         public StringIdentifier CargoTypeID { get; }
         public long MassPerUnit
@@ -317,15 +317,13 @@ namespace Pulsar4X.ECSLib
         /// <param name="isEnabled">whether the component is enabled on construction. default=true</param>
         public ComponentInstance(ComponentDesign design, bool isEnabled = true)
         {
-            ID = Guid.NewGuid();
+            ID = new StringIdentifier("player", Guid.NewGuid().ToString());
             Design = design;
             IsEnabled = isEnabled;
             HTKRemaining = design.HTK;
             HTKMax = design.HTK;
             CargoTypeID = design.CargoTypeID;
             Name = design.Name;
-
-
         }
 
 
